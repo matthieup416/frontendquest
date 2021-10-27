@@ -11,7 +11,7 @@ function HomeScreen(props) {
     AsyncStorage.removeItem("token")
     props.navigation.navigate("SignIn", { screen: "SignInScreen" })
   }
-
+  console.log("console home", props.dataUser)
   return (
     <View style={{ flex: 1, justifyContent: "flex-end" }}>
       <Text>DASHBOARD QUetes</Text>
@@ -20,6 +20,14 @@ function HomeScreen(props) {
         buttonStyle={{ backgroundColor: "red" }}
         type="solid"
         onPress={() => handleSubmitRemove()}
+      />
+      <Button
+        title="ajouter une quête"
+        buttonStyle={{ backgroundColor: "red" }}
+        type="solid"
+        onPress={() => {
+          props.navigation.navigate("AddQuest", { screen: "AddQuestScreen" })
+        }}
       />
     </View>
   )

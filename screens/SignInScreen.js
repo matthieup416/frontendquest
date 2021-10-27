@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, Image, SafeAreaView, StyleSheet } from "react-native";
+import { View, Text, Button, Image, SafeAreaView, StyleSheet, ImageBackground } from "react-native";
 import { connect } from "react-redux";
 import { Input } from "react-native-elements";
 
@@ -17,8 +17,8 @@ function SignInScreen(props) {
 
   useEffect(() => {
     AsyncStorage.getItem("token", function (error, value) {
-      console.log("console log de token " + value);
       if (value) {
+        props.addUser([{ token: value }]);
         props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" });
         console.log(value);
       } else {
@@ -55,14 +55,12 @@ function SignInScreen(props) {
   });
 
   return (
-    <View style={styles.container}>
+    <ImageBackground source={require("../assets/SignInScreen.png")} style={styles.container}>
       <Image source={require("../assets/logo.png")} resizeMode={"contain"} style={styles.Image} />
       <SafeAreaView>
-        <Text style={styles.Text}>Mon Email</Text>
-        <Input selectionColor="black" style={styles.inputStyle} onChangeText={(text) => setSignInEmail(text)} value={signInEmail} />
+        <Input selectionColor="black" style={styles.inputStyle} onChangeText={(text) => setSignInEmail(text)} value={signInEmail} placeholder="Mon Email" />
         {tabErrorsSignIn}
-        <Text style={styles.Text}>Password</Text>
-        <Input selectionColor="black" style={styles.inputStyle} onChangeText={(text) => setSignInPassword(text)} value={signInPassword} />
+        <Input selectionColor="black" style={styles.inputStyle} onChangeText={(text) => setSignInPassword(text)} value={signInPassword} placeholder="Password" />
       </SafeAreaView>
       <Button
         title="HomeScreen"
@@ -73,14 +71,6 @@ function SignInScreen(props) {
         }}
       />
       <Button
-        title="Signup"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        type="solid"
-        onPress={() => {
-          props.navigation.navigate("SignUpHome");
-        }}
-      />
-      <Button
         title="Créer une quête"
         color="#009788"
         type="solid"
@@ -88,36 +78,36 @@ function SignInScreen(props) {
           props.navigation.navigate("AddQuest");
         }}
       />
-
-      <Button
-        title="Connexion"
-        color="#009788"
-        type="solid"
-        onPress={() => {
-          handleSubmitSignIn();
-          console.log("clic sur button CONNEXION");
-        }}
-      />
-
-      {/*  <CoButton
-        text="Connexion"
-        onPress={() => {
-          handleSubmitSignIn()
-          console.log("clic sur bouton CONNEXION")
-        }}
-      /> */}
-    </View>
+      <View style={styles.connexion}>
+        <Button
+          title="Connexion"
+          type="solid"
+          onPress={() => {
+            handleSubmitSignIn();
+          }}
+        />
+      </View>
+      <View style={styles.create}>
+        <Button
+          color="#FFFFFF"
+          title="Créer un compte"
+          type="solid"
+          onPress={() => {
+            props.navigation.navigate("SignUpHome");
+          }}
+        />
+      </View>
+      <Text>Ou</Text>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    display: "flex",
     flexDirection: "column",
     justifyContent: "center",
-    padding: 35,
-    backgroundColor: "#2D98DA",
+    padding: 50,
   },
   inputStyle: {
     width: "200%",
@@ -126,6 +116,26 @@ const styles = StyleSheet.create({
   },
   Text: {
     color: "#FFFFFF",
+  },
+  connexion: {
+    position: "absolute",
+    backgroundColor: "#FFFFFF",
+    height: 43,
+    width: 150,
+    borderRadius: 30,
+    bottom: 50,
+    left: 150,
+    top: 500,
+  },
+  create: {
+    position: "absolute",
+    backgroundColor: "#2D98DA",
+    height: 43,
+    width: 180,
+    borderRadius: 30,
+    bottom: 50,
+    left: 125,
+    top: 750,
   },
   Image: {
     position: "absolute",
