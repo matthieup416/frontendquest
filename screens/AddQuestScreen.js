@@ -445,10 +445,10 @@ function AddQuestScreen(props) {
           groundFloorChecked
             ? () => setGroundFloorChecked(false)
             : () => [
-                setGroundFloorChecked(true),
-                setFloorChecked(false),
-                setTopFloorChecked(false),
-              ]
+              setGroundFloorChecked(true),
+              setFloorChecked(false),
+              setTopFloorChecked(false),
+            ]
         }
       />
       <CheckBox
@@ -465,10 +465,10 @@ function AddQuestScreen(props) {
           floorChecked
             ? () => setFloorChecked(false)
             : () => [
-                setFloorChecked(true),
-                setGroundFloorChecked(false),
-                setTopFloorChecked(false),
-              ]
+              setFloorChecked(true),
+              setGroundFloorChecked(false),
+              setTopFloorChecked(false),
+            ]
         }
       />
       <CheckBox
@@ -485,10 +485,10 @@ function AddQuestScreen(props) {
           topFloorChecked
             ? () => setTopFloorChecked(false)
             : () => [
-                setTopFloorChecked(true),
-                setGroundFloorChecked(false),
-                setFloorChecked(false),
-              ]
+              setTopFloorChecked(true),
+              setGroundFloorChecked(false),
+              setFloorChecked(false),
+            ]
         }
       />
     </View>
@@ -549,10 +549,10 @@ function AddQuestScreen(props) {
           datePreferenceChecked
             ? () => setDatePreferenceChecked(false)
             : () => [
-                setDatePreferenceChecked(true),
-                setDate(new Date()),
-                setDateDisplayFr(""),
-              ]
+              setDatePreferenceChecked(true),
+              setDate(new Date()),
+              setDateDisplayFr(""),
+            ]
         }
       />
     </View>
@@ -625,12 +625,12 @@ function AddQuestScreen(props) {
           maisonChecked
             ? () => setMaisonChecked(false)
             : () => [
-                setMaisonChecked(true),
-                setAppartementChecked(false),
-                setImmeubleChecked(false),
-                setBusinessChecked(false),
-                setAutreChecked(false),
-              ]
+              setMaisonChecked(true),
+              setAppartementChecked(false),
+              setImmeubleChecked(false),
+              setBusinessChecked(false),
+              setAutreChecked(false),
+            ]
         }
       />
       <CheckBox
@@ -650,12 +650,12 @@ function AddQuestScreen(props) {
           appartementChecked
             ? () => setAppartementChecked(false)
             : () => [
-                setAppartementChecked(true),
-                setMaisonChecked(false),
-                setImmeubleChecked(false),
-                setBusinessChecked(false),
-                setAutreChecked(false),
-              ]
+              setAppartementChecked(true),
+              setMaisonChecked(false),
+              setImmeubleChecked(false),
+              setBusinessChecked(false),
+              setAutreChecked(false),
+            ]
         }
       />
       <CheckBox
@@ -675,12 +675,12 @@ function AddQuestScreen(props) {
           immeubleChecked
             ? () => setImmeubleChecked(false)
             : () => [
-                setImmeubleChecked(true),
-                setAppartementChecked(false),
-                setMaisonChecked(false),
-                setBusinessChecked(false),
-                setAutreChecked(false),
-              ]
+              setImmeubleChecked(true),
+              setAppartementChecked(false),
+              setMaisonChecked(false),
+              setBusinessChecked(false),
+              setAutreChecked(false),
+            ]
         }
       />
       <CheckBox
@@ -700,12 +700,12 @@ function AddQuestScreen(props) {
           businessChecked
             ? () => setBusinessChecked(false)
             : () => [
-                setBusinessChecked(true),
-                setAppartementChecked(false),
-                setMaisonChecked(false),
-                setImmeubleChecked(false),
-                setAutreChecked(false),
-              ]
+              setBusinessChecked(true),
+              setAppartementChecked(false),
+              setMaisonChecked(false),
+              setImmeubleChecked(false),
+              setAutreChecked(false),
+            ]
         }
       />
       <CheckBox
@@ -725,12 +725,12 @@ function AddQuestScreen(props) {
           autreChecked
             ? () => setAutreChecked(false)
             : () => [
-                setAutreChecked(true),
-                setAppartementChecked(false),
-                setMaisonChecked(false),
-                setImmeubleChecked(false),
-                setBusinessChecked(false),
-              ]
+              setAutreChecked(true),
+              setAppartementChecked(false),
+              setMaisonChecked(false),
+              setImmeubleChecked(false),
+              setBusinessChecked(false),
+            ]
         }
       />
     </View>
