@@ -20,11 +20,7 @@ function SignUpFormScreen(props) {
   const [listErrorsSignUp, setErrorsSignup] = useState([]);
 
   var handleSubmitSignup = async () => {
-<<<<<<< HEAD
     const data = await fetch("http://192.168.1.43:3000/users/sign-up", {
-=======
-    const data = await fetch("http://192.168.1.70:3000/users/sign-up", {
->>>>>>> 2c29dd45eca256096e4e746ef04c6ef19595783f
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `firstNameFromFront=${firstName}&lastNameFromFront=${lastName}&emailFromFront=${signUpEmail}&phoneFromFront=${phoneNumber}&passwordFromFront=${signUpPassword}`,

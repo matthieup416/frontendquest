@@ -11,7 +11,7 @@ function MessagesScreen(props) {
   const [listConversation, setListConversation] = useState([]);
 
   useEffect(() => {
-    console.log("dataUser", props.dataUser[0].token);
+    console.log("messages token", props.dataUser[0].token);
 
     async function listQuest() {
       const data = await fetch(`http://192.168.1.43:3000/inbox/?token=${props.dataUser[0].token}`);
@@ -30,6 +30,8 @@ function MessagesScreen(props) {
 
   useEffect(() => {
     async function selectedConversation() {
+      console.log("selectedQuest", selectedQuest);
+
       const data = await fetch(`http://192.168.1.43:3000/inbox/selectedQuest?id=${selectedQuest}&token=${props.dataUser[0].token}`);
       const body = await data.json();
       console.log("body", body);

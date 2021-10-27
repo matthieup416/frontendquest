@@ -18,7 +18,7 @@ function SignInScreen(props) {
   useEffect(() => {
     AsyncStorage.getItem("token", function (error, value) {
       if (value) {
-        props.addUser([{ token: value }]);
+        props.addUser({ token: value });
         props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" });
         console.log(value);
       } else {
