@@ -18,7 +18,7 @@ function MessagesScreen(props) {
   //Au chargement du composant, on cherche toutes les quêtes de l'utilisateur pour faire le menu select
   useEffect(() => {
     async function listQuest() {
-      const data = await fetch(`http://192.168.1.70:3000/inbox/?token=${props.dataUser[0].token}`);
+      const data = await fetch(`http://192.168.1.43:3000/inbox/?token=${props.dataUser[0].token}`);
       const body = await data.json();
       var list = body.listQuest.map((quest) => {
         return {
@@ -27,6 +27,7 @@ function MessagesScreen(props) {
         };
       });
       setListQuest(list);
+      setSelectedQuest(body.listQuest[0]._id);
     }
     listQuest();
   }, []);
@@ -34,7 +35,7 @@ function MessagesScreen(props) {
   //Quand on click sur une quête, on charge les conversations de celle ci.
   useEffect(() => {
     async function selectedConversation() {
-      const data = await fetch(`http://192.168.1.70:3000/inbox/selectedQuest?id=${selectedQuest}&token=${props.dataUser[0].token}`);
+      const data = await fetch(`http://192.168.1.43:3000/inbox/selectedQuest?id=${selectedQuest}&token=${props.dataUser[0].token}`);
       const body = await data.json();
       var list = body.conversations.conversation.map((conv) => {
         return {
@@ -61,7 +62,7 @@ function MessagesScreen(props) {
   //Quand on click sur une conversation, on cherche tous ses messages et on les affiche
   var listMsgConversation = async (id) => {
     setSelectedConversation(id);
-    const data = await fetch(`http://192.168.1.70:3000/inbox/conversation?id=${id}&token=${props.dataUser[0].token}`);
+    const data = await fetch(`http://192.168.1.43:3000/inbox/conversation?id=${id}&token=${props.dataUser[0].token}`);
     const body = await data.json();
     console.log("body", body);
     var list = body.messages.listMessages.map((msg) => {
@@ -80,7 +81,7 @@ function MessagesScreen(props) {
 
   //Au clic sur le bouton envoyer, on enregistre le nouveau message dans la conversation.
   var sendMessage = async (id, sender_token, message) => {
-    const data = await fetch("http://192.168.1.70:3000/inbox/addMessage", {
+    const data = await fetch("http://192.168.1.43:3000/inbox/addMessage", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `id=${id}&sender_token=${sender_token}&message=${message}`,
@@ -127,8 +128,9 @@ function MessagesScreen(props) {
         {/* Menu select */}
         <RNPickerSelect onValueChange={(value) => setSelectedQuest(value)} items={listQuest} placeholder={{ label: "Choisir une quête", value: null }} style={pickerSelectStyles} />
         {/* Résultat du choix du select */}
-        <Card containerStyle={{ padding: 0, flex: 1 }}>
+        <Card containerStyle={{ padding: 0, flex: 0 }}>
           {listConversation.map((d, i) => {
+            console.log("d", d);
             if (!d.usersLastMessage.avatar) {
               var avatar = <Avatar rounded icon={{ name: "user", type: "font-awesome" }} title={d.usersLastMessage.prenom[0]} containerStyle={{ backgroundColor: "#585858" }} />;
             } else {
