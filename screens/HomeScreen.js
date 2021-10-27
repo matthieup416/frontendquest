@@ -29,6 +29,14 @@ function HomeScreen(props) {
           props.navigation.navigate("AddQuest", { screen: "AddQuestScreen" })
         }}
       />
+      <Button
+        title="ListingScreen"
+        buttonStyle={{ backgroundColor: "pink" }}
+        type="solid"
+        onPress={() => {
+          props.navigation.navigate("Listing", { screen: "ListingScreen" })
+        }}
+      />
     </View>
   )
 }
