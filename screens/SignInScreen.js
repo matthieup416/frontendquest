@@ -5,7 +5,8 @@ import {
   Button,
   Image,
   SafeAreaView,
-  StyleSheet, ImageBackground
+  StyleSheet,
+  ImageBackground,
 } from "react-native"
 import { connect } from "react-redux"
 import { Input } from "react-native-elements"
@@ -25,7 +26,7 @@ function SignInScreen(props) {
   useEffect(() => {
     AsyncStorage.getItem("token", function (error, value) {
       if (value) {
-        props.addUser([{ token: value }])
+        props.addUser({ token: value })
         props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" })
         console.log(value)
       } else {
@@ -35,7 +36,7 @@ function SignInScreen(props) {
   }, [])
 
   var handleSubmitSignIn = async () => {
-    const data = await fetch("http://192.168.1.70:3000/users/sign-in", {
+    const data = await fetch("http://192.168.1.91:3000/users/sign-in", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `emailFromFront=${signInEmail}&passwordFromFront=${signInPassword}`,
@@ -62,7 +63,10 @@ function SignInScreen(props) {
   })
 
   return (
-    <ImageBackground source={require('../assets/SignInScreen.png')} style={styles.container}>
+    <ImageBackground
+      source={require("../assets/SignInScreen.png")}
+      style={styles.container}
+    >
       <Image
         source={require("../assets/logo.png")}
         resizeMode={"contain"}
