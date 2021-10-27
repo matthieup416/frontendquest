@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, Dimensions, TextInput, StyleSheet, SafeAreaView } from "react-native";
 
+import { MY_IP } from "@env" /* Variable environnement */
+
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { connect } from "react-redux";
 import StepIndicator from "react-native-step-indicator";
@@ -9,6 +11,7 @@ import { Input, SearchBar, CheckBox, Button, Slider } from "react-native-element
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import localization from "moment/locale/fr";
+
 
 const customStyles = {
   stepIndicatorSize: 25,
@@ -146,7 +149,7 @@ function AddQuestScreen(props) {
       };
 
       console.log("juste avant denvoyer data au back : " + JSON.stringify(data));
-      let envoiBack = await fetch("http://192.168.1.43:3000/addquest", {
+      let envoiBack = await fetch(`http://${MY_IP}:3000/addquest`, {
         method: "post",
 
         body: JSON.stringify(data),

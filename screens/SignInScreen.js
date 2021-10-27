@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react"
 import { View, Text, Image, StyleSheet, ImageBackground, TextInput, TouchableOpacity } from "react-native"
 import { connect } from "react-redux"
 
+import { MY_IP } from "@env" /* Variable environnement */
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function SignInScreen(props) {
@@ -25,7 +27,7 @@ function SignInScreen(props) {
   }, []);
 
   var handleSubmitSignIn = async () => {
-    const data = await fetch("http://192.168.1.70:3000/users/sign-in", {
+    const data = await fetch(`http://${MY_IP}:3000/users/sign-in`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `emailFromFront=${signInEmail}&passwordFromFront=${signInPassword}`,

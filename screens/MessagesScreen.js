@@ -6,6 +6,9 @@ import { connect } from "react-redux";
 import RNPickerSelect from "react-native-picker-select";
 import { FontAwesome } from "@expo/vector-icons";
 
+import { MY_IP } from "@env" /* Variable environnement */
+
+
 function MessagesScreen(props) {
   const [listQuest, setListQuest] = useState([]);
   const [selectedQuest, setSelectedQuest] = useState("");
@@ -18,7 +21,7 @@ function MessagesScreen(props) {
   //Au chargement du composant, on cherche toutes les quêtes de l'utilisateur pour faire le menu select
   useEffect(() => {
     async function listQuest() {
-      const data = await fetch(`http://192.168.1.70:3000/inbox/?token=${props.dataUser[0].token}`);
+      const data = await fetch(`http://${MY_IP}:3000/inbox/?token=${props.dataUser[0].token}`);
       const body = await data.json();
       var list = body.listQuest.map((quest) => {
         return {
@@ -34,7 +37,7 @@ function MessagesScreen(props) {
   //Quand on click sur une quête, on charge les conversations de celle ci.
   useEffect(() => {
     async function selectedConversation() {
-      const data = await fetch(`http://192.168.1.70:3000/inbox/selectedQuest?id=${selectedQuest}&token=${props.dataUser[0].token}`);
+      const data = await fetch(`http://${MY_IP}:3000/inbox/selectedQuest?id=${selectedQuest}&token=${props.dataUser[0].token}`);
       const body = await data.json();
       var list = body.conversations.conversation.map((conv) => {
         return {
@@ -61,7 +64,7 @@ function MessagesScreen(props) {
   //Quand on click sur une conversation, on cherche tous ses messages et on les affiche
   var listMsgConversation = async (id) => {
     setSelectedConversation(id);
-    const data = await fetch(`http://192.168.1.70:3000/inbox/conversation?id=${id}&token=${props.dataUser[0].token}`);
+    const data = await fetch(`http://${MY_IP}:3000/inbox/conversation?id=${id}&token=${props.dataUser[0].token}`);
     const body = await data.json();
     console.log("body", body);
     var list = body.messages.listMessages.map((msg) => {
@@ -80,7 +83,7 @@ function MessagesScreen(props) {
 
   //Au clic sur le bouton envoyer, on enregistre le nouveau message dans la conversation.
   var sendMessage = async (id, sender_token, message) => {
-    const data = await fetch("http://192.168.1.70:3000/inbox/addMessage", {
+    const data = await fetch(`http://${MY_IP}:3000/inbox/addMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `id=${id}&sender_token=${sender_token}&message=${message}`,
