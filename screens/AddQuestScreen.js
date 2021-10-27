@@ -133,7 +133,7 @@ function AddQuestScreen(props) {
       setFormProgress(formProgress + 1)
     } else {
       var data = {
-        token: props.dataUser[0].token,
+        token: props.dataUser.token,
         quest: {
           cities: [{ name: searchValue, rayon: sliderValue }],
           type: type,

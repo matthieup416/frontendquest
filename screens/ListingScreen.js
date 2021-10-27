@@ -6,6 +6,7 @@ import { Button, Badge } from "react-native-elements"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 
 import { connect } from "react-redux"
+import { MY_IP } from "@env" /* Variable environnement */
 
 let deviceHeight = Dimensions.get("window").height
 let deviceWidth = Dimensions.get("window").width
@@ -59,7 +60,7 @@ function ListingScreen(props) {
   useEffect(() => {
     const displayOffer = async () => {
       const reqFind = await fetch(
-        `http://192.168.1.91:3000/display-offer?offerId=61796c1aa457047cc68bf305&token=${props.dataUser.token}`
+        `http://${MY_IP}:3000/display-offer?offerId=61796c1aa457047cc68bf305&token=${props.dataUser.token}`
       )
       const resultFind = await reqFind.json()
       console.log(resultFind)
