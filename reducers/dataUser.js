@@ -1,7 +1,8 @@
-export default function (dataUser = [], action) {
+export default function (dataUser = {}, action) {
   if (action.type == "addUser") {
-    var dataUser = [...dataUser, action.dataUser]
-    return dataUser
+    return action.dataUser
+  } else if (action.type == "clearUser") {
+    return {}
   } else {
     return dataUser
   }
