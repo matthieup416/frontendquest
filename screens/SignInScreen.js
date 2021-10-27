@@ -10,16 +10,16 @@ function SignInScreen(props) {
   const [signInEmail, setSignInEmail] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
 
-  const [userExists, setUserExists] = useState(false);
-
   const [listErrorsSignIn, setErrorsSignIn] = useState([]);
 
   useEffect(() => {
     AsyncStorage.getItem("token", function (error, value) {
       if (value) {
+        // requête backend user (avec le token)
+        // modifier addUser pour stocker l'ensemble de l'utilisateur
         props.addUser({ token: value })
         props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" })
-        console.log(value)
+        // console.log(value)
       } else {
         console.log("error");
       }
@@ -38,10 +38,7 @@ function SignInScreen(props) {
     if (body.result == true) {
       props.addUser(body.dataUser);
       props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" });
-      setUserExists(true);
       AsyncStorage.setItem("token", body.dataUser.token);
-      AsyncStorage.getItem("token", function (error, data) {
-      })
     } else {
       setErrorsSignIn(body.error);
     }
