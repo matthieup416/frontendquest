@@ -159,7 +159,6 @@ function AddQuestScreen(props) {
         },
       }
 
-      console.log("juste avant denvoyer data au back : " + JSON.stringify(data))
       let envoiBack = await fetch("http://192.168.1.91:3000/addquest", {
         method: "post",
 

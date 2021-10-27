@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { View, Text, Dimensions, ScrollView, Image } from "react-native"
 import Icon from "react-native-vector-icons/FontAwesome5"
 import { StatusBar } from "expo-status-bar"
@@ -54,6 +54,21 @@ function ListingScreen(props) {
   if (!props.dataUser) {
     props.navigation.navigate("SignIn", { screen: "SignInScreen" })
   }
+  const [offerData, setOfferData] = useState({})
+
+  useEffect(() => {
+    const displayOffer = async () => {
+      const reqFind = await fetch(
+        `http://192.168.1.91:3000/display-offer?offerId=61796c1aa457047cc68bf305&token=${props.dataUser.token}`
+      )
+      const resultFind = await reqFind.json()
+      console.log(resultFind)
+
+      setOfferData(resultFind.offerData)
+    }
+
+    displayOffer()
+  }, [])
 
   let listingContent = (
     <View>
