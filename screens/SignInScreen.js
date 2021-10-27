@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, Button, Image, SafeAreaView, StyleSheet, ImageBackground } from "react-native";
-import { connect } from "react-redux";
-import { Input } from "react-native-elements";
+import React, { useState, useEffect } from "react"
+import { View, Text, Image, StyleSheet, ImageBackground, TextInput, TouchableOpacity } from "react-native"
+import { connect } from "react-redux"
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-import CoButton from "../shared/CoButton";
 
 function SignInScreen(props) {
   const [signInEmail, setSignInEmail] = useState("");
@@ -18,9 +15,9 @@ function SignInScreen(props) {
   useEffect(() => {
     AsyncStorage.getItem("token", function (error, value) {
       if (value) {
-        props.addUser({ token: value });
-        props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" });
-        console.log(value);
+        props.addUser({ token: value })
+        props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" })
+        console.log(value)
       } else {
         console.log("error");
       }
@@ -28,14 +25,13 @@ function SignInScreen(props) {
   }, []);
 
   var handleSubmitSignIn = async () => {
-    const data = await fetch("http://192.168.1.43:3000/users/sign-in", {
+    const data = await fetch("http://192.168.1.70:3000/users/sign-in", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `emailFromFront=${signInEmail}&passwordFromFront=${signInPassword}`,
     });
 
-    const body = await data.json();
-    console.log("log de body ", body);
+    const body = await data.json()
 
     if (body.result == true) {
       props.addUser(body.dataUser);
@@ -43,8 +39,7 @@ function SignInScreen(props) {
       setUserExists(true);
       AsyncStorage.setItem("token", body.dataUser.token);
       AsyncStorage.getItem("token", function (error, data) {
-        console.log("console log de token ", data);
-      });
+      })
     } else {
       setErrorsSignIn(body.error);
     }
@@ -55,49 +50,51 @@ function SignInScreen(props) {
   });
 
   return (
-    <ImageBackground source={require("../assets/SignInScreen.png")} style={styles.container}>
-      <Image source={require("../assets/logo.png")} resizeMode={"contain"} style={styles.Image} />
-      <SafeAreaView>
-        <Input selectionColor="black" style={styles.inputStyle} onChangeText={(text) => setSignInEmail(text)} value={signInEmail} placeholder="Mon Email" />
+    <ImageBackground source={require('../assets/SignInScreen.png')} style={styles.container}>
+      <Image
+        source={require("../assets/logo.png")}
+        resizeMode={"contain"}
+        style={styles.Image}
+      />
+      <View>
+        <TextInput
+          style={styles.inputStyle}
+          onChangeText={(text) => setSignInEmail(text)}
+          value={signInEmail}
+          placeholderTextColor={'#fff'}
+          placeholder="Mon Email"
+        />
         {tabErrorsSignIn}
-        <Input selectionColor="black" style={styles.inputStyle} onChangeText={(text) => setSignInPassword(text)} value={signInPassword} placeholder="Password" />
-      </SafeAreaView>
-      <Button
-        title="HomeScreen"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        type="solid"
-        onPress={() => {
-          props.navigation.navigate("BottomNavigator", { screen: "Accueil" });
-        }}
-      />
-      <Button
-        title="Créer une quête"
-        color="#009788"
-        type="solid"
-        onPress={() => {
-          props.navigation.navigate("AddQuest");
-        }}
-      />
-      <View style={styles.connexion}>
-        <Button
-          title="Connexion"
-          type="solid"
-          onPress={() => {
-            handleSubmitSignIn();
-          }}
+        <TextInput
+          selectionColor="black"
+          style={styles.inputStyle}
+          placeholderTextColor={'#fff'}
+          onChangeText={(text) => setSignInPassword(text)}
+          value={signInPassword}
+          placeholder="Password"
         />
       </View>
-      <View style={styles.create}>
-        <Button
-          color="#FFFFFF"
-          title="Créer un compte"
-          type="solid"
+      <TouchableOpacity style={styles.Button} onPress={() => {
+        handleSubmitSignIn()
+      }}>
+        <Text style={styles.buttonText}>
+          Connexion
+        </Text>
+      </TouchableOpacity>
+      <View style={styles.bottomBox}>
+        <Text style={styles.Ou}>
+          Ou
+        </Text>
+        <TouchableOpacity
           onPress={() => {
             props.navigation.navigate("SignUpHome");
           }}
-        />
+          style={styles.signup}>
+          <Text style={styles.signupText}>
+            Creer un compte
+          </Text>
+        </TouchableOpacity>
       </View>
-      <Text>Ou</Text>
     </ImageBackground>
   );
 }
@@ -107,35 +104,23 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
-    padding: 50,
+    alignItems: 'center'
+
   },
   inputStyle: {
-    width: "200%",
-    alignSelf: "center",
-    backgroundColor: "#FFFFFF",
+    paddingVertical: 5,
+    fontSize: 17,
+    borderBottomColor: '#fff',
+    borderBottomWidth: 1,
+    width: 270,
+    marginTop: 10
+  },
+  Ou: {
+    fontWeight: 'bold',
+    margin: 10
   },
   Text: {
     color: "#FFFFFF",
-  },
-  connexion: {
-    position: "absolute",
-    backgroundColor: "#FFFFFF",
-    height: 43,
-    width: 150,
-    borderRadius: 30,
-    bottom: 50,
-    left: 150,
-    top: 500,
-  },
-  create: {
-    position: "absolute",
-    backgroundColor: "#2D98DA",
-    height: 43,
-    width: 180,
-    borderRadius: 30,
-    bottom: 50,
-    left: 125,
-    top: 750,
   },
   Image: {
     position: "absolute",
@@ -146,7 +131,38 @@ const styles = StyleSheet.create({
     borderRadius: 99,
     alignSelf: "center",
   },
-});
+  Button: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 30,
+    paddingVertical: 15,
+    alignSelf: 'center',
+    borderRadius: 25,
+    marginTop: 30
+
+  },
+  signup: {
+    backgroundColor: '#2C8BC6',
+    paddingHorizontal: 30,
+    paddingVertical: 15,
+    alignSelf: 'center',
+    borderRadius: 25,
+  },
+  signupText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    alignSelf: 'center'
+  },
+  buttonText: {
+    color: '#2C8BC6',
+    fontWeight: 'bold',
+    alignSelf: 'center'
+  },
+  bottomBox: {
+    position: 'absolute',
+    bottom: 80,
+    alignItems: 'center'
+  }
+})
 
 function mapDispatchToProps(dispatch) {
   return {
