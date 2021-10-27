@@ -1,110 +1,106 @@
-import React, { useState, useEffect } from "react"
-import { View, Text, Button, Image, StyleSheet } from "react-native"
-import Icon from "react-native-vector-icons/FontAwesome5"
-import { connect } from "react-redux"
-
-import AsyncStorage from "@react-native-async-storage/async-storage"
-
-import Acheteur from "../shared/Acheteur"
+import React from "react"
+import { View, Text, TouchableOpacity, Image, StyleSheet, ImageBackground } from "react-native"
 
 function SignUpHomeScreen(props) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.Text}>
-        Quest est une nouvelle application qui propose une façon révolutionaire
-        de rechercher un bien immobilier et construire son réseau dans
-        l’immobilier. Ne perdez plus votre temps à passer en revue tous les
-        sites d’annonces, lancez une quête et recevez directement les biens
-        correspondant à votre recherche, parfois même avant leur
-        commercialisation !
-      </Text>
+    <ImageBackground source={require('../assets/SignInScreen.png')} style={styles.container}>
       <Image
         source={require("../assets/logo.png")}
         resizeMode={"contain"}
         style={styles.Image}
       />
-      {/* <Button
-        style={styles.Buttons}
-        title="Je suis Acheteur"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        type="solid"
-      /> */}
-      {/* <Button
-        title="Je suis Vendeur"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        type="solid"
-        onPress={() => {
-          props.navigation.navigate("SignupForm")
-        }}
-      /> */}
-      {/* <Acheteur
-        text="Je suis un acheteur"
-        onPress={() => {
-          props.navigation.navigate("SignUpForm")
-        }}
-      /> */}
-      <Button
-        style={styles.Buttons}
-        title="Je suis Acheteur"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        type="solid"
-        onPress={() => {
-          props.navigation.navigate("SignUpForm")
-        }}
-      />
-    </View>
+      <Text style={styles.Text}>
+        Quest est une nouvelle application qui propose une façon révolutionaire
+        de rechercher un bien immobilier et construire son réseau dans
+        l’immobilier. Ne perdez plus votre temps à passer en revue tous les
+      </Text>
+      <Text style={styles.Text}>
+        sites d’annonces, lancez une quête et recevez directement les biens
+        correspondant à votre recherche, parfois même avant leur
+        commercialisation !
+      </Text>
+      <View style={styles.bottomBox}>
+        <Text style={styles.commencer}>
+          Commencer :
+        </Text>
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.navigate("SignUpForm")
+          }}
+          style={styles.signup}>
+          <Text style={styles.signupText}>
+            je suis acheteur
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.navigate("SignUpForm")
+          }}
+          style={styles.signup}>
+          <Text style={styles.signupText}>
+            je suis vendeur
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   )
 }
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
     padding: 35,
     backgroundColor: "#2D98DA",
   },
   Image: {
-    position: "absolute",
     height: 60,
     width: 200,
-    top: 100,
-    left: 100,
-    borderRadius: 99,
+    marginTop: 50,
+    marginBottom: 5,
     alignSelf: "center",
   },
   Text: {
-    position: "absolute",
-    width: 302,
-    height: 275,
-    left: 29,
-    top: 240,
-
-    // fontFamily: "Roboto",
+    marginTop: 10,
     fontStyle: "normal",
     fontWeight: "500",
     fontSize: 18,
     lineHeight: 24,
-    /* or 133% */
-
     display: "flex",
     alignItems: "center",
     textAlign: "justify",
-    letterSpacing: 0.01,
-
     color: "#F8F7FF",
   },
-  Buttons: {
-    position: "absolute",
-    backgroundColor: "#FFFFFF",
-    width: 143,
-    height: 43,
-    top: -10,
-    left: 50,
-    borderRadius: 99,
-    alignSelf: "center",
+  signup: {
+    backgroundColor: '#2C8BC6',
+    paddingHorizontal: 30,
+    paddingVertical: 18,
+    alignSelf: 'center',
+    borderRadius: 30,
+    marginTop: 10
   },
+  signupText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    alignSelf: 'center'
+  },
+  buttonText: {
+    color: '#2C8BC6',
+    fontWeight: 'bold',
+    alignSelf: 'center'
+  },
+  bottomBox: {
+    position: 'absolute',
+    bottom: 50,
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+  commencer: {
+    color: "#2C8BC6",
+    fontWeight: 'bold',
+    fontSize: 17
+  }
 })
 
 export default SignUpHomeScreen
