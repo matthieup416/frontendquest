@@ -6,18 +6,51 @@ import { connect } from "react-redux";
 import RNPickerSelect from "react-native-picker-select";
 
 function MessagesScreen(props) {
+  const [listQuest, setListQuest] = useState([]);
   const [selectedQuest, setSelectedQuest] = useState("");
+  const [listConversation, setListConversation] = useState([]);
 
   useEffect(() => {
-    async function selectedConversation() {}
+    console.log("dataUser", props.dataUser[0].token);
+
+    async function listQuest() {
+      const data = await fetch(`http://192.168.1.43:3000/inbox/?token=${props.dataUser[0].token}`);
+      const body = await data.json();
+      // console.log("log de body ", body);
+      var list = body.listQuest.map((quest) => {
+        return {
+          value: quest._id,
+          label: `${quest.cities[0].name} - ${quest.min_price}/${quest.max_price}€`,
+        };
+      });
+      setListQuest(list);
+    }
+    listQuest();
+  }, []);
+
+  useEffect(() => {
+    async function selectedConversation() {
+      const data = await fetch(`http://192.168.1.43:3000/inbox/selectedQuest?id=${selectedQuest}&token=${props.dataUser[0].token}`);
+      const body = await data.json();
+      console.log("body", body);
+      // var list = body.conversations.conversation.map((conv) => {
+      //   return {
+      //     usersLastMessage: {
+      //       prenom: conv.user.firstName,
+      //       avatar: conv.user.avatar,
+      //     },
+      //     lastMessage: conv.lastMessage.text,
+      //     offre: {
+      //       type: conversations.quest[0].type,
+      //       surface: "100",
+      //       price: "250 000",
+      //     },
+      //     conversation: 1,
+      //   };
+      // });
+    }
     selectedConversation();
   }, [selectedQuest]);
-
-  var quests = [
-    { value: "1", label: "Villa Aix-en-Provence" },
-    { value: "2", label: "Villa Lyon" },
-    { value: "3", label: "Immeuble Aix-en-Provence" },
-  ];
 
   var discussions = [
     {
@@ -37,12 +70,14 @@ function MessagesScreen(props) {
   return (
     <View style={styles.container}>
       {/* Menu select */}
-      <RNPickerSelect onValueChange={(value) => setSelectedQuest(value)} items={quests} placeholder={{ label: "Choisir une quête", value: null }} style={pickerSelectStyles} />
+      <RNPickerSelect onValueChange={(value) => setSelectedQuest(value)} items={listQuest} placeholder={{ label: "Choisir une quête", value: null }} style={pickerSelectStyles} />
       {/* Résultat du choix du select */}
       <Card containerStyle={{ padding: 0, flex: 1 }}>
         {discussions.map((d, i) => {
           if (!d.usersLastMessage.avatar) {
-            console.log("d", d);
+            {
+              /* console.log("d", d); */
+            }
             var avatar = <Avatar rounded icon={{ name: "user", type: "font-awesome" }} title={d.usersLastMessage.prenom[0]} />;
           } else {
             var avatar = <Avatar source={{ uri: d.usersLastMessage.avatar }} rounded title={d.usersLastMessage.prenom[0]} />;
@@ -95,4 +130,8 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
-export default MessagesScreen;
+function mapStateToProps(state) {
+  return { dataUser: state.dataUser };
+}
+
+export default connect(mapStateToProps)(MessagesScreen);
