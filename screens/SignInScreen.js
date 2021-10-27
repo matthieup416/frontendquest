@@ -51,7 +51,7 @@ function SignInScreen(props) {
   };
 
   var tabErrorsSignIn = listErrorsSignIn.map((error, i) => {
-    return <Text>{error}</Text>;
+    return <Text key={i}>{error}</Text>;
   });
 
   return (
