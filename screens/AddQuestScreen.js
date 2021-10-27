@@ -12,7 +12,13 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome5"
 import { connect } from "react-redux"
 import StepIndicator from "react-native-step-indicator"
-import { Input, SearchBar, CheckBox, Button } from "react-native-elements"
+import {
+  Input,
+  SearchBar,
+  CheckBox,
+  Button,
+  Slider,
+} from "react-native-elements"
 // import Slider from "@react-native-community/slider"
 import DateTimePicker from "@react-native-community/datetimepicker"
 import moment from "moment"
@@ -46,6 +52,9 @@ let deviceHeight = Dimensions.get("window").height
 let deviceWidth = Dimensions.get("window").width
 
 function AddQuestScreen(props) {
+  if (!props.dataUser) {
+    props.navigation.navigate("SignIn", { screen: "SignInScreen" })
+  }
   const [maisonChecked, setMaisonChecked] = useState(true)
   const [appartementChecked, setAppartementChecked] = useState(false)
   const [immeubleChecked, setImmeubleChecked] = useState(false)
@@ -115,35 +124,39 @@ function AddQuestScreen(props) {
   const [searchValue, setSearchValue] = useState("")
   const [goodType, setGoodType] = useState("maison")
   let changeGoodType = (value) => setGoodType(value)
+
   let nextStep = async () => {
     if (formProgress < 4) {
       processData()
       setFormProgress(formProgress + 1)
     } else {
       var data = {
-        cities: [{ name: searchValue, rayon: sliderValue }],
-        type: type,
-        min_price: min_Price,
-        max_price: max_Price,
-        min_surface: min_Surface,
-        max_surface: max_Surface,
-        nb_pieces: nb_Pieces,
-        floor_type: floor_Type,
-        floor_max: 4,
-        elevator: elevatorChecked,
-        parking: parkingChecked,
-        fiber_optics: fiber_opticsChecked,
-        pool: poolChecked,
-        balcony: balconyChecked,
-        market_date: marketDateFromFront,
-        creation_date: new Date(),
-        outdoor_surface: outdoor_surface,
-        open_to_pro: open_to_proChecked,
-        terrace: terraceChecked,
-        is_online: true,
-        is_old: ancienChecked,
-        is_new: neufChecked,
-        social_text: social_text,
+        token: props.dataUser[0].token,
+        quest: {
+          cities: [{ name: searchValue, rayon: sliderValue }],
+          type: type,
+          min_price: min_Price,
+          max_price: max_Price,
+          min_surface: min_Surface,
+          max_surface: max_Surface,
+          nb_pieces: nb_Pieces,
+          floor_type: floor_Type,
+          floor_max: 4,
+          elevator: elevatorChecked,
+          parking: parkingChecked,
+          fiber_optics: fiber_opticsChecked,
+          pool: poolChecked,
+          balcony: balconyChecked,
+          market_date: marketDateFromFront,
+          creation_date: new Date(),
+          outdoor_surface: outdoor_surface,
+          open_to_pro: open_to_proChecked,
+          terrace: terraceChecked,
+          is_online: true,
+          is_old: ancienChecked,
+          is_new: neufChecked,
+          social_text: social_text,
+        },
       }
 
       console.log("juste avant denvoyer data au back : " + JSON.stringify(data))
@@ -160,6 +173,8 @@ function AddQuestScreen(props) {
         console.log(
           "tout est bon coté back la quest a été enregistree en BDD !"
         )
+        // redirection vers HomeScreen
+        props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" })
       } else {
         console.log("erreur coté back!")
       }
@@ -170,8 +185,20 @@ function AddQuestScreen(props) {
     console.log(formProgress)
   }
   let dateDisplay = <Text>{date}</Text>
-  /* let slider = (
+  let slider = (
     <Slider
+      value={Math.round(sliderValue)}
+      onValueChange={(value) => setSliderValue(Math.round(value))}
+      maximumValue={30}
+      minimumValue={0}
+      thumbStyle={{ width: 12, height: 12 }}
+      style={{ width: 100 }}
+      thumbTintColor="#2D98DA"
+      minimumTrackTintColor="#585858"
+    />
+  )
+
+  /*  <Slider
       maximumValue={30}
       minimumValue={0}
       minimumTrackTintColor="#585858"
@@ -181,8 +208,8 @@ function AddQuestScreen(props) {
       value={sliderValue}
       onValueChange={(sliderValue) => setSliderValue(sliderValue)}
       style={{ width: deviceWidth / 3 }}
-    />
-  ) */
+    />  */
+
   let sliderValueDisplay = (
     <Text style={{ color: "#585858" }}>Rayon : {sliderValue} km</Text>
   )
@@ -193,6 +220,7 @@ function AddQuestScreen(props) {
         placeholder="1000"
         inputContainerStyle={{ width: deviceWidth / 8 }}
         onChangeText={(value) => setOutdoor_surface(value)}
+        keyboardType="numeric"
       />
       <Text
         style={{
@@ -445,10 +473,10 @@ function AddQuestScreen(props) {
           groundFloorChecked
             ? () => setGroundFloorChecked(false)
             : () => [
-              setGroundFloorChecked(true),
-              setFloorChecked(false),
-              setTopFloorChecked(false),
-            ]
+                setGroundFloorChecked(true),
+                setFloorChecked(false),
+                setTopFloorChecked(false),
+              ]
         }
       />
       <CheckBox
@@ -465,10 +493,10 @@ function AddQuestScreen(props) {
           floorChecked
             ? () => setFloorChecked(false)
             : () => [
-              setFloorChecked(true),
-              setGroundFloorChecked(false),
-              setTopFloorChecked(false),
-            ]
+                setFloorChecked(true),
+                setGroundFloorChecked(false),
+                setTopFloorChecked(false),
+              ]
         }
       />
       <CheckBox
@@ -485,10 +513,10 @@ function AddQuestScreen(props) {
           topFloorChecked
             ? () => setTopFloorChecked(false)
             : () => [
-              setTopFloorChecked(true),
-              setGroundFloorChecked(false),
-              setFloorChecked(false),
-            ]
+                setTopFloorChecked(true),
+                setGroundFloorChecked(false),
+                setFloorChecked(false),
+              ]
         }
       />
     </View>
@@ -498,6 +526,24 @@ function AddQuestScreen(props) {
     <View style={{ flexDirection: "column" }}>
       <View>
         <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
+          <Button
+            onPress={showDatepicker}
+            buttonStyle={{
+              width: deviceWidth / 7,
+              marginLeft: 10,
+
+              backgroundColor: "#98989E",
+            }}
+            icon={
+              <Icon
+                name="calendar-alt"
+                size={15}
+                color="white"
+                style={{ marginRight: 8 }}
+              />
+            }
+            iconLeft
+          />
           <Text
             style={{
               fontSize: 16,
@@ -509,19 +555,6 @@ function AddQuestScreen(props) {
           >
             {dateDisplayFr}
           </Text>
-          <Button
-            onPress={showDatepicker}
-            buttonStyle={{ width: deviceWidth / 6, backgroundColor: "#FBC531" }}
-            icon={
-              <Icon
-                name="calendar-alt"
-                size={15}
-                color="white"
-                style={{ marginRight: 8 }}
-              />
-            }
-            iconLeft
-          />
         </View>
 
         {show && (
@@ -549,10 +582,10 @@ function AddQuestScreen(props) {
           datePreferenceChecked
             ? () => setDatePreferenceChecked(false)
             : () => [
-              setDatePreferenceChecked(true),
-              setDate(new Date()),
-              setDateDisplayFr(""),
-            ]
+                setDatePreferenceChecked(true),
+                setDate(new Date()),
+                setDateDisplayFr(""),
+              ]
         }
       />
     </View>
@@ -625,12 +658,12 @@ function AddQuestScreen(props) {
           maisonChecked
             ? () => setMaisonChecked(false)
             : () => [
-              setMaisonChecked(true),
-              setAppartementChecked(false),
-              setImmeubleChecked(false),
-              setBusinessChecked(false),
-              setAutreChecked(false),
-            ]
+                setMaisonChecked(true),
+                setAppartementChecked(false),
+                setImmeubleChecked(false),
+                setBusinessChecked(false),
+                setAutreChecked(false),
+              ]
         }
       />
       <CheckBox
@@ -650,12 +683,12 @@ function AddQuestScreen(props) {
           appartementChecked
             ? () => setAppartementChecked(false)
             : () => [
-              setAppartementChecked(true),
-              setMaisonChecked(false),
-              setImmeubleChecked(false),
-              setBusinessChecked(false),
-              setAutreChecked(false),
-            ]
+                setAppartementChecked(true),
+                setMaisonChecked(false),
+                setImmeubleChecked(false),
+                setBusinessChecked(false),
+                setAutreChecked(false),
+              ]
         }
       />
       <CheckBox
@@ -675,12 +708,12 @@ function AddQuestScreen(props) {
           immeubleChecked
             ? () => setImmeubleChecked(false)
             : () => [
-              setImmeubleChecked(true),
-              setAppartementChecked(false),
-              setMaisonChecked(false),
-              setBusinessChecked(false),
-              setAutreChecked(false),
-            ]
+                setImmeubleChecked(true),
+                setAppartementChecked(false),
+                setMaisonChecked(false),
+                setBusinessChecked(false),
+                setAutreChecked(false),
+              ]
         }
       />
       <CheckBox
@@ -700,12 +733,12 @@ function AddQuestScreen(props) {
           businessChecked
             ? () => setBusinessChecked(false)
             : () => [
-              setBusinessChecked(true),
-              setAppartementChecked(false),
-              setMaisonChecked(false),
-              setImmeubleChecked(false),
-              setAutreChecked(false),
-            ]
+                setBusinessChecked(true),
+                setAppartementChecked(false),
+                setMaisonChecked(false),
+                setImmeubleChecked(false),
+                setAutreChecked(false),
+              ]
         }
       />
       <CheckBox
@@ -725,12 +758,12 @@ function AddQuestScreen(props) {
           autreChecked
             ? () => setAutreChecked(false)
             : () => [
-              setAutreChecked(true),
-              setAppartementChecked(false),
-              setMaisonChecked(false),
-              setImmeubleChecked(false),
-              setBusinessChecked(false),
-            ]
+                setAutreChecked(true),
+                setAppartementChecked(false),
+                setMaisonChecked(false),
+                setImmeubleChecked(false),
+                setBusinessChecked(false),
+              ]
         }
       />
     </View>
@@ -794,7 +827,7 @@ function AddQuestScreen(props) {
           }}
         >
           {sliderValueDisplay}
-          {/* {slider} */}
+          {slider}
         </View>
       </View>
       {radioButtons}
@@ -923,11 +956,15 @@ function AddQuestScreen(props) {
           placeholder="Prix Minimum"
           inputContainerStyle={{ width: deviceWidth / 2 }}
           onChangeText={(value) => setMin_Price(value)}
+          keyboardType="numeric"
+          maxLength={7}
         />
         <Input
           placeholder="Prix Maximum"
           inputContainerStyle={{ width: deviceWidth / 2 }}
           onChangeText={(value) => setMax_Price(value)}
+          keyboardType="numeric"
+          maxLength={7}
         />
 
         <Text
@@ -948,11 +985,15 @@ function AddQuestScreen(props) {
             placeholder="min"
             inputContainerStyle={{ width: deviceWidth / 8 }}
             onChangeText={(value) => setMin_Surface(value)}
+            keyboardType="numeric"
+            maxLength={4}
           />
           <Input
             placeholder="max"
             inputContainerStyle={{ width: deviceWidth / 8 }}
             onChangeText={(value) => setMax_Surface(value)}
+            keyboardType="numeric"
+            maxLength={4}
           />
         </View>
       </View>
@@ -1379,6 +1420,8 @@ function AddQuestScreen(props) {
             fontWeight: "bold",
             marginBottom: 5,
             marginLeft: 10,
+            marginTop: 30,
+            marginBottom: 10,
           }}
         >
           Commercialisé depuis le :
@@ -1483,7 +1526,11 @@ function AddQuestScreen(props) {
             borderRadius: 15,
           }}
           onChangeText={(value) => setSocial_text(value)}
-          autoCapitalize={"words"}
+          maxLength={250}
+          textAlignVertical="top"
+          multiLine={true}
+          numberOfLines={3}
+          textAlign="left"
         />
         <CheckBox
           containerStyle={{
@@ -1589,4 +1636,8 @@ function AddQuestScreen(props) {
   )
 }
 
-export default AddQuestScreen
+function mapStateToProps(state) {
+  return { dataUser: state.dataUser }
+}
+
+export default connect(mapStateToProps)(AddQuestScreen)
