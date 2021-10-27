@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react"
 import { View, Text, Image, StyleSheet, ImageBackground, TextInput, TouchableOpacity } from "react-native"
 import { connect } from "react-redux"
 
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function SignInScreen(props) {
-  const [signInEmail, setSignInEmail] = useState("")
-  const [signInPassword, setSignInPassword] = useState("")
+  const [signInEmail, setSignInEmail] = useState("");
+  const [signInPassword, setSignInPassword] = useState("");
 
-  const [userExists, setUserExists] = useState(false)
+  const [userExists, setUserExists] = useState(false);
 
-  const [listErrorsSignIn, setErrorsSignIn] = useState([])
+  const [listErrorsSignIn, setErrorsSignIn] = useState([]);
 
   useEffect(() => {
     AsyncStorage.getItem("token", function (error, value) {
@@ -19,35 +19,35 @@ function SignInScreen(props) {
         props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" })
         console.log(value)
       } else {
-        console.log("error")
+        console.log("error");
       }
-    })
-  }, [])
+    });
+  }, []);
 
   var handleSubmitSignIn = async () => {
     const data = await fetch("http://192.168.1.70:3000/users/sign-in", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `emailFromFront=${signInEmail}&passwordFromFront=${signInPassword}`,
-    })
+    });
 
     const body = await data.json()
 
     if (body.result == true) {
-      props.addUser(body.dataUser)
-      props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" })
-      setUserExists(true)
-      AsyncStorage.setItem("token", body.dataUser.token)
+      props.addUser(body.dataUser);
+      props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" });
+      setUserExists(true);
+      AsyncStorage.setItem("token", body.dataUser.token);
       AsyncStorage.getItem("token", function (error, data) {
       })
     } else {
-      setErrorsSignIn(body.error)
+      setErrorsSignIn(body.error);
     }
-  }
+  };
 
   var tabErrorsSignIn = listErrorsSignIn.map((error, i) => {
-    return <Text>{error}</Text>
-  })
+    return <Text key={i}>{error}</Text>;
+  });
 
   return (
     <ImageBackground source={require('../assets/SignInScreen.png')} style={styles.container}>
@@ -87,7 +87,7 @@ function SignInScreen(props) {
         </Text>
         <TouchableOpacity
           onPress={() => {
-            props.navigation.navigate("SignUpHome")
+            props.navigation.navigate("SignUpHome");
           }}
           style={styles.signup}>
           <Text style={styles.signupText}>
@@ -96,7 +96,7 @@ function SignInScreen(props) {
         </TouchableOpacity>
       </View>
     </ImageBackground>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -122,7 +122,6 @@ const styles = StyleSheet.create({
   Text: {
     color: "#FFFFFF",
   },
-
   Image: {
     position: "absolute",
     height: 60,
@@ -163,15 +162,14 @@ const styles = StyleSheet.create({
     bottom: 80,
     alignItems: 'center'
   }
-
 })
 
 function mapDispatchToProps(dispatch) {
   return {
     addUser: function (dataUser) {
-      dispatch({ type: "addUser", dataUser: dataUser })
+      dispatch({ type: "addUser", dataUser: dataUser });
     },
-  }
+  };
 }
 
-export default connect(null, mapDispatchToProps)(SignInScreen)
+export default connect(null, mapDispatchToProps)(SignInScreen);

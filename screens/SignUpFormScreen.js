@@ -1,43 +1,43 @@
 import React, { useState } from "react"
 import { Text, View, StyleSheet, Button, ImageBackground, TouchableOpacity, StatusBar } from "react-native"
 
-import { connect } from "react-redux"
+import { connect } from "react-redux";
 
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { TextInput } from "react-native-gesture-handler"
 
 function SignUpFormScreen(props) {
-  const [signUpEmail, setSignUpEmail] = useState("")
-  const [firstName, setFirstName] = useState("")
-  const [lastName, setLastName] = useState("")
-  const [phoneNumber, setPhoneNumber] = useState("")
-  const [signUpPassword, setSignUpPassword] = useState("")
+  const [signUpEmail, setSignUpEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [signUpPassword, setSignUpPassword] = useState("");
 
-  const [userExists, setUserExists] = useState(false)
+  const [userExists, setUserExists] = useState(false);
 
-  const [listErrorsSignUp, setErrorsSignup] = useState([])
+  const [listErrorsSignUp, setErrorsSignup] = useState([]);
 
   var handleSubmitSignup = async () => {
     const data = await fetch("http://192.168.1.70:3000/users/sign-up", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `firstNameFromFront=${firstName}&lastNameFromFront=${lastName}&emailFromFront=${signUpEmail}&phoneFromFront=${phoneNumber}&passwordFromFront=${signUpPassword}`,
-    })
-    const body = await data.json()
+    });
+    const body = await data.json();
 
     if (body.result == true) {
-      props.addUser(body.dataUser)
-      props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" })
-      setUserExists(true)
-      AsyncStorage.setItem("token", body.dataUser.token)
+      props.addUser(body.dataUser);
+      props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" });
+      setUserExists(true);
+      AsyncStorage.setItem("token", body.dataUser.token);
     } else {
-      setErrorsSignup(body.error)
+      setErrorsSignup(body.error);
     }
-  }
+  };
   var tabErrorsSignUp = listErrorsSignUp.map((error, i) => {
-    return <Text>{error}</Text>
-  })
+    return <Text>{error}</Text>;
+  });
 
 
   return (
@@ -164,9 +164,9 @@ const styles = StyleSheet.create({
 function mapDispatchToProps(dispatch) {
   return {
     addUser: function (dataUser) {
-      dispatch({ type: "addUser", dataUser: dataUser })
+      dispatch({ type: "addUser", dataUser: dataUser });
     },
-  }
+  };
 }
 
-export default connect(null, mapDispatchToProps)(SignUpFormScreen)
+export default connect(null, mapDispatchToProps)(SignUpFormScreen);
