@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Image, LogBox } from "react-native";
-import { Card, Text, Badge, ListItem, Avatar } from "react-native-elements";
+import { View, StyleSheet, TextInput, ScrollView, KeyboardAvoidingView } from "react-native";
+import { Card, Text, Button, ListItem, Avatar } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { connect } from "react-redux";
 import RNPickerSelect from "react-native-picker-select";
+import { FontAwesome } from "@expo/vector-icons";
 
 function MessagesScreen(props) {
   const [listQuest, setListQuest] = useState([]);
   const [selectedQuest, setSelectedQuest] = useState("");
   const [listConversation, setListConversation] = useState([]);
+  const [selectedConversation, setSelectedConversation] = useState("");
+  const [msgIsVisible, setMsgIsVisible] = useState(false);
+  const [listMessages, setListMessages] = useState([]);
+  const [inputMessage, setInputMessage] = useState("");
 
+  //Au chargement du composant, on cherche toutes les quêtes de l'utilisateur pour faire le menu select
   useEffect(() => {
-    console.log("messages token", props.dataUser[0].token);
-
     async function listQuest() {
       const data = await fetch(`http://192.168.1.43:3000/inbox/?token=${props.dataUser[0].token}`);
       const body = await data.json();
-      // console.log("log de body ", body);
       var list = body.listQuest.map((quest) => {
         return {
           value: quest._id,
@@ -28,76 +31,124 @@ function MessagesScreen(props) {
     listQuest();
   }, []);
 
+  //Quand on click sur une quête, on charge les conversations de celle ci.
   useEffect(() => {
     async function selectedConversation() {
-      console.log("selectedQuest", selectedQuest);
-
       const data = await fetch(`http://192.168.1.43:3000/inbox/selectedQuest?id=${selectedQuest}&token=${props.dataUser[0].token}`);
       const body = await data.json();
-      console.log("body", body);
-      // var list = body.conversations.conversation.map((conv) => {
-      //   return {
-      //     usersLastMessage: {
-      //       prenom: conv.user.firstName,
-      //       avatar: conv.user.avatar,
-      //     },
-      //     lastMessage: conv.lastMessage.text,
-      //     offre: {
-      //       type: conversations.quest[0].type,
-      //       surface: "100",
-      //       price: "250 000",
-      //     },
-      //     conversation: 1,
-      //   };
-      // });
+      var list = body.conversations.conversation.map((conv) => {
+        return {
+          usersLastMessage: {
+            prenom: conv.user.firstName,
+            avatar: conv.user.avatar,
+          },
+          lastMessage: conv.lastMessage.text,
+          offre: {
+            type: body.conversations.quest[0].type,
+            surface: body.conversations.quest[0].min_surface,
+            price: body.conversations.quest[0].min_price,
+          },
+          conversation: 1,
+          _id: conv._id,
+        };
+      });
+      console.log("list conversation", list);
+      setListConversation(list);
     }
     selectedConversation();
   }, [selectedQuest]);
 
-  var discussions = [
-    {
-      usersLastMessage: { prenom: "Maria", avatar: null },
-      lastMessage: "lorem",
-      offre: { type: "maison", surface: "100", price: "250 000" },
-      conversation: 1,
-    },
-    {
-      usersLastMessage: { prenom: "John", avatar: "https://previews.123rf.com/images/igorrita/igorrita1507/igorrita150700040/42584424-flat-hipster-character-stylish-young-guy-with-glasses-avatar-icon-man-vector-illustration-eps10.jpg" },
-      lastMessage: "lorem",
-      offre: { type: "appartement", surface: "70", price: "120 000" },
-      conversation: 2,
-    },
-  ];
+  //Quand on click sur une conversation, on cherche tous ses messages et on les affiche
+  var listMsgConversation = async (id) => {
+    setSelectedConversation(id);
+    const data = await fetch(`http://192.168.1.43:3000/inbox/conversation?id=${id}&token=${props.dataUser[0].token}`);
+    const body = await data.json();
+    console.log("body", body);
+    var list = body.messages.listMessages.map((msg) => {
+      console.log("msg", msg);
+      return {
+        firstName: msg.users[0].firstName,
+        avatar: msg.users[0].avatar,
+        text: msg.messages.text,
+      };
+    });
+    console.log("list message", list);
 
-  return (
-    <View style={styles.container}>
-      {/* Menu select */}
-      <RNPickerSelect onValueChange={(value) => setSelectedQuest(value)} items={listQuest} placeholder={{ label: "Choisir une quête", value: null }} style={pickerSelectStyles} />
-      {/* Résultat du choix du select */}
-      <Card containerStyle={{ padding: 0, flex: 1 }}>
-        {discussions.map((d, i) => {
-          if (!d.usersLastMessage.avatar) {
-            {
-              /* console.log("d", d); */
+    setListMessages(list);
+    setMsgIsVisible(true);
+  };
+
+  //Au clic sur le bouton envoyer, on enregistre le nouveau message dans la conversation.
+  var sendMessage = async (id, sender_token, message) => {
+    const data = await fetch("http://192.168.1.43:3000/inbox/addMessage", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `id=${id}&sender_token=${sender_token}&message=${message}`,
+    });
+
+    const body = await data.json();
+    console.log("log de body ", body);
+    setInputMessage("");
+    setMsgIsVisible(false);
+  };
+
+  //On affiche les messages
+  if (msgIsVisible) {
+    return (
+      <View style={styles.container}>
+        <Button icon={<Icon name="arrow-left" size={15} color="white" style={{ marginRight: 8 }} />} title="Retour aux discussions" onPress={() => setMsgIsVisible(false)} />
+        <ScrollView>
+          {listMessages.map((msg, i) => {
+            if (!msg.avatar) {
+              var avatar = <Avatar rounded icon={<FontAwesome name="user" size={24} color="black" />} title={msg.firstName[0]} containerStyle={{ backgroundColor: "#585858" }} />;
+            } else {
+              var avatar = <Avatar source={{ uri: msg.avatar }} rounded title={msg.firstName[0]} containerStyle={{ backgroundColor: "#585858" }} />;
             }
-            var avatar = <Avatar rounded icon={{ name: "user", type: "font-awesome" }} title={d.usersLastMessage.prenom[0]} />;
-          } else {
-            var avatar = <Avatar source={{ uri: d.usersLastMessage.avatar }} rounded title={d.usersLastMessage.prenom[0]} />;
-          }
-          return (
-            <ListItem key={i} bottomDivider>
-              {avatar}
-              <ListItem.Content>
-                <ListItem.Title>{d.usersLastMessage.prenom}</ListItem.Title>
-                <ListItem.Subtitle>{d.offre.type + " - " + d.offre.price + "€ - " + d.offre.surface + "m²"}</ListItem.Subtitle>
-                <ListItem.Subtitle>{d.lastMessage}</ListItem.Subtitle>
-              </ListItem.Content>
-            </ListItem>
-          );
-        })}
-      </Card>
-    </View>
-  );
+            return (
+              <ListItem key={i} bottomDivider>
+                {avatar}
+                <ListItem.Content>
+                  <ListItem.Subtitle>{msg.text}</ListItem.Subtitle>
+                </ListItem.Content>
+              </ListItem>
+            );
+          })}
+        </ScrollView>
+        <KeyboardAvoidingView>
+          <TextInput multiline numberOfLines={4} onChangeText={(text) => setInputMessage(text)} value={inputMessage} style={{ padding: 10, backgroundColor: "#F8F7FF" }} placeholder="Écrire un message" />
+          <Button icon={<FontAwesome name="send-o" size={24} color="white" style={{ marginRight: 8 }} />} title="Envoyer" onPress={() => sendMessage(selectedConversation, props.dataUser[0].token, inputMessage)} />
+        </KeyboardAvoidingView>
+      </View>
+    );
+  } else {
+    //Sinon on affiche les conversations
+    return (
+      <View style={styles.container}>
+        {/* Menu select */}
+        <RNPickerSelect onValueChange={(value) => setSelectedQuest(value)} items={listQuest} placeholder={{ label: "Choisir une quête", value: null }} style={pickerSelectStyles} />
+        {/* Résultat du choix du select */}
+        <Card containerStyle={{ padding: 0, flex: 1 }}>
+          {listConversation.map((d, i) => {
+            if (!d.usersLastMessage.avatar) {
+              var avatar = <Avatar rounded icon={{ name: "user", type: "font-awesome" }} title={d.usersLastMessage.prenom[0]} containerStyle={{ backgroundColor: "#585858" }} />;
+            } else {
+              var avatar = <Avatar source={{ uri: d.usersLastMessage.avatar }} rounded title={d.usersLastMessage.prenom[0]} containerStyle={{ backgroundColor: "#585858" }} />;
+            }
+            return (
+              <ListItem key={i} bottomDivider onPress={() => listMsgConversation(d._id)}>
+                {avatar}
+                <ListItem.Content>
+                  <ListItem.Title>{d.usersLastMessage.prenom}</ListItem.Title>
+                  <ListItem.Subtitle>{d.offre.type + " - " + d.offre.price + "€ - " + d.offre.surface + "m²"}</ListItem.Subtitle>
+                  <ListItem.Subtitle>{d.lastMessage}</ListItem.Subtitle>
+                </ListItem.Content>
+              </ListItem>
+            );
+          })}
+        </Card>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
