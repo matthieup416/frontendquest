@@ -17,6 +17,7 @@ import SignInScreen from "./screens/SignInScreen"
 import SignUpHomeScreen from "./screens/SignUpHomeScreen"
 import SignUpFormScreen from "./screens/SignUpFormScreen"
 import AddQuestScreen from "./screens/AddQuestScreen"
+import ListingScreen from "./screens/ListingScreen"
 
 import { FontAwesome5 } from "@expo/vector-icons"
 import { Provider } from "react-redux"
@@ -71,6 +72,7 @@ export default function App() {
           <Stack.Screen name="SignUpHome" component={SignUpHomeScreen} />
           <Stack.Screen name="SignUpForm" component={SignUpFormScreen} />
           <Stack.Screen name="AddQuest" component={AddQuestScreen} />
+          <Stack.Screen name="Listing" component={ListingScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

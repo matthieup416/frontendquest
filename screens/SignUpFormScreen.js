@@ -3,6 +3,9 @@ import { Text, View, StyleSheet, Button, ImageBackground, TouchableOpacity, Stat
 
 import { connect } from "react-redux";
 
+import { MY_IP } from "@env" /* Variable environnement */
+
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { TextInput } from "react-native-gesture-handler"
@@ -19,7 +22,7 @@ function SignUpFormScreen(props) {
   const [listErrorsSignUp, setErrorsSignup] = useState([]);
 
   var handleSubmitSignup = async () => {
-    const data = await fetch("http://192.168.1.70:3000/users/sign-up", {
+    const data = await fetch(`http://${MY_IP}:3000/users/sign-up`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `firstNameFromFront=${firstName}&lastNameFromFront=${lastName}&emailFromFront=${signUpEmail}&phoneFromFront=${phoneNumber}&passwordFromFront=${signUpPassword}`,
@@ -56,7 +59,7 @@ function SignUpFormScreen(props) {
           <View style={styles.formContainer}>
             <View style={{ flexDirection: 'row' }}>
               <View style={[styles.inputWrapper, { flex: 1 }]}>
-                <Text style={styles.label}>
+                <Text>
                   Prenom
                 </Text>
                 <TextInput style={styles.inputStyle} onChangeText={(text) => setFirstName(text)}
@@ -64,7 +67,7 @@ function SignUpFormScreen(props) {
               </View>
               {tabErrorsSignUp}
               <View style={[styles.inputWrapper, { flex: 1 }]}>
-                <Text style={styles.label}>
+                <Text>
                   Nom
                 </Text>
                 <TextInput style={styles.inputStyle} onChangeText={(text) => setLastName(text)}
@@ -72,21 +75,21 @@ function SignUpFormScreen(props) {
               </View>
             </View>
             <View style={styles.inputWrapper}>
-              <Text style={styles.label}>
+              <Text>
                 Email
               </Text>
               <TextInput style={styles.inputStyle} onChangeText={(text) => setSignUpEmail(text)}
                 value={signUpEmail} />
             </View>
             <View style={styles.inputWrapper}>
-              <Text style={styles.label}>
+              <Text>
                 Password
               </Text>
               <TextInput style={styles.inputStyle} onChangeText={(number) => setSignUpPassword(number)}
                 value={signUpPassword} />
             </View>
             <View style={styles.inputWrapper}>
-              <Text style={styles.label}>
+              <Text>
                 Telephone
               </Text>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>

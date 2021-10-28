@@ -7,11 +7,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 
 function HomeScreen(props) {
   var handleSubmitRemove = async () => {
-    console.log("click!")
     AsyncStorage.removeItem("token")
+    props.clearUser()
     props.navigation.navigate("SignIn", { screen: "SignInScreen" })
   }
-  console.log("console home", props.dataUser)
   return (
     <View style={{ flex: 1, justifyContent: "flex-end" }}>
       <Text>DASHBOARD QUetes</Text>
@@ -29,6 +28,14 @@ function HomeScreen(props) {
           props.navigation.navigate("AddQuest", { screen: "AddQuestScreen" })
         }}
       />
+      <Button
+        title="ListingScreen"
+        buttonStyle={{ backgroundColor: "pink" }}
+        type="solid"
+        onPress={() => {
+          props.navigation.navigate("Listing", { screen: "ListingScreen" })
+        }}
+      />
     </View>
   )
 }
@@ -36,4 +43,12 @@ function mapStateToProps(state) {
   return { dataUser: state.dataUser }
 }
 
-export default connect(mapStateToProps)(HomeScreen)
+function mapDispatchToProps(dispatch) {
+  return {
+    clearUser: function () {
+      dispatch({ type: "clearUser" });
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
