@@ -21,7 +21,6 @@ import {
   Button,
   Slider,
 } from "react-native-elements"
-// import Slider from "@react-native-community/slider"
 import DateTimePicker from "@react-native-community/datetimepicker"
 import moment from "moment"
 import localization from "moment/locale/fr"
@@ -70,22 +69,42 @@ function AddQuestScreen(props) {
   const [fourRoomChecked, setFourRoomChecked] = useState(false)
   const [fiveRoomChecked, setFiveRoomChecked] = useState(false)
   const [moreRoomChecked, setMoreRoomChecked] = useState(false)
+
+  //fonction pour supprimer un nombre de pièces dans piecesList quand on décoche une checkbox
+  function handleRemoveRoom(number) {
+    const newList = piecesList.filter((item) => item !== number)
+    setPiecesList(newList)
+    // puis on détermine le plus grand et le plus petit de la liste et on attribue ces valeurs à room_max et room_min
+  }
+  function findMinMax() {
+    const newList2 = piecesList
+    if (newList2.length > 1) {
+      setPieces_Min(Math.min(...newList2))
+      setPieces_Max(Math.max(...newList2))
+    }
+    // si un seul nombre de pièces, on met pieces_Min et pieces_Max à la meme valeur unique
+    else {
+      setPieces_Min(newList2[0])
+      setPieces_Max(newList2[0])
+    }
+  }
+
   const [ancienChecked, setAncienChecked] = useState(true)
   const [neufChecked, setNeufChecked] = useState(false)
-  const [groundFloorChecked, setGroundFloorChecked] = useState(false)
-  const [floorChecked, setFloorChecked] = useState(false)
-  const [topFloorChecked, setTopFloorChecked] = useState(false)
   const [nb_Pieces, setNb_Pieces] = useState(1)
   const [min_Price, setMin_Price] = useState(0)
   const [max_Price, setMax_Price] = useState(0)
   const [min_Surface, setMin_Surface] = useState(0)
   const [max_Surface, setMax_Surface] = useState(0)
   const [outdoor_surface, setOutdoor_surface] = useState(0)
+  const [pieces_Min, setPieces_Min] = useState(1)
+  const [pieces_Max, setPieces_Max] = useState(1)
+  const [piecesList, setPiecesList] = useState([1])
 
   const [fiber_opticsChecked, setFiber_opticsChecked] = useState(false)
   const [poolChecked, setPoolChecked] = useState(false)
   const [elevatorChecked, setElevatorChecked] = useState(false)
-  const [datePreferenceChecked, setDatePreferenceChecked] = useState(false)
+  const [datePreferenceChecked, setDatePreferenceChecked] = useState(true)
   const [marketDateFromFront, setMarketDateFromFront] = useState(null)
 
   const [social_text, setSocial_text] = useState("")
@@ -93,8 +112,6 @@ function AddQuestScreen(props) {
   const [terraceChecked, setTerraceChecked] = useState(false)
 
   const [type, setType] = useState("maison")
-  const [nb_Floor, setNb_Floor] = useState(0)
-  const [floor_Type, setFloor_Type] = useState("")
 
   const [formProgress, setFormProgress] = useState(0)
   const [dateDisplayFr, setDateDisplayFr] = useState("")
@@ -129,28 +146,30 @@ function AddQuestScreen(props) {
 
   let nextStep = async () => {
     if (formProgress < 4) {
+      findMinMax()
+
       processData()
       setFormProgress(formProgress + 1)
     } else {
       var data = {
         token: props.dataUser.token,
         quest: {
-          cities: [{ name: searchValue, rayon: sliderValue }],
+          city: searchValue,
+          rayon: sliderValue,
           type: type,
           min_price: min_Price,
           max_price: max_Price,
           min_surface: min_Surface,
           max_surface: max_Surface,
-          nb_pieces: nb_Pieces,
-          floor_type: floor_Type,
-          floor_max: 4,
+          pieces_min: pieces_Min,
+          pieces_max: pieces_Max,
           elevator: elevatorChecked,
           parking: parkingChecked,
           fiber_optics: fiber_opticsChecked,
           pool: poolChecked,
           balcony: balconyChecked,
           market_date: marketDateFromFront,
-          creation_date: new Date(),
+          created: new Date(),
           outdoor_surface: outdoor_surface,
           open_to_pro: open_to_proChecked,
           terrace: terraceChecked,
@@ -161,7 +180,6 @@ function AddQuestScreen(props) {
         },
       }
 
-      console.log("juste avant denvoyer data au back : " + JSON.stringify(data))
       let envoiBack = await fetch(`http://${MY_IP}:3000/addquest`, {
         method: "post",
 
@@ -184,7 +202,6 @@ function AddQuestScreen(props) {
   }
   let previousStep = () => {
     setFormProgress(formProgress - 1)
-    console.log(formProgress)
   }
   let dateDisplay = <Text>{date}</Text>
   let slider = (
@@ -199,18 +216,6 @@ function AddQuestScreen(props) {
       minimumTrackTintColor="#585858"
     />
   )
-
-  /*  <Slider
-      maximumValue={30}
-      minimumValue={0}
-      minimumTrackTintColor="#585858"
-      maximumTrackTintColor="#000000"
-      thumbTintColor="#2D98DA"
-      step={1}
-      value={sliderValue}
-      onValueChange={(sliderValue) => setSliderValue(sliderValue)}
-      style={{ width: deviceWidth / 3 }}
-    />  */
 
   let sliderValueDisplay = (
     <Text style={{ color: "#585858" }}>Rayon : {sliderValue} km</Text>
@@ -311,8 +316,14 @@ function AddQuestScreen(props) {
           checkedColor="#2D98DA"
           onPress={
             oneRoomChecked
-              ? () => setOneRoomChecked(false)
-              : () => setOneRoomChecked(true)
+              ? () => {
+                  setOneRoomChecked(false)
+                  handleRemoveRoom(1)
+                }
+              : () => {
+                  setOneRoomChecked(true)
+                  setPiecesList([...piecesList, 1])
+                }
           }
         />
         <CheckBox
@@ -327,8 +338,14 @@ function AddQuestScreen(props) {
           checkedColor="#2D98DA"
           onPress={
             twoRoomChecked
-              ? () => setTwoRoomChecked(false)
-              : () => setTwoRoomChecked(true)
+              ? () => {
+                  setTwoRoomChecked(false)
+                  handleRemoveRoom(2)
+                }
+              : () => {
+                  setTwoRoomChecked(true)
+                  setPiecesList([...piecesList, 2])
+                }
           }
         />
       </View>
@@ -345,8 +362,14 @@ function AddQuestScreen(props) {
           checkedColor="#2D98DA"
           onPress={
             threeRoomChecked
-              ? () => setThreeRoomChecked(false)
-              : () => setThreeRoomChecked(true)
+              ? () => {
+                  setThreeRoomChecked(false)
+                  handleRemoveRoom(3)
+                }
+              : () => {
+                  setThreeRoomChecked(true)
+                  setPiecesList([...piecesList, 3])
+                }
           }
         />
         <CheckBox
@@ -361,8 +384,15 @@ function AddQuestScreen(props) {
           checkedColor="#2D98DA"
           onPress={
             fourRoomChecked
-              ? () => setFourRoomChecked(false)
-              : () => setFourRoomChecked(true)
+              ? () => {
+                  setFourRoomChecked(false)
+                  handleRemoveRoom(4)
+                }
+              : () => {
+                  setFourRoomChecked(true)
+                  setPiecesList([...piecesList, 4])
+                  console.log(piecesList)
+                }
           }
         />
       </View>
@@ -379,8 +409,14 @@ function AddQuestScreen(props) {
           checkedColor="#2D98DA"
           onPress={
             fiveRoomChecked
-              ? () => setFiveRoomChecked(false)
-              : () => setFiveRoomChecked(true)
+              ? () => {
+                  setFiveRoomChecked(false)
+                  handleRemoveRoom(5)
+                }
+              : () => {
+                  setFiveRoomChecked(true)
+                  setPiecesList([...piecesList, 5])
+                }
           }
         />
         <CheckBox
@@ -395,8 +431,14 @@ function AddQuestScreen(props) {
           checkedColor="#2D98DA"
           onPress={
             moreRoomChecked
-              ? () => setMoreRoomChecked(false)
-              : () => setMoreRoomChecked(true)
+              ? () => {
+                  setMoreRoomChecked(false)
+                  handleRemoveRoom(6)
+                }
+              : () => {
+                  setMoreRoomChecked(true)
+                  setPiecesList([...piecesList, 6])
+                }
           }
         />
       </View>
@@ -456,71 +498,6 @@ function AddQuestScreen(props) {
 
       {fiber}
       {elevator}
-    </View>
-  )
-
-  let checkBoxesFloors = (
-    <View style={{ flexDirection: "column" }}>
-      <CheckBox
-        containerStyle={{
-          borderColor: "#FFFFFF",
-          alignSelf: "flex-start",
-          alignItems: "flex-start",
-        }}
-        center
-        title="Rez-de-chaussée"
-        checked={groundFloorChecked}
-        checkedColor="#2D98DA"
-        onPress={
-          groundFloorChecked
-            ? () => setGroundFloorChecked(false)
-            : () => [
-                setGroundFloorChecked(true),
-                setFloorChecked(false),
-                setTopFloorChecked(false),
-              ]
-        }
-      />
-      <CheckBox
-        containerStyle={{
-          borderColor: "#FFFFFF",
-          alignSelf: "flex-start",
-          alignItems: "flex-start",
-        }}
-        center
-        title="En étage"
-        checked={floorChecked}
-        checkedColor="#2D98DA"
-        onPress={
-          floorChecked
-            ? () => setFloorChecked(false)
-            : () => [
-                setFloorChecked(true),
-                setGroundFloorChecked(false),
-                setTopFloorChecked(false),
-              ]
-        }
-      />
-      <CheckBox
-        containerStyle={{
-          borderColor: "#FFFFFF",
-          alignSelf: "flex-start",
-          alignItems: "flex-start",
-        }}
-        center
-        title="Dernier étage"
-        checked={topFloorChecked}
-        checkedColor="#2D98DA"
-        onPress={
-          topFloorChecked
-            ? () => setTopFloorChecked(false)
-            : () => [
-                setTopFloorChecked(true),
-                setGroundFloorChecked(false),
-                setFloorChecked(false),
-              ]
-        }
-      />
     </View>
   )
 
@@ -1039,19 +1016,6 @@ function AddQuestScreen(props) {
         </Text>
 
         {checkBoxes}
-        <Text
-          style={{
-            fontSize: 18,
-            textAlign: "left",
-            color: "#585858",
-            fontWeight: "bold",
-            marginBottom: 5,
-            marginLeft: 10,
-          }}
-        >
-          Étage :
-        </Text>
-        {checkBoxesFloors}
 
         <Text
           style={{
@@ -1586,36 +1550,6 @@ function AddQuestScreen(props) {
       setType("local commercial")
     } else if (autreChecked == true) {
       setType("autre")
-    }
-    // nombre de pièces
-    if (oneRoomChecked == true) {
-      setNb_Pieces(1)
-    }
-    if (twoRoomChecked == true) {
-      setNb_Pieces(2)
-    }
-    if (threeRoomChecked == true) {
-      setNb_Pieces(3)
-    }
-    if (fourRoomChecked == true) {
-      setNb_Pieces(4)
-    }
-    if (fiveRoomChecked == true) {
-      setNb_Pieces(5)
-    }
-    if (moreRoomChecked == true) {
-      setNb_Pieces(6)
-    }
-
-    // Etage, RDC ou dernier etage
-    if (groundFloorChecked == true) {
-      setFloor_Type("ground_floor")
-    }
-    if (floorChecked == true) {
-      setFloor_Type("floor")
-    }
-    if (topFloorChecked == true) {
-      setFloor_Type("top_floor")
     }
 
     // Date de commercialisation
