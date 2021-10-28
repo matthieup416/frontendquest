@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet, ImageBackground, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, Image, StyleSheet, ImageBackground, TextInput, TouchableOpacity, Dimensions } from "react-native";
 import { connect } from "react-redux";
 
 import { MY_IP } from "@env"; /* Importation de la variable d'environnement */
@@ -85,6 +85,14 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: -1,
   },
   inputStyle: {
     paddingVertical: 5,
