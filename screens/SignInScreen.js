@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react"
-import { View, Text, Image, StyleSheet, ImageBackground, TextInput, TouchableOpacity } from "react-native"
-import { connect } from "react-redux"
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, StyleSheet, ImageBackground, TextInput, TouchableOpacity } from "react-native";
+import { connect } from "react-redux";
 
-import { MY_IP } from "@env" /* Importation de la variable d'environnement */
+import { MY_IP } from "@env"; /* Importation de la variable d'environnement */
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -17,14 +17,16 @@ function SignInScreen(props) {
       if (value) {
         // requête backend user (avec le token)
         // modifier addUser pour stocker l'ensemble de l'utilisateur
-        props.addUser({ token: value })
-        props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" })
+        props.addUser({ token: value });
+        props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" });
         // console.log(value)
       } else {
         console.log("error");
       }
     });
   }, []);
+
+  console.log(`http://${MY_IP}:3000/users/sign-in`);
 
   var handleSubmitSignIn = async () => {
     const data = await fetch(`http://${MY_IP}:3000/users/sign-in`, {
@@ -33,7 +35,7 @@ function SignInScreen(props) {
       body: `emailFromFront=${signInEmail}&passwordFromFront=${signInPassword}`,
     });
 
-    const body = await data.json()
+    const body = await data.json();
 
     if (body.result == true) {
       props.addUser(body.dataUser);
@@ -49,49 +51,28 @@ function SignInScreen(props) {
   });
 
   return (
-    <ImageBackground source={require('../assets/SignInScreen.png')} style={styles.container}>
-      <Image
-        source={require("../assets/logo.png")}
-        resizeMode={"contain"}
-        style={styles.Image}
-      />
+    <ImageBackground source={require("../assets/SignInScreen.png")} style={styles.container}>
+      <Image source={require("../assets/logo.png")} resizeMode={"contain"} style={styles.Image} />
       <View>
-        <TextInput
-          style={styles.inputStyle}
-          onChangeText={(text) => setSignInEmail(text)}
-          value={signInEmail}
-          placeholderTextColor={'#fff'}
-          placeholder="Mon Email"
-        />
+        <TextInput style={styles.inputStyle} onChangeText={(text) => setSignInEmail(text)} value={signInEmail} placeholderTextColor={"#fff"} placeholder="Mon Email" />
         {tabErrorsSignIn}
-        <TextInput
-          selectionColor="black"
-          style={styles.inputStyle}
-          placeholderTextColor={'#fff'}
-          onChangeText={(text) => setSignInPassword(text)}
-          value={signInPassword}
-          placeholder="Password"
-        />
+        <TextInput selectionColor="black" style={styles.inputStyle} placeholderTextColor={"#fff"} onChangeText={(text) => setSignInPassword(text)} value={signInPassword} placeholder="Password" />
       </View>
-      <TouchableOpacity style={styles.Button} onPress={() => {
-        handleSubmitSignIn()
-      }}>
-        <Text style={styles.buttonText}>
-          Connexion
-        </Text>
+      <TouchableOpacity
+        style={styles.Button}
+        onPress={() => {
+          handleSubmitSignIn();
+        }}>
+        <Text style={styles.buttonText}>Connexion</Text>
       </TouchableOpacity>
       <View style={styles.bottomBox}>
-        <Text style={styles.Ou}>
-          Ou
-        </Text>
+        <Text style={styles.Ou}>Ou</Text>
         <TouchableOpacity
           onPress={() => {
             props.navigation.navigate("SignUpHome");
           }}
           style={styles.signup}>
-          <Text style={styles.signupText}>
-            Creer un compte
-          </Text>
+          <Text style={styles.signupText}>Creer un compte</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -103,20 +84,19 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
-    alignItems: 'center'
-
+    alignItems: "center",
   },
   inputStyle: {
     paddingVertical: 5,
     fontSize: 17,
-    borderBottomColor: '#fff',
+    borderBottomColor: "#fff",
     borderBottomWidth: 1,
     width: 270,
-    marginTop: 10
+    marginTop: 10,
   },
   Ou: {
-    fontWeight: 'bold',
-    margin: 10
+    fontWeight: "bold",
+    margin: 10,
   },
   Text: {
     color: "#FFFFFF",
@@ -131,37 +111,36 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   Button: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     paddingHorizontal: 30,
     paddingVertical: 15,
-    alignSelf: 'center',
+    alignSelf: "center",
     borderRadius: 25,
-    marginTop: 30
-
+    marginTop: 30,
   },
   signup: {
-    backgroundColor: '#2C8BC6',
+    backgroundColor: "#2C8BC6",
     paddingHorizontal: 30,
     paddingVertical: 15,
-    alignSelf: 'center',
+    alignSelf: "center",
     borderRadius: 25,
   },
   signupText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    alignSelf: 'center'
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
   },
   buttonText: {
-    color: '#2C8BC6',
-    fontWeight: 'bold',
-    alignSelf: 'center'
+    color: "#2C8BC6",
+    fontWeight: "bold",
+    alignSelf: "center",
   },
   bottomBox: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 80,
-    alignItems: 'center'
-  }
-})
+    alignItems: "center",
+  },
+});
 
 function mapDispatchToProps(dispatch) {
   return {
