@@ -1,7 +1,5 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, Text, View } from "react-native";
-import { Button, Overlay } from 'react-native-elements';
-
 
 export default function CreatButton({
     children,
@@ -22,7 +20,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 50,
         paddingVertical: 17,
         elevation: 10,
-
         borderRadius: 25,
     },
     buttonWrapper: {
