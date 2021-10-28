@@ -67,10 +67,10 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="SignIn" component={SignInScreen} />
-          <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
           <Stack.Screen name="SignUpHome" component={SignUpHomeScreen} />
           <Stack.Screen name="SignUpForm" component={SignUpFormScreen} />
           <Stack.Screen name="AddQuest" component={AddQuestScreen} />
+          <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -1,46 +1,102 @@
-import React from "react"
-import { View, Text, Button } from "react-native"
-import Icon from "react-native-vector-icons/FontAwesome5"
-import { connect } from "react-redux"
+import React, { useEffect, useState } from "react";
+import { View, Text, SafeAreaView, ScrollView } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome5";
+import { connect } from "react-redux";
 
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import { Button, Overlay } from 'react-native-elements';
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Header from "../components/Account/header";
+import CreatButton from "../shared/CreatButton";
+
+import { MY_IP } from "@env" /* Variable environnement */
+
+
 
 function HomeScreen(props) {
-  var handleSubmitRemove = async () => {
-    AsyncStorage.removeItem("token")
-    props.clearUser()
-    props.navigation.navigate("SignIn", { screen: "SignInScreen" })
-  }
+
+  const [data, setdata] = useState("");
+
+  // Au chargement du composant, on obtient toutes les données de l'utilisateur
+
+  useEffect(() => {
+    const callData = async () => {
+      try {
+        let res = await fetch(`http://${MY_IP}:3000/userDetail?token=${props.dataUser.token}`)
+        res = await res.json()
+        console.log(res)
+        if (res.success) {
+          setdata(res.result)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    callData()
+  }, []);
+
+
+  console.log("console home", props.dataUser);
   return (
-    <View style={{ flex: 1, justifyContent: "flex-end" }}>
-      <Text>DASHBOARD QUetes</Text>
-      <Button
-        title="deconnexion"
-        buttonStyle={{ backgroundColor: "red" }}
-        type="solid"
-        onPress={() => handleSubmitRemove()}
-      />
-      <Button
-        title="ajouter une quête"
-        buttonStyle={{ backgroundColor: "red" }}
-        type="solid"
-        onPress={() => {
-          props.navigation.navigate("AddQuest", { screen: "AddQuestScreen" })
-        }}
-      />
-    </View>
-  )
+    <SafeAreaView>
+      <ScrollView>
+        <Header title={data.firstName} image={data.avatar} />
+        <Text
+          style={{
+            textAlign: "center",
+            fontSize: 20,
+            marginVertical: 10,
+            color: "#2C98DA",
+            fontWeight: "bold",
+          }}
+        >
+        </Text>
+
+        {data?.quests?.map((item, i) => {
+          return (
+            <View
+              key={i}
+              style={{
+                backgroundColor: "#F8F7FF",
+                padding: 15,
+                elevation: 5,
+                marginVertical: 3,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text>{item?.cities[0]?.name}</Text>
+                <Text>Rayon {item?.cities[0]?.rayon} </Text>
+              </View>
+
+              <View style={{ marginVertical: 20 }}>
+                <Text>250000E</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <CreatButton>Détails</CreatButton>
+                <CreatButton buttonStyle={{ backgroundColor: "orange" }}>
+                  0 RESULTATS
+                </CreatButton>
+              </View>
+            </View>
+          );
+        })}
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
+
 function mapStateToProps(state) {
-  return { dataUser: state.dataUser }
+  return { dataUser: state.dataUser };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    clearUser: function () {
-      dispatch({ type: "clearUser" });
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
+export default connect(mapStateToProps)(HomeScreen);

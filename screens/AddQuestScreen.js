@@ -746,7 +746,7 @@ function AddQuestScreen(props) {
           Votre budget :
         </Text>
 
-        <Input placeholder="Prix Minimum" inputContainerStyle={{ width: deviceWidth / 2 }} onChangeText={(value) => setMin_Price(value)} keyboardType="numeric" maxLength={7} />
+        <Input placeholder="Prix Minimum" inputContainerStyle={{ width: deviceWidth / 2 }} onChangeText={(value) => setMin_Price(value)} Type="keyboardnumeric" maxLength={7} />
         <Input placeholder="Prix Maximum" inputContainerStyle={{ width: deviceWidth / 2 }} onChangeText={(value) => setMax_Price(value)} keyboardType="numeric" maxLength={7} />
 
         <Text
