@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react"
-import { View, Text, Dimensions, ScrollView, Image } from "react-native"
+import {
+  View,
+  Text,
+  Dimensions,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from "react-native"
 import Icon from "react-native-vector-icons/FontAwesome5"
 import { StatusBar } from "expo-status-bar"
 import { Button, Badge } from "react-native-elements"
@@ -39,11 +46,16 @@ function ListingScreen(props) {
   const [avatarSource, setAvatarSource] = useState(
     "https://www.luxerecrutement.com/content/files/blank_user.jpg"
   )
+  const [pictureList, setPictureList] = useState([])
+
+  const [imageSource, setImageSource] = useState(
+    "https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png"
+  )
 
   useEffect(() => {
     const displayOffer = async () => {
       const reqFind = await fetch(
-        `http://${MY_IP}:3000/display-offer?offerId=61796c1aa457047cc68bf305&token=${props.dataUser.token}`
+        `http://${MY_IP}:3000/display-offer?offerId=617afe0baaa1a501b8d17ee5&token=${props.dataUser.token}`
       )
       const resultFind = await reqFind.json()
 
@@ -51,6 +63,8 @@ function ListingScreen(props) {
       setSellerData(resultFind.sellerData)
       setGoodType(CapitalizeFirstLetter(resultFind.offerData.type))
       setAvatarSource(resultFind.sellerData.avatar)
+      setImageSource(resultFind.offerData.pictures[0].url)
+      setPictureList(resultFind.offerData.pictures)
     }
 
     displayOffer()
@@ -58,12 +72,20 @@ function ListingScreen(props) {
 
   let listingContent = (
     <View>
-      <Image
-        source={require("../assets/maison-1.jpg")}
-        style={{ width: deviceWidth, height: deviceHeight / 2.8 }}
-        resizeMethod="resize"
-        resizeMode="center"
-      ></Image>
+      <TouchableOpacity
+        onPress={() =>
+          props.navigation.navigate("ImageScreen", {
+            imagesData: pictureList,
+          })
+        }
+      >
+        <Image
+          source={{ uri: imageSource }}
+          style={{ width: deviceWidth, height: deviceHeight / 2.8 }}
+          resizeMethod="resize"
+          resizeMode="center"
+        ></Image>
+      </TouchableOpacity>
       <View
         style={{
           backgroundColor: "white",
@@ -143,7 +165,7 @@ function ListingScreen(props) {
             style={{
               width: deviceWidth / 4.5,
               height: deviceWidth / 4.5,
-              borderRadius: 100,
+              borderRadius: 70,
               zIndex: 1, // mettre l'image au premier plan sur ios
               marginRight: 40,
             }}
