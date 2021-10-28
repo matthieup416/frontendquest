@@ -26,6 +26,8 @@ function SignInScreen(props) {
     });
   }, []);
 
+  console.log(`http://${MY_IP}:3000/users/sign-in`);
+
   var handleSubmitSignIn = async () => {
     const data = await fetch(`http://${MY_IP}:3000/users/sign-in`, {
       method: "POST",
