@@ -10,52 +10,35 @@ import { MY_IP } from "@env" /* Variable environnement */
 
 let deviceHeight = Dimensions.get("window").height
 let deviceWidth = Dimensions.get("window").width
-let data = [
-  {
-    user: {
-      status: "pro",
-    },
-    city: "Marseille",
-    price: 389000,
-    type: "maison",
-    surface: 105,
-    description:
-      "Idéal investisseur, excellente rentabilité. Pas de vis-à-vis. Terrasse exposée plein sud.",
-    social_text:
-      "Je serai ravie de vous faire visiter cette maison. Cette maison était sous compromis mais le financement n'a pas abouti. A visiter d'urgence!",
-    outdoor_surface: 2000,
-    nb_pieces: 6,
-    floor_type: null,
-    floor_number: null,
-    parking: false,
-    garage: true,
-    balcony: true,
-    elevator: false,
-    fiber_optics: true,
-    exclusive: true,
-    market_date: 1635321216724,
-    creation_date: 1635321216724,
-    pictures: [
-      "maison-1.jpg",
-      "maison-2.jpg",
-      "maison-3.jpg",
-      "maison-4.jpg",
-      "maison-5.jpg",
-      "maison-6.jpg",
-    ],
-    pool: true,
-    open_to_pro: false,
-    terrace: true,
-    is_online: true,
-    is_sold: false,
-  },
-]
 
 function ListingScreen(props) {
   if (!props.dataUser) {
     props.navigation.navigate("SignIn", { screen: "SignInScreen" })
   }
+
+  // fonction pour mettre la première lettre d'une string en majuscule
+  const CapitalizeFirstLetter = (str) => {
+    return str.length ? str.charAt(0).toUpperCase() + str.slice(1) : str
+  }
+  // fonction pour vérifier si l'annonce a plus de 24h
+  //   const isRecent = (dateToCompare) => {
+  //     const oneday = 60 * 60 * 24 * 1000
+
+  //     var now = new Date().getTime()
+  //     if (now - dateToCompare >= oneday) {
+  //       return true
+  //     } else {
+  //       return false
+  //     }
+  //   }
+
+  const [goodType, setGoodType] = useState("")
   const [offerData, setOfferData] = useState({})
+  const [sellerData, setSellerData] = useState({})
+  // avatar par défaut pendant le chargement
+  const [avatarSource, setAvatarSource] = useState(
+    "https://www.luxerecrutement.com/content/files/blank_user.jpg"
+  )
 
   useEffect(() => {
     const displayOffer = async () => {
@@ -63,9 +46,11 @@ function ListingScreen(props) {
         `http://${MY_IP}:3000/display-offer?offerId=61796c1aa457047cc68bf305&token=${props.dataUser.token}`
       )
       const resultFind = await reqFind.json()
-      console.log(resultFind)
 
       setOfferData(resultFind.offerData)
+      setSellerData(resultFind.sellerData)
+      setGoodType(CapitalizeFirstLetter(resultFind.offerData.type))
+      setAvatarSource(resultFind.sellerData.avatar)
     }
 
     displayOffer()
@@ -86,15 +71,23 @@ function ListingScreen(props) {
           marginRight: 10,
         }}
       >
-        <Text style={{ fontSize: 22, fontWeight: "bold", color: "#585858" }}>
-          {data[0].type} {data[0].nb_pieces} pièces {data[0].surface} m2
+        {/* pour afficher le caractère mètre carré m2 en format UNICODE  >>> \u00b2    */}
+        <Text
+          style={{
+            fontSize: 22,
+            fontWeight: "bold",
+            color: "#585858",
+          }}
+        >
+          {goodType} {offerData.nb_pieces} pièces {offerData.surface} m
+          {"\u00b2"}
         </Text>
         <Text style={{ fontSize: 22, fontWeight: "bold", color: "#2D98DA" }}>
-          {data[0].price} €
+          {offerData.price} €
         </Text>
-        <Text style={{ fontSize: 15, color: "#585858" }}>{data[0].city}</Text>
+        <Text style={{ fontSize: 15, color: "#585858" }}>{offerData.city}</Text>
         <View
-          style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}
+          style={{ flexDirection: "row", alignItems: "center", marginTop: 0 }}
         >
           <Icon
             name="meteor"
@@ -142,7 +135,7 @@ function ListingScreen(props) {
             <Text
               style={{ fontSize: 22, fontWeight: "bold", color: "#585858" }}
             >
-              Juliette
+              {sellerData.firstName}
             </Text>
           </View>
 
@@ -156,7 +149,7 @@ function ListingScreen(props) {
             }}
             resizeMethod="resize"
             resizeMode="center"
-            source={require("../assets/user-1.png")}
+            source={{ uri: avatarSource }}
           ></Image>
         </View>
         <View
@@ -187,7 +180,7 @@ function ListingScreen(props) {
               color: "#585858",
             }}
           >
-            {data[0].social_text}
+            {offerData.social_text}
           </Text>
         </View>
         <Icon
