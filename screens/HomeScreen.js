@@ -20,7 +20,7 @@ function HomeScreen(props) {
       try {
         let res = await fetch(`http://${MY_IP}:3000/userDetail?token=${props.dataUser.token}`)
         res = await res.json()
-        console.log(res)
+        console.log("user data ", res)
         if (res.success) {
           setdata(res.result)
         }
@@ -45,7 +45,7 @@ function HomeScreen(props) {
             color: "#2C98DA",
             fontWeight: "bold",
           }}
-        >
+        > Vous avez 2 quêtes en cours
         </Text>
 
         {data?.quests?.map((item, i) => {
@@ -70,7 +70,7 @@ function HomeScreen(props) {
               </View>
 
               <View style={{ marginVertical: 20 }}>
-                <Text>250000E</Text>
+                <Text>{item?.cities[0]?.min_price}€</Text>
               </View>
               <View
                 style={{

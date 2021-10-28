@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Text, View, StyleSheet, Button, ImageBackground, TouchableOpacity, StatusBar } from "react-native"
+import { Text, View, StyleSheet, Dimensions, ImageBackground, TouchableOpacity, StatusBar } from "react-native"
 
 import { connect } from "react-redux";
 
@@ -60,7 +60,7 @@ function SignUpFormScreen(props) {
             <View style={styles.formContainer}>
               <View style={{ flexDirection: 'row' }}>
                 <View style={[styles.inputWrapper, { flex: 1 }]}>
-                  <Text>
+                  <Text style={styles.text}>
                     Prenom
                   </Text>
                   <TextInput style={styles.inputStyle} onChangeText={(text) => setFirstName(text)}
@@ -68,7 +68,7 @@ function SignUpFormScreen(props) {
                 </View>
                 {tabErrorsSignUp}
                 <View style={[styles.inputWrapper, { flex: 1 }]}>
-                  <Text>
+                  <Text style={styles.text}>
                     Nom
                   </Text>
                   <TextInput style={styles.inputStyle} onChangeText={(text) => setLastName(text)}
@@ -76,25 +76,25 @@ function SignUpFormScreen(props) {
                 </View>
               </View>
               <View style={styles.inputWrapper}>
-                <Text>
+                <Text style={styles.text}>
                   Email
                 </Text>
                 <TextInput style={styles.inputStyle} onChangeText={(text) => setSignUpEmail(text)}
                   value={signUpEmail} />
               </View>
               <View style={styles.inputWrapper}>
-                <Text>
+                <Text style={styles.text}>
                   Password
                 </Text>
                 <TextInput style={styles.inputStyle} onChangeText={(number) => setSignUpPassword(number)}
                   value={signUpPassword} />
               </View>
               <View style={styles.inputWrapper}>
-                <Text>
+                <Text style={styles.text}>
                   Telephone
                 </Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text>+33</Text>
+                  <Text style={styles.text}>+33</Text>
                   <TextInput style={[styles.inputStyle, { flex: 0, minWidth: 150 }]} onChangeText={(number) => setPhoneNumber(number)}
                     value={phoneNumber} />
                 </View>
@@ -119,18 +119,31 @@ function SignUpFormScreen(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: -1,
   },
   personalText: {
     fontSize: 18,
     margin: 10,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: "#585858",
+  },
+  text: {
+    color: "#585858",
   },
   inputStyle: {
     borderBottomColor: '#000',
     borderBottomWidth: 1,
     marginVertical: 5,
     fontSize: 17,
-    paddingVertical: 4
+    paddingVertical: 4,
+    color: "#585858",
   },
   inputWrapper: {
     margin: 5,
@@ -140,11 +153,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#2C98DA',
-    marginVertical: 30
+    marginVertical: 30,
+    paddingTop: 100,
   },
   mainbox: {
     flex: 1,
     justifyContent: "center",
+    paddingBottom: 170,
   },
   signup: {
     backgroundColor: '#2C8BC6',

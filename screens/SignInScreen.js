@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { View, Text, Image, StyleSheet, ImageBackground, TextInput, TouchableOpacity } from "react-native"
+import { View, Text, Image, StyleSheet, ImageBackground, TextInput, TouchableOpacity, Dimensions } from "react-native"
 import { connect } from "react-redux"
 
 import { MY_IP } from "@env" /* Importation de la variable d'environnement */
@@ -21,7 +21,7 @@ function SignInScreen(props) {
         props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" })
         // console.log(value)
       } else {
-        console.log("error");
+        console.log("Connectez-vous!");
       }
     });
   }, []);
@@ -57,6 +57,7 @@ function SignInScreen(props) {
       />
       <View>
         <TextInput
+          selectionColor="white"
           style={styles.inputStyle}
           onChangeText={(text) => setSignInEmail(text)}
           value={signInEmail}
@@ -65,7 +66,7 @@ function SignInScreen(props) {
         />
         {tabErrorsSignIn}
         <TextInput
-          selectionColor="black"
+          selectionColor="white"
           style={styles.inputStyle}
           placeholderTextColor={'#fff'}
           onChangeText={(text) => setSignInPassword(text)}
@@ -103,10 +104,19 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
-    alignItems: 'center'
+    alignItems: 'center',
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: -1,
 
   },
   inputStyle: {
+    color: "#F8F7FF",
     paddingVertical: 5,
     fontSize: 17,
     borderBottomColor: '#fff',
@@ -116,7 +126,8 @@ const styles = StyleSheet.create({
   },
   Ou: {
     fontWeight: 'bold',
-    margin: 10
+    margin: 10,
+    color: "#585858",
   },
   Text: {
     color: "#FFFFFF",
