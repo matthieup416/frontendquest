@@ -16,7 +16,6 @@ import { StatusBar } from "expo-status-bar"
 import { MY_IP } from "@env" /* Variable environnement */
 
 function MessagesScreen(props) {
-<<<<<<< HEAD
   const [listQuest, setListQuest] = useState([])
   const [selectedQuest, setSelectedQuest] = useState("")
   const [listConversation, setListConversation] = useState([])
@@ -25,16 +24,6 @@ function MessagesScreen(props) {
   const [listMessages, setListMessages] = useState([])
   const [inputMessage, setInputMessage] = useState("")
   const scrollviewref = useRef(ScrollView)
-=======
-  const [listQuest, setListQuest] = useState([]);
-  const [selectedQuest, setSelectedQuest] = useState("");
-  const [listConversation, setListConversation] = useState([]);
-  const [selectedConversation, setSelectedConversation] = useState("");
-  const [msgIsVisible, setMsgIsVisible] = useState(false);
-  const [listMessages, setListMessages] = useState([]);
-  const [inputMessage, setInputMessage] = useState("");
-  const scrollViewRef = useRef(ScrollView);
->>>>>>> 0e19c6c443596e09aa4753dd4f06a7f9908d0d3b
 
   //Au chargement du composant, on cherche toutes les quêtes de l'utilisateur pour faire le menu select
   useEffect(() => {
@@ -47,17 +36,10 @@ function MessagesScreen(props) {
         return {
           value: quest._id,
           label: `${quest.city} - ${quest.min_price}/${quest.max_price}€`,
-<<<<<<< HEAD
         }
       })
       setListQuest(list)
       setSelectedQuest(body.listQuest[0]._id)
-=======
-        };
-      });
-      setListQuest(list);
-      setSelectedQuest(body.listQuest[0]._id);
->>>>>>> 0e19c6c443596e09aa4753dd4f06a7f9908d0d3b
     }
     listQuest()
   }, [])
@@ -135,7 +117,6 @@ function MessagesScreen(props) {
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor={"#2D98DA"} style="light" />
-<<<<<<< HEAD
         <Button
           icon={
             <Icon
@@ -152,10 +133,6 @@ function MessagesScreen(props) {
           ref={(ref) => (scrollView = ref)}
           onContentSizeChange={() => scrollView.scrollToEnd({ animated: true })}
         >
-=======
-        <Button icon={<Icon name="arrow-left" size={15} color="white" style={{ marginRight: 8 }} />} title="Retour aux discussions" onPress={() => setMsgIsVisible(false)} />
-        <ScrollView ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
->>>>>>> 0e19c6c443596e09aa4753dd4f06a7f9908d0d3b
           {listMessages.map((msg, i) => {
             if (!msg.avatar) {
               var avatar = (
