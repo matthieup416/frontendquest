@@ -6,33 +6,30 @@ import { connect } from "react-redux";
 import Header from "../components/header";
 import CreatButton from "../shared/CreatButton";
 
-import { MY_IP } from "@env" /* Variable environnement */
-
-
+import { MY_IP } from "@env"; /* Variable environnement */
+import { log } from "react-native-reanimated";
 
 function HomeScreen(props) {
-
   const [data, setData] = useState("");
   const [quest, setQuest] = useState(0);
-
-
 
   // Au chargement du composant, on obtient toutes les données de l'utilisateur
   useEffect(() => {
     async function userData() {
-      const data = await fetch(`http://${MY_IP}:3000/home/userDetail?token=${props.dataUser.token}`)
-      const body = await data.json()
+      const data = await fetch(`http://${MY_IP}:3000/home/userDetail?token=${props.dataUser.token}`);
+      const body = await data.json();
       if (body.result) {
-        setData(body.user)
+        setData(body.user);
+        setQuest(body.user.quests.length);
       } else {
-        console.log("error")
+        console.log("error");
       }
     }
     userData();
   }, []);
-  console.log(data)
+  // console.log(data);
 
-  // // Overlay 
+  // // Overlay
   // const Overlay = () => {
   //   const [visible, setVisible] = useState(false);
   //   const toggleOverlay = () => {
@@ -40,12 +37,11 @@ function HomeScreen(props) {
   //   };
   // }
 
-  var handleResult = async () => {
-    props.navigation.navigate("ResultsScreen", {
-      questId: data.quests._id
-    })
-  }
-
+  var handleResult = async (id) => {
+    props.navigation.navigate("Results", {
+      questId: id,
+    });
+  };
 
   return (
     <SafeAreaView>
@@ -58,9 +54,11 @@ function HomeScreen(props) {
             marginVertical: 10,
             color: "#2C98DA",
             fontWeight: "bold",
-          }}
-        > Vos quêtes en cours
+          }}>
+          {" "}
+          Vos {quest} quêtes en cours
         </Text>
+<<<<<<< HEAD
         {/* <Button
           title="AddQuestScreen"
           buttonStyle={{ backgroundColor: "pink" }}
@@ -73,6 +71,12 @@ function HomeScreen(props) {
           style={styles.Button}
           onPress={() => {
             handleResult();
+=======
+        <TouchableOpacity
+          style={styles.Button}
+          onPress={() => {
+            props.navigation.navigate("AddQuest", { screen: "AddQuestScreen" });
+>>>>>>> 092547d57b79bafa0cce5a5901cf334ae99d2aa5
           }}>
           <Text style={styles.buttonText}>Lancez une quête</Text>
         </TouchableOpacity>
@@ -85,14 +89,12 @@ function HomeScreen(props) {
                 padding: 15,
                 elevation: 5,
                 marginVertical: 3,
-              }}
-            >
+              }}>
               <View
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
-                }}
-              >
+                }}>
                 <Text>{item.city}</Text>
                 <Text>Rayon {item.rayon} </Text>
               </View>
@@ -104,13 +106,15 @@ function HomeScreen(props) {
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
-                }}
-              >
+                }}>
                 <CreatButton>Détails</CreatButton>
-                <CreatButton onPress={() => {
-                  handleResult()
-                }} buttonStyle={{ backgroundColor: "orange" }}>
-                  0 RESULTATS
+                <CreatButton
+                  onPress={() => {
+                    handleResult(item._id);
+                    console.log(item._id);
+                  }}
+                  buttonStyle={{ backgroundColor: "orange" }}>
+                  RESULTATS
                 </CreatButton>
               </View>
             </View>
@@ -128,6 +132,18 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderRadius: 25,
     marginTop: 5,
+  },
+});
+
+const styles = StyleSheet.create({
+  Button: {
+    backgroundColor: "#FBC531",
+    paddingHorizontal: 30,
+    paddingVertical: 15,
+    alignSelf: "center",
+    borderRadius: 25,
+    marginTop: 5,
+    marginBottom: 5,
   },
 });
 
