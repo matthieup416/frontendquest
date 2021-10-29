@@ -140,9 +140,6 @@ function MessagesScreen(props) {
         {/* Résultat du choix du select */}
         <Card containerStyle={{ padding: 0, flex: 0 }}>
           {listConversation.map((d, i) => {
-            {
-              /* console.log("listConversation", d); */
-            }
             if (!d.usersLastMessage.avatar) {
               var avatar = <Avatar rounded icon={{ name: "user", type: "font-awesome" }} title={d.usersLastMessage.prenom[0]} containerStyle={{ backgroundColor: "#585858" }} />;
             } else {
