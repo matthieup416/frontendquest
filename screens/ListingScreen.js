@@ -48,7 +48,7 @@ function ListingScreen(props) {
   //   }
 
   const [newMessage, setNewMessage] = useState("")
-  const [questId, setQuestId] = useState("617ad5a219347a8d2567cc2e")
+  const [offerId, setOfferId] = useState("617be796d358a930a204d9af")
   const [goodType, setGoodType] = useState("")
   const [offerData, setOfferData] = useState({})
   const [sellerData, setSellerData] = useState({})
@@ -65,7 +65,7 @@ function ListingScreen(props) {
   useEffect(() => {
     const displayOffer = async () => {
       const reqFind = await fetch(
-        `http://${MY_IP}:3000/display-offer?offerId=617afe0baaa1a501b8d17ee5&token=${props.dataUser.token}`
+        `http://${MY_IP}:3000/display-offer?offerId=${props.route.params.questId}&token=${props.dataUser.token}`
       )
       const resultFind = await reqFind.json()
 
@@ -92,7 +92,7 @@ function ListingScreen(props) {
     const data = await fetch(`http://${MY_IP}:3000/inbox/addMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `sender_token=${props.dataUser.token}&receiver_token=${sellerData.sellerToken}&quest_id=${questId}&offer_id=${offerData._id}&message=${newMessage}`,
+      body: `sender_token=${props.dataUser.token}&receiver_token=${sellerData.sellerToken}&quest_id=${props.route.params.questId}&offer_id=${offerData._id}&message=${newMessage}`,
     })
 
     const body = await data.json()
@@ -101,7 +101,7 @@ function ListingScreen(props) {
         "tout est bon coté back les infos ont bien été envoyées vers Messages !"
       )
       // redirection vers MessagesScreen
-      props.navigation.navigate("BottomNavigator", { screen: "MessagesScreen" })
+      props.navigation.navigate("Messages", { screen: "MessagesScreen" })
     } else {
       console.log("erreur coté back!")
     }
