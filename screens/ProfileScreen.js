@@ -20,6 +20,22 @@ function ProfileScreen(props) {
         type="solid"
         onPress={() => handleSubmitRemove()}
       />
+      <Button
+        title="ListingScreen"
+        buttonStyle={{ backgroundColor: "pink" }}
+        type="solid"
+        onPress={() => {
+          props.navigation.navigate("Listing", { screen: "ListingScreen" });
+        }}
+      />
+      <Button
+        title="ResultsScreen"
+        buttonStyle={{ backgroundColor: "pink" }}
+        type="solid"
+        onPress={() => {
+          props.navigation.navigate("Results", { screen: "ResultsScreen" });
+        }}
+      />
     </View>
   )
 }
