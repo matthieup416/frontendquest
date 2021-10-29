@@ -17,7 +17,7 @@ function MessagesScreen(props) {
   const [msgIsVisible, setMsgIsVisible] = useState(false);
   const [listMessages, setListMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
-  const scrollviewref = useRef(ScrollView);
+  const scrollViewRef = useRef(ScrollView);
 
   //Au chargement du composant, on cherche toutes les quêtes de l'utilisateur pour faire le menu select
   useEffect(() => {
@@ -27,7 +27,7 @@ function MessagesScreen(props) {
       var list = body.listQuest.map((quest) => {
         return {
           value: quest._id,
-          label: `${quest.cities[0].name} - ${quest.min_price}/${quest.max_price}€`,
+          label: `${quest.city} - ${quest.min_price}/${quest.max_price}€`,
         };
       });
       setListQuest(list);
@@ -106,7 +106,7 @@ function MessagesScreen(props) {
       <View style={styles.container}>
         <StatusBar backgroundColor={"#2D98DA"} style="light" />
         <Button icon={<Icon name="arrow-left" size={15} color="white" style={{ marginRight: 8 }} />} title="Retour aux discussions" onPress={() => setMsgIsVisible(false)} />
-        <ScrollView ref={(ref) => (scrollView = ref)} onContentSizeChange={() => scrollView.scrollToEnd({ animated: true })}>
+        <ScrollView ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
           {listMessages.map((msg, i) => {
             if (!msg.avatar) {
               var avatar = <Avatar rounded icon={<FontAwesome name="user" size={24} color="black" />} title={msg.firstName[0]} containerStyle={{ backgroundColor: "#585858" }} />;
