@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-import React, { useState, useEffect } from "react"
-import { View, Text, Image, StyleSheet, ImageBackground, TextInput, TouchableOpacity, Dimensions } from "react-native"
-import { connect } from "react-redux"
-=======
 import React, { useState, useEffect } from "react";
 import { View, Text, Image, StyleSheet, ImageBackground, TextInput, TouchableOpacity, Dimensions } from "react-native";
 import { connect } from "react-redux";
->>>>>>> results
 
 import { MY_IP } from "@env"; /* Importation de la variable d'environnement */
 
@@ -27,20 +21,11 @@ function SignInScreen(props) {
         props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" });
         // console.log(value)
       } else {
-<<<<<<< HEAD
         console.log("Connectez-vous!");
-=======
-        console.log("error");
->>>>>>> results
       }
     });
   }, []);
 
-<<<<<<< HEAD
-=======
-  console.log(`http://${MY_IP}:3000/users/sign-in`);
-
->>>>>>> results
   var handleSubmitSignIn = async () => {
     const data = await fetch(`http://${MY_IP}:3000/users/sign-in`, {
       method: "POST",
@@ -67,29 +52,9 @@ function SignInScreen(props) {
     <ImageBackground source={require("../assets/SignInScreen.png")} style={styles.container}>
       <Image source={require("../assets/logo.png")} resizeMode={"contain"} style={styles.Image} />
       <View>
-<<<<<<< HEAD
-        <TextInput
-          selectionColor="white"
-          style={styles.inputStyle}
-          onChangeText={(text) => setSignInEmail(text)}
-          value={signInEmail}
-          placeholderTextColor={"#fff"}
-          placeholder="Mon Email"
-        />
+        <TextInput selectionColor="white" style={styles.inputStyle} onChangeText={(text) => setSignInEmail(text)} value={signInEmail} placeholderTextColor={"#fff"} placeholder="Mon Email" />
         {tabErrorsSignIn}
-        <TextInput
-          selectionColor="white"
-          style={styles.inputStyle}
-          placeholderTextColor={"#fff"}
-          onChangeText={(text) => setSignInPassword(text)}
-          value={signInPassword}
-          placeholder="Password"
-        />
-=======
-        <TextInput style={styles.inputStyle} onChangeText={(text) => setSignInEmail(text)} value={signInEmail} placeholderTextColor={"#fff"} placeholder="Mon Email" />
-        {tabErrorsSignIn}
-        <TextInput selectionColor="black" style={styles.inputStyle} placeholderTextColor={"#fff"} onChangeText={(text) => setSignInPassword(text)} value={signInPassword} placeholder="Password" />
->>>>>>> results
+        <TextInput selectionColor="white" style={styles.inputStyle} placeholderTextColor={"#fff"} onChangeText={(text) => setSignInPassword(text)} value={signInPassword} placeholder="Password" />
       </View>
       <TouchableOpacity
         style={styles.Button}
@@ -117,11 +82,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
-<<<<<<< HEAD
-    alignItems: 'center',
-=======
     alignItems: "center",
->>>>>>> results
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
     position: "absolute",
@@ -130,10 +91,6 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: -1,
-<<<<<<< HEAD
-
-=======
->>>>>>> results
   },
   inputStyle: {
     color: "#F8F7FF",
@@ -145,7 +102,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   Ou: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     margin: 10,
     color: "#585858",
   },
