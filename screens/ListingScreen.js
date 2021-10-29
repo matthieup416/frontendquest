@@ -9,7 +9,7 @@ import {
 } from "react-native"
 import Icon from "react-native-vector-icons/FontAwesome5"
 import { StatusBar } from "expo-status-bar"
-import { Button, Badge } from "react-native-elements"
+import { Button, Badge, Overlay, ListItem } from "react-native-elements"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 
 import { connect } from "react-redux"
@@ -21,6 +21,14 @@ let deviceWidth = Dimensions.get("window").width
 function ListingScreen(props) {
   if (!props.dataUser) {
     props.navigation.navigate("SignIn", { screen: "SignInScreen" })
+  }
+  //Etat pour l'affichage de la surface extérieure s'il y en a
+  const [isVisibleOutdoor, setIsVisibleOutdoor] = useState(false)
+  // Etat pour l'overlay "détails"
+  const [visible, setVisible] = useState(false)
+  // fonction pour faire apparaitre l'overlay
+  const toggleOverlay = () => {
+    setVisible(!visible)
   }
 
   // fonction pour mettre la première lettre d'une string en majuscule
@@ -39,6 +47,8 @@ function ListingScreen(props) {
   //     }
   //   }
 
+  const [newMessage, setNewMessage] = useState("")
+  const [questId, setQuestId] = useState("617ad5a219347a8d2567cc2e")
   const [goodType, setGoodType] = useState("")
   const [offerData, setOfferData] = useState({})
   const [sellerData, setSellerData] = useState({})
@@ -61,14 +71,184 @@ function ListingScreen(props) {
 
       setOfferData(resultFind.offerData)
       setSellerData(resultFind.sellerData)
+      setNewMessage(
+        `👋 Bonjour ${resultFind.sellerData.firstName}, je suis intéressé par votre offre (${resultFind.offerData.type} à ${resultFind.offerData.city}). Pouvez-vous m'en dire un peu plus ?`
+      )
       setGoodType(CapitalizeFirstLetter(resultFind.offerData.type))
       setAvatarSource(resultFind.sellerData.avatar)
       setImageSource(resultFind.offerData.pictures[0].url)
       setPictureList(resultFind.offerData.pictures)
+      //on rend la surface extérieure visible si > 0
+      if (resultFind.offerData.outdoor_surface > 0) {
+        setIsVisibleOutdoor(true)
+      }
     }
 
     displayOffer()
   }, [])
+
+  /// fonction pour créer une conversation quand on clique sur le bouton bleu handshake
+  var createConversation = async () => {
+    const data = await fetch(`http://${MY_IP}:3000/inbox/addMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `sender_token=${props.dataUser.token}buyer_token=${props.dataUser.token}&seller_token=${sellerData.sellerToken}&quest_id=${questId}&offer_id=${offerData._id}&message=${newMessage}`,
+    })
+
+    const body = await data.json()
+    if (body.result == true) {
+      console.log(
+        "tout est bon coté back les infos ont bien été envoyées vers Messages !"
+      )
+      // redirection vers MessagesScreen
+      props.navigation.navigate("BottomNavigator", { screen: "MessagesScreen" })
+    } else {
+      console.log("erreur coté back!")
+    }
+  }
+
+  let descriptionOver = (
+    <View
+      style={{
+        backgroundColor: "#ECECEC",
+        margin: 5,
+        padding: 10,
+        borderRadius: 10,
+      }}
+    >
+      <Text
+        style={{
+          fontSize: 20,
+          color: "#585858",
+        }}
+      >
+        Description :
+      </Text>
+      <Text style={{ color: "#585858", textAlign: "justify" }}>
+        {offerData.description}
+      </Text>
+    </View>
+  )
+  // liste des caractéristiques en bas de l'annonce (piscine, fibre, etc)
+  let detailsContent = (
+    <View
+      style={{
+        flex: 1,
+        width: deviceWidth * 0.82,
+        flexDirection: "column",
+        alignItems: "flex-start",
+        jusitfyContent: "center",
+        borderRadius: 18,
+        borderColor: "#FBC531",
+        borderWidth: 1,
+        alignSelf: "center",
+        marginBottom: 20,
+        marginTop: 10,
+      }}
+    >
+      <Text
+        style={{
+          padding: 5,
+          color: "#868686",
+          fontSize: 19,
+          borderRadius: 30,
+          textAlign: "center",
+          fontWeight: "bold",
+          marginBottom: 5,
+          width: deviceWidth / 1.3,
+        }}
+      >
+        Caractéristiques
+      </Text>
+      <Text
+        style={{
+          backgroundColor: "white",
+          padding: 5,
+          color: "#868686",
+
+          fontWeight: "bold",
+          marginBottom: 5,
+          width: deviceWidth / 1.3,
+        }}
+      >
+        Surface habitable : {offerData.surface} m{"\u00b2"}
+      </Text>
+      <Text
+        style={{
+          backgroundColor: "white",
+          padding: 5,
+          color: "#868686",
+
+          fontWeight: "bold",
+          marginBottom: 5,
+          width: deviceWidth / 1.3,
+        }}
+        visible={isVisibleOutdoor}
+      >
+        Surface extérieure : {offerData.outdoor_surface} m{"\u00b2"}
+      </Text>
+
+      <Text
+        visible={offerData.pool}
+        style={{
+          padding: 5,
+          color: "#868686",
+
+          fontWeight: "bold",
+          marginBottom: 5,
+          width: deviceWidth / 2,
+        }}
+      >
+        <Icon
+          name="check"
+          size={15}
+          color="#FBC531"
+          style={{ marginRight: 15 }}
+        />
+        {"  "}
+        Piscine 🏊‍♂️
+      </Text>
+      <Text
+        visible={offerData.parking}
+        style={{
+          padding: 5,
+          color: "#868686",
+
+          fontWeight: "bold",
+          marginBottom: 5,
+        }}
+      >
+        <Icon
+          name="check"
+          size={15}
+          color="#FBC531"
+          style={{ marginRight: 15 }}
+        />
+        {"  "}
+        Stationnement privatif 🚗
+      </Text>
+
+      <Text
+        visible={offerData.fiber_optics}
+        style={{
+          padding: 5,
+          color: "#868686",
+
+          fontWeight: "bold",
+          marginBottom: 5,
+        }}
+      >
+        <Icon
+          name="check"
+          size={15}
+          color="#FBC531"
+          style={{ marginRight: 15 }}
+        />
+        {"  "}
+        Raccordé à la fibre optique 👨‍💻
+      </Text>
+    </View>
+  )
 
   let listingContent = (
     <View>
@@ -108,6 +288,7 @@ function ListingScreen(props) {
           {offerData.price} €
         </Text>
         <Text style={{ fontSize: 15, color: "#585858" }}>{offerData.city}</Text>
+
         <View
           style={{ flexDirection: "row", alignItems: "center", marginTop: 0 }}
         >
@@ -127,53 +308,38 @@ function ListingScreen(props) {
             EN VENTE DEPUIS MOINS DE 24H
           </Text>
         </View>
+        <Text
+          style={{
+            color: "#868686",
+
+            fontWeight: "bold",
+          }}
+          visible={offerData.exclusive}
+        >
+          💎 Bien en exclusivité dans notre agence
+        </Text>
         <Button
-          title="Détails"
+          title="Description"
           titleStyle={{ color: "#585858" }}
           buttonStyle={{
-            width: deviceWidth / 3,
+            width: deviceWidth / 2.8,
             borderRadius: 50,
 
             backgroundColor: "#FBC531",
-            marginTop: deviceHeight / 25,
+            marginTop: deviceHeight / 40,
           }}
+          onPress={toggleOverlay}
+          icon={
+            <Icon
+              name="book-reader"
+              size={15}
+              color="#585858"
+              style={{ marginRight: 8, marginLeft: 5 }}
+            />
+          }
+          iconLeft
         />
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "flex-end",
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "column",
-              alignItems: "flex-end",
-              justifyContent: "center",
-              marginRight: 5,
-              marginBottom: 10,
-            }}
-          >
-            <Badge value="PRO" badgeStyle={{ backgroundColor: "#2D98DA" }} />
-            <Text
-              style={{ fontSize: 22, fontWeight: "bold", color: "#585858" }}
-            >
-              {sellerData.firstName}
-            </Text>
-          </View>
 
-          <Image
-            style={{
-              width: deviceWidth / 4.5,
-              height: deviceWidth / 4.5,
-              borderRadius: 70,
-              zIndex: 1, // mettre l'image au premier plan sur ios
-              marginRight: 40,
-            }}
-            resizeMethod="resize"
-            resizeMode="center"
-            source={{ uri: avatarSource }}
-          ></Image>
-        </View>
         <View
           style={{
             backgroundColor: "#F8F7FF",
@@ -181,8 +347,8 @@ function ListingScreen(props) {
             marginRight: deviceWidth / 20,
             padding: deviceWidth / 20,
             paddingBottom: deviceWidth / 20 + 5,
-            marginTop: -20,
             fontStyle: "italic",
+            marginTop: 40,
           }}
           borderRadius={18}
         >
@@ -192,12 +358,49 @@ function ListingScreen(props) {
             color="rgba(0,0,0,0.05)"
             style={{ marginTop: -40, marginLeft: 0 }}
           />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              marginTop: -90,
+              marginRight: -50,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "column",
+                alignItems: "flex-end",
+                justifyContent: "center",
+                marginRight: 5,
+                marginBottom: 10,
+              }}
+            >
+              <Badge value="PRO" badgeStyle={{ backgroundColor: "#2D98DA" }} />
+              <Text
+                style={{ fontSize: 22, fontWeight: "bold", color: "#585858" }}
+              >
+                {sellerData.firstName}
+              </Text>
+            </View>
+
+            <Image
+              style={{
+                width: deviceWidth / 4.5,
+                height: deviceWidth / 4.5,
+                borderRadius: 70,
+                marginRight: 40,
+              }}
+              resizeMethod="resize"
+              resizeMode="center"
+              source={{ uri: avatarSource }}
+            ></Image>
+          </View>
           <Text
             style={{
               fontStyle: "italic",
               lineHeight: 20,
               textAlign: "justify",
-              marginTop: 0,
+              marginTop: 10,
               marginBottom: 5,
               color: "#585858",
             }}
@@ -223,48 +426,62 @@ function ListingScreen(props) {
 
   // footer fixe avec les deux boutons pour accepter ou refuser une offre
   let footer = (
-    <View
-      style={{
-        flexDirection: "row",
-        justifyContent: "space-evenly",
-        alignItems: "center",
-      }}
-    >
-      <View
+    <View>
+      <Text
         style={{
-          backgroundColor: "white",
-          borderWidth: 3,
-          borderColor: "#585858",
-          borderRadius: 20,
-          paddingLeft: 10,
-          paddingRight: 10,
-          paddingTop: 5,
-          paddingBottom: 5,
+          fontSize: 18,
+          fontWeight: "bold",
+          color: "#2D98DA",
+          textAlign: "center",
+          marginBottom: 5,
         }}
       >
-        <MaterialCommunityIcons
-          name="bell-cancel-outline"
-          size={40}
-          color="#585858"
-          style={{ marginLeft: "auto", marginRight: "auto" }}
-        />
-      </View>
+        Intéressé par l'offre de {sellerData.firstName} ?
+      </Text>
       <View
         style={{
-          backgroundColor: "#2D98DA",
-          borderRadius: 20,
-          paddingLeft: 10,
-          paddingRight: 10,
-          paddingTop: 5,
-          paddingBottom: 5,
+          flexDirection: "row",
+          justifyContent: "space-evenly",
+          alignItems: "center",
         }}
       >
-        <Icon
-          name="handshake"
-          size={50}
-          color="white"
-          style={{ marginLeft: "auto", marginRight: "auto" }}
-        />
+        <View
+          style={{
+            backgroundColor: "white",
+            borderWidth: 3,
+            borderColor: "#98989E",
+            borderRadius: 20,
+            paddingLeft: 10,
+            paddingRight: 10,
+            paddingTop: 5,
+            paddingBottom: 5,
+          }}
+        >
+          <MaterialCommunityIcons
+            name="bell-cancel-outline"
+            size={35}
+            color="#98989E"
+            style={{ marginLeft: "auto", marginRight: "auto" }}
+          />
+        </View>
+        <View
+          style={{
+            backgroundColor: "#2D98DA",
+            borderRadius: 20,
+            paddingLeft: 10,
+            paddingRight: 10,
+            paddingTop: 5,
+            paddingBottom: 5,
+          }}
+        >
+          <Icon
+            name="handshake"
+            size={40}
+            color="white"
+            style={{ marginLeft: "auto", marginRight: "auto" }}
+            onPress={createConversation}
+          />
+        </View>
       </View>
     </View>
   )
@@ -277,6 +494,9 @@ function ListingScreen(props) {
         justifyContent: "flex-start",
       }}
     >
+      <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+        {descriptionOver}
+      </Overlay>
       <StatusBar backgroundColor={"#2D98DA"} style="light" />
       <ScrollView
         style={{
@@ -284,12 +504,15 @@ function ListingScreen(props) {
         }}
       >
         {listingContent}
+        {detailsContent}
       </ScrollView>
       <View
         style={{
-          height: deviceHeight / 10,
+          height: deviceHeight / 8,
           backgroundColor: "white",
           justifyContent: "center",
+          borderTopWidth: 2,
+          borderColor: "#98989E",
         }}
       >
         {footer}
