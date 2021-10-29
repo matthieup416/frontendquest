@@ -3,12 +3,11 @@ import { Text, View, StyleSheet, Dimensions, ImageBackground, TouchableOpacity, 
 
 import { connect } from "react-redux";
 
-import { MY_IP } from "@env" /* Variable environnement */
-
+import { MY_IP } from "@env"; /* Variable environnement */
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { TextInput } from "react-native-gesture-handler"
+import { TextInput } from "react-native-gesture-handler";
 
 function SignUpFormScreen(props) {
   const [signUpEmail, setSignUpEmail] = useState("");
@@ -42,15 +41,12 @@ function SignUpFormScreen(props) {
     return <Text>{error}</Text>;
   });
 
-
   return (
     <>
       {/* <StatusBar barStyle={{ height: StatusBar.currentHeight }} backgroundColor={'#2C8BC6'} /> */}
-      <ImageBackground source={require('../assets/SignUpScreen.png')} style={styles.container}>
+      <ImageBackground source={require("../assets/SignUpScreen.png")} style={styles.container}>
         <View>
-          <Text style={styles.headingText}>
-            Vous êtes acheteur
-          </Text>
+          <Text style={styles.headingText}>Vous êtes acheteur</Text>
         </View>
         <View style={styles.mainbox}>
           <View>
@@ -113,7 +109,7 @@ function SignUpFormScreen(props) {
         </View>
       </ImageBackground>
     </>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -138,7 +134,7 @@ const styles = StyleSheet.create({
     color: "#585858",
   },
   inputStyle: {
-    borderBottomColor: '#000',
+    borderBottomColor: "#000",
     borderBottomWidth: 1,
     marginVertical: 5,
     fontSize: 17,
@@ -162,28 +158,28 @@ const styles = StyleSheet.create({
     paddingBottom: 170,
   },
   signup: {
-    backgroundColor: '#2C8BC6',
+    backgroundColor: "#2C8BC6",
     paddingHorizontal: 50,
     paddingVertical: 17,
     elevation: 10,
     borderRadius: 25,
   },
   buttonWrapper: {
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
     paddingRight: 50,
-    paddingTop: 50
+    paddingTop: 50,
   },
   signupText: {
-    color: '#fff',
-    alignSelf: 'center'
+    color: "#fff",
+    alignSelf: "center",
   },
   formContainer: {
-    backgroundColor: '#F8F7FF',
+    backgroundColor: "#F8F7FF",
     paddingVertical: 10,
     elevation: 10,
-    paddingHorizontal: 15
-  }
-})
+    paddingHorizontal: 15,
+  },
+});
 
 function mapDispatchToProps(dispatch) {
   return {

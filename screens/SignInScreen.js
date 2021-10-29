@@ -4,13 +4,13 @@ import { connect } from "react-redux"
 
 import { MY_IP } from "@env" /* Importation de la variable d'environnement */
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 function SignInScreen(props) {
-  const [signInEmail, setSignInEmail] = useState("");
-  const [signInPassword, setSignInPassword] = useState("");
+  const [signInEmail, setSignInEmail] = useState("")
+  const [signInPassword, setSignInPassword] = useState("")
 
-  const [listErrorsSignIn, setErrorsSignIn] = useState([]);
+  const [listErrorsSignIn, setErrorsSignIn] = useState([])
 
   useEffect(() => {
     AsyncStorage.getItem("token", function (error, value) {
@@ -23,33 +23,36 @@ function SignInScreen(props) {
       } else {
         console.log("Connectez-vous!");
       }
-    });
-  }, []);
+    })
+  }, [])
 
   var handleSubmitSignIn = async () => {
     const data = await fetch(`http://${MY_IP}:3000/users/sign-in`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `emailFromFront=${signInEmail}&passwordFromFront=${signInPassword}`,
-    });
+    })
 
     const body = await data.json()
 
     if (body.result == true) {
-      props.addUser(body.dataUser);
-      props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" });
-      AsyncStorage.setItem("token", body.dataUser.token);
+      props.addUser(body.dataUser)
+      props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" })
+      AsyncStorage.setItem("token", body.dataUser.token)
     } else {
-      setErrorsSignIn(body.error);
+      setErrorsSignIn(body.error)
     }
-  };
+  }
 
   var tabErrorsSignIn = listErrorsSignIn.map((error, i) => {
-    return <Text key={i}>{error}</Text>;
-  });
+    return <Text key={i}>{error}</Text>
+  })
 
   return (
-    <ImageBackground source={require('../assets/SignInScreen.png')} style={styles.container}>
+    <ImageBackground
+      source={require("../assets/SignInScreen.png")}
+      style={styles.container}
+    >
       <Image
         source={require("../assets/logo.png")}
         resizeMode={"contain"}
@@ -61,42 +64,40 @@ function SignInScreen(props) {
           style={styles.inputStyle}
           onChangeText={(text) => setSignInEmail(text)}
           value={signInEmail}
-          placeholderTextColor={'#fff'}
+          placeholderTextColor={"#fff"}
           placeholder="Mon Email"
         />
         {tabErrorsSignIn}
         <TextInput
           selectionColor="white"
           style={styles.inputStyle}
-          placeholderTextColor={'#fff'}
+          placeholderTextColor={"#fff"}
           onChangeText={(text) => setSignInPassword(text)}
           value={signInPassword}
           placeholder="Password"
         />
       </View>
-      <TouchableOpacity style={styles.Button} onPress={() => {
-        handleSubmitSignIn()
-      }}>
-        <Text style={styles.buttonText}>
-          Connexion
-        </Text>
+      <TouchableOpacity
+        style={styles.Button}
+        onPress={() => {
+          handleSubmitSignIn()
+        }}
+      >
+        <Text style={styles.buttonText}>Connexion</Text>
       </TouchableOpacity>
       <View style={styles.bottomBox}>
-        <Text style={styles.Ou}>
-          Ou
-        </Text>
+        <Text style={styles.Ou}>Ou</Text>
         <TouchableOpacity
           onPress={() => {
-            props.navigation.navigate("SignUpHome");
+            props.navigation.navigate("SignUpHome")
           }}
-          style={styles.signup}>
-          <Text style={styles.signupText}>
-            Creer un compte
-          </Text>
+          style={styles.signup}
+        >
+          <Text style={styles.signupText}>Creer un compte</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -119,10 +120,10 @@ const styles = StyleSheet.create({
     color: "#F8F7FF",
     paddingVertical: 5,
     fontSize: 17,
-    borderBottomColor: '#fff',
+    borderBottomColor: "#fff",
     borderBottomWidth: 1,
     width: 270,
-    marginTop: 10
+    marginTop: 10,
   },
   Ou: {
     fontWeight: 'bold',
@@ -142,44 +143,43 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   Button: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     paddingHorizontal: 30,
     paddingVertical: 15,
-    alignSelf: 'center',
+    alignSelf: "center",
     borderRadius: 25,
-    marginTop: 30
-
+    marginTop: 30,
   },
   signup: {
-    backgroundColor: '#2C8BC6',
+    backgroundColor: "#2C8BC6",
     paddingHorizontal: 30,
     paddingVertical: 15,
-    alignSelf: 'center',
+    alignSelf: "center",
     borderRadius: 25,
   },
   signupText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    alignSelf: 'center'
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
   },
   buttonText: {
-    color: '#2C8BC6',
-    fontWeight: 'bold',
-    alignSelf: 'center'
+    color: "#2C8BC6",
+    fontWeight: "bold",
+    alignSelf: "center",
   },
   bottomBox: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 80,
-    alignItems: 'center'
-  }
+    alignItems: "center",
+  },
 })
 
 function mapDispatchToProps(dispatch) {
   return {
     addUser: function (dataUser) {
-      dispatch({ type: "addUser", dataUser: dataUser });
+      dispatch({ type: "addUser", dataUser: dataUser })
     },
-  };
+  }
 }
 
-export default connect(null, mapDispatchToProps)(SignInScreen);
+export default connect(null, mapDispatchToProps)(SignInScreen)

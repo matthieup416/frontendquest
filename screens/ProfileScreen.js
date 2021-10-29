@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function ProfileScreen(props) {
   var handleSubmitRemove = async () => {
-    console.log("click!")
+    console.log("Déconnecté!")
     AsyncStorage.removeItem("token")
     props.navigation.navigate("SignIn", { screen: "SignInScreen" })
   }

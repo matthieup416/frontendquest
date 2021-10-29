@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, ScrollView } from "react-native";
 import { connect } from "react-redux";
+// import { Overlay } from "react-native-elements";
 
-import Header from "../components/Account/header";
+import Header from "../components/header";
 import CreatButton from "../shared/CreatButton";
 
 import { MY_IP } from "@env" /* Variable environnement */
@@ -11,28 +12,34 @@ import { MY_IP } from "@env" /* Variable environnement */
 
 function HomeScreen(props) {
 
-  const [data, setdata] = useState("");
+  const [data, setData] = useState("");
+  const [quest, setQuest] = useState(0);
 
   // Au chargement du composant, on obtient toutes les données de l'utilisateur
-
   useEffect(() => {
-    const callData = async () => {
-      try {
-        let res = await fetch(`http://${MY_IP}:3000/userDetail?token=${props.dataUser.token}`)
-        res = await res.json()
-        console.log("user data ", res)
-        if (res.success) {
-          setdata(res.result)
-        }
-      } catch (error) {
-        console.log(error)
+    async function userData() {
+      const data = await fetch(`http://${MY_IP}:3000/home/userDetail?token=${props.dataUser.token}`)
+      const body = await data.json()
+      if (body.result) {
+        setData(body.user)
+      } else {
+        console.log("error")
       }
     }
-    callData()
+    userData();
   }, []);
 
 
-  console.log("console home", props.dataUser);
+  // // Overlay 
+
+  // const Overlay = () => {
+  //   const [visible, setVisible] = useState(false);
+
+  //   const toggleOverlay = () => {
+  //     setVisible(!visible);
+  //   };
+  // }
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -47,8 +54,7 @@ function HomeScreen(props) {
           }}
         > Vous avez 2 quêtes en cours
         </Text>
-
-        {data?.quests?.map((item, i) => {
+        {data.quests?.map((item, i) => {
           return (
             <View
               key={i}
@@ -65,12 +71,12 @@ function HomeScreen(props) {
                   justifyContent: "space-between",
                 }}
               >
-                <Text>{item?.cities[0]?.name}</Text>
-                <Text>Rayon {item?.cities[0]?.rayon} </Text>
+                <Text>{item.city}</Text>
+                <Text>Rayon {item.rayon} </Text>
               </View>
 
               <View style={{ marginVertical: 20 }}>
-                <Text>{item?.cities[0]?.min_price}€</Text>
+                <Text>{item.max_price}€</Text>
               </View>
               <View
                 style={{
