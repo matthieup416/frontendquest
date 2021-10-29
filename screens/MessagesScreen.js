@@ -41,6 +41,7 @@ function MessagesScreen(props) {
     async function selectedConversation() {
       const data = await fetch(`http://${MY_IP}:3000/inbox/selectedQuest?id=${selectedQuest}&token=${props.dataUser.token}`);
       const body = await data.json();
+      console.log("body", body);
       var list = body.conversations.conversation.map((conv) => {
         return {
           usersLastMessage: {
@@ -139,6 +140,9 @@ function MessagesScreen(props) {
         {/* Résultat du choix du select */}
         <Card containerStyle={{ padding: 0, flex: 0 }}>
           {listConversation.map((d, i) => {
+            {
+              /* console.log("listConversation", d); */
+            }
             if (!d.usersLastMessage.avatar) {
               var avatar = <Avatar rounded icon={{ name: "user", type: "font-awesome" }} title={d.usersLastMessage.prenom[0]} containerStyle={{ backgroundColor: "#585858" }} />;
             } else {
