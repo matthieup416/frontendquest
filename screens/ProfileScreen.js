@@ -3,7 +3,7 @@ import { View, Text, Button } from "react-native"
 import Icon from "react-native-vector-icons/FontAwesome5"
 import { connect } from "react-redux"
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 function ProfileScreen(props) {
   var handleSubmitRemove = async () => {
@@ -14,6 +14,15 @@ function ProfileScreen(props) {
   return (
     <View style={{ flex: 1, justifyContent: "flex-end" }}>
       <Text>Profile page de profil</Text>
+
+      <Button
+        title="AddQuestScreen"
+        buttonStyle={{ backgroundColor: "pink" }}
+        type="solid"
+        onPress={() => {
+          props.navigation.navigate("AddQuest", { screen: "AddQuestScreen" })
+        }}
+      />
       <Button
         title="deconnexion"
         buttonStyle={{ backgroundColor: "red" }}
@@ -25,7 +34,7 @@ function ProfileScreen(props) {
         buttonStyle={{ backgroundColor: "pink" }}
         type="solid"
         onPress={() => {
-          props.navigation.navigate("Listing", { screen: "ListingScreen" });
+          props.navigation.navigate("Listing", { screen: "ListingScreen" })
         }}
       />
       <Button
@@ -33,7 +42,7 @@ function ProfileScreen(props) {
         buttonStyle={{ backgroundColor: "pink" }}
         type="solid"
         onPress={() => {
-          props.navigation.navigate("Results", { screen: "ResultsScreen" });
+          props.navigation.navigate("Results", { screen: "ResultsScreen" })
         }}
       />
     </View>

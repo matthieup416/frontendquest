@@ -92,7 +92,7 @@ function ListingScreen(props) {
     const data = await fetch(`http://${MY_IP}:3000/inbox/addMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `sender_token=${props.dataUser.token}buyer_token=${props.dataUser.token}&seller_token=${sellerData.sellerToken}&quest_id=${questId}&offer_id=${offerData._id}&message=${newMessage}`,
+      body: `sender_token=${props.dataUser.token}&receiver_token=${sellerData.sellerToken}&quest_id=${questId}&offer_id=${offerData._id}&message=${newMessage}`,
     })
 
     const body = await data.json()
