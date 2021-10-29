@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet, ImageBackground, TextInput, TouchableOpacity, Dimensions } from "react-native";
+import { View, Text, Image, StyleSheet, ImageBackground, TextInput, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 
 import { MY_IP } from "@env"; /* Importation de la variable d'environnement */
