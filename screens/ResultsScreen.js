@@ -1,16 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView } from "react-native";
 import { Badge, Button, ListItem, Avatar } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { connect } from "react-redux";
 import { StatusBar } from "expo-status-bar";
+import { MY_IP } from "@env"; /* Variable environnement */
 
 let deviceHeight = Dimensions.get("window").height;
 let deviceWidth = Dimensions.get("window").width;
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
 function ResultsScreen(props) {
+  const [listOffer, setListOffer] = useState([]);
+
+  //Au chargement du composant, on cherche toutes les offres de la quête choisie
+  useEffect(() => {
+    async function offers() {
+      const data = await fetch(`http://${MY_IP}:3000/results?token=${props.dataUser.token}&quest_id=${"617905dba41305d7eec0d35b"}`);
+      const body = await data.json();
+      console.log("body", body);
+    }
+    offers();
+  }, []);
+
   return (
     <View style={{ backgroundColor: "#FFFFFF", height: "100%" }}>
       <StatusBar backgroundColor={"#2D98DA"} style="light" />
