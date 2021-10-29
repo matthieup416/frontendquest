@@ -14,6 +14,15 @@ function ProfileScreen(props) {
   return (
     <View style={{ flex: 1, justifyContent: "flex-end" }}>
       <Text>Profile page de profil</Text>
+
+      <Button
+        title="AddQuestScreen"
+        buttonStyle={{ backgroundColor: "pink" }}
+        type="solid"
+        onPress={() => {
+          props.navigation.navigate("AddQuest", { screen: "AddQuestScreen" });
+        }}
+      />
       <Button title="deconnexion" buttonStyle={{ backgroundColor: "red" }} type="solid" onPress={() => handleSubmitRemove()} />
       <Button
         title="ListingScreen"
@@ -29,14 +38,6 @@ function ProfileScreen(props) {
         type="solid"
         onPress={() => {
           props.navigation.navigate("Results", { screen: "ResultsScreen" });
-        }}
-      />
-      <Button
-        title="AddQuestScreen"
-        buttonStyle={{ backgroundColor: "pink" }}
-        type="solid"
-        onPress={() => {
-          props.navigation.navigate("AddQuest", { screen: "AddQuestScreen" });
         }}
       />
     </View>

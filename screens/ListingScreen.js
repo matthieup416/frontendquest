@@ -79,14 +79,14 @@ function ListingScreen(props) {
     const data = await fetch(`http://${MY_IP}:3000/inbox/addMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `sender_token=${props.dataUser.token}buyer_token=${props.dataUser.token}&seller_token=${sellerData.sellerToken}&quest_id=${questId}&offer_id=${offerData._id}&message=${newMessage}`,
+      body: `sender_token=${props.dataUser.token}&receiver_token=${sellerData.sellerToken}&quest_id=${props.route.params.questId}&offer_id=${offerData._id}&message=${newMessage}`,
     });
 
     const body = await data.json();
     if (body.result == true) {
       console.log("tout est bon coté back les infos ont bien été envoyées vers Messages !");
       // redirection vers MessagesScreen
-      props.navigation.navigate("BottomNavigator", { screen: "MessagesScreen" });
+      props.navigation.navigate("Messages", { screen: "MessagesScreen" });
     } else {
       console.log("erreur coté back!");
     }
