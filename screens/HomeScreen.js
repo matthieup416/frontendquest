@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, ScrollView, Button } from "react-native";
+import { View, Text, SafeAreaView, ScrollView, Button, StyleSheet, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 // import { Overlay } from "react-native-elements";
 
@@ -61,14 +61,21 @@ function HomeScreen(props) {
           }}
         > Vos quêtes en cours
         </Text>
-        <Button
+        {/* <Button
           title="AddQuestScreen"
           buttonStyle={{ backgroundColor: "pink" }}
           type="solid"
           onPress={() => {
             props.navigation.navigate("AddQuest", { screen: "AddQuestScreen" });
           }}
-        />
+        /> */}
+        <TouchableOpacity
+          style={styles.Button}
+          onPress={() => {
+            handleResult();
+          }}>
+          <Text style={styles.buttonText}>Lancez une quête</Text>
+        </TouchableOpacity>
         {data.quests?.map((item, i) => {
           return (
             <View
@@ -113,6 +120,16 @@ function HomeScreen(props) {
     </SafeAreaView>
   );
 }
+const styles = StyleSheet.create({
+  Button: {
+    backgroundColor: "#FBC531",
+    paddingHorizontal: 30,
+    paddingVertical: 15,
+    alignSelf: "center",
+    borderRadius: 25,
+    marginTop: 5,
+  },
+});
 
 function mapStateToProps(state) {
   return { dataUser: state.dataUser };
