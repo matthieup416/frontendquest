@@ -36,6 +36,14 @@ function ProfileScreen(props) {
           props.navigation.navigate("Results", { screen: "ResultsScreen" });
         }}
       />
+      <Button
+        title="AddQuestScreen"
+        buttonStyle={{ backgroundColor: "pink" }}
+        type="solid"
+        onPress={() => {
+          props.navigation.navigate("AddQuest", { screen: "AddQuestScreen" });
+        }}
+      />
     </View>
   )
 }

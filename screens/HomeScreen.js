@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, ScrollView } from "react-native";
+import { View, Text, SafeAreaView, ScrollView, Button } from "react-native";
 import { connect } from "react-redux";
 // import { Overlay } from "react-native-elements";
 
@@ -15,6 +15,8 @@ function HomeScreen(props) {
   const [data, setData] = useState("");
   const [quest, setQuest] = useState(0);
 
+
+
   // Au chargement du composant, on obtient toutes les données de l'utilisateur
   useEffect(() => {
     async function userData() {
@@ -28,17 +30,22 @@ function HomeScreen(props) {
     }
     userData();
   }, []);
-
+  console.log(data)
 
   // // Overlay 
-
   // const Overlay = () => {
   //   const [visible, setVisible] = useState(false);
-
   //   const toggleOverlay = () => {
   //     setVisible(!visible);
   //   };
   // }
+
+  var handleResult = async () => {
+    props.navigation.navigate("ResultsScreen", {
+      questId: data.quests._id
+    })
+  }
+
 
   return (
     <SafeAreaView>
@@ -52,8 +59,16 @@ function HomeScreen(props) {
             color: "#2C98DA",
             fontWeight: "bold",
           }}
-        > Vous avez 2 quêtes en cours
+        > Vos quêtes en cours
         </Text>
+        <Button
+          title="AddQuestScreen"
+          buttonStyle={{ backgroundColor: "pink" }}
+          type="solid"
+          onPress={() => {
+            props.navigation.navigate("AddQuest", { screen: "AddQuestScreen" });
+          }}
+        />
         {data.quests?.map((item, i) => {
           return (
             <View
@@ -85,7 +100,9 @@ function HomeScreen(props) {
                 }}
               >
                 <CreatButton>Détails</CreatButton>
-                <CreatButton buttonStyle={{ backgroundColor: "orange" }}>
+                <CreatButton onPress={() => {
+                  handleResult()
+                }} buttonStyle={{ backgroundColor: "orange" }}>
                   0 RESULTATS
                 </CreatButton>
               </View>
