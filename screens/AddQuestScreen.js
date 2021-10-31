@@ -317,13 +317,13 @@ function AddQuestScreen(props) {
           onPress={
             oneRoomChecked
               ? () => {
-                setOneRoomChecked(false)
-                handleRemoveRoom(1)
-              }
+                  setOneRoomChecked(false)
+                  handleRemoveRoom(1)
+                }
               : () => {
-                setOneRoomChecked(true)
-                setPiecesList([...piecesList, 1])
-              }
+                  setOneRoomChecked(true)
+                  setPiecesList([...piecesList, 1])
+                }
           }
         />
         <CheckBox
@@ -339,13 +339,13 @@ function AddQuestScreen(props) {
           onPress={
             twoRoomChecked
               ? () => {
-                setTwoRoomChecked(false)
-                handleRemoveRoom(2)
-              }
+                  setTwoRoomChecked(false)
+                  handleRemoveRoom(2)
+                }
               : () => {
-                setTwoRoomChecked(true)
-                setPiecesList([...piecesList, 2])
-              }
+                  setTwoRoomChecked(true)
+                  setPiecesList([...piecesList, 2])
+                }
           }
         />
       </View>
@@ -363,13 +363,13 @@ function AddQuestScreen(props) {
           onPress={
             threeRoomChecked
               ? () => {
-                setThreeRoomChecked(false)
-                handleRemoveRoom(3)
-              }
+                  setThreeRoomChecked(false)
+                  handleRemoveRoom(3)
+                }
               : () => {
-                setThreeRoomChecked(true)
-                setPiecesList([...piecesList, 3])
-              }
+                  setThreeRoomChecked(true)
+                  setPiecesList([...piecesList, 3])
+                }
           }
         />
         <CheckBox
@@ -385,14 +385,14 @@ function AddQuestScreen(props) {
           onPress={
             fourRoomChecked
               ? () => {
-                setFourRoomChecked(false)
-                handleRemoveRoom(4)
-              }
+                  setFourRoomChecked(false)
+                  handleRemoveRoom(4)
+                }
               : () => {
-                setFourRoomChecked(true)
-                setPiecesList([...piecesList, 4])
-                console.log(piecesList)
-              }
+                  setFourRoomChecked(true)
+                  setPiecesList([...piecesList, 4])
+                  console.log(piecesList)
+                }
           }
         />
       </View>
@@ -410,13 +410,13 @@ function AddQuestScreen(props) {
           onPress={
             fiveRoomChecked
               ? () => {
-                setFiveRoomChecked(false)
-                handleRemoveRoom(5)
-              }
+                  setFiveRoomChecked(false)
+                  handleRemoveRoom(5)
+                }
               : () => {
-                setFiveRoomChecked(true)
-                setPiecesList([...piecesList, 5])
-              }
+                  setFiveRoomChecked(true)
+                  setPiecesList([...piecesList, 5])
+                }
           }
         />
         <CheckBox
@@ -432,13 +432,13 @@ function AddQuestScreen(props) {
           onPress={
             moreRoomChecked
               ? () => {
-                setMoreRoomChecked(false)
-                handleRemoveRoom(6)
-              }
+                  setMoreRoomChecked(false)
+                  handleRemoveRoom(6)
+                }
               : () => {
-                setMoreRoomChecked(true)
-                setPiecesList([...piecesList, 6])
-              }
+                  setMoreRoomChecked(true)
+                  setPiecesList([...piecesList, 6])
+                }
           }
         />
       </View>
@@ -561,10 +561,10 @@ function AddQuestScreen(props) {
           datePreferenceChecked
             ? () => setDatePreferenceChecked(false)
             : () => [
-              setDatePreferenceChecked(true),
-              setDate(new Date()),
-              setDateDisplayFr(""),
-            ]
+                setDatePreferenceChecked(true),
+                setDate(new Date()),
+                setDateDisplayFr(""),
+              ]
         }
       />
     </View>
@@ -637,12 +637,12 @@ function AddQuestScreen(props) {
           maisonChecked
             ? () => setMaisonChecked(false)
             : () => [
-              setMaisonChecked(true),
-              setAppartementChecked(false),
-              setImmeubleChecked(false),
-              setBusinessChecked(false),
-              setAutreChecked(false),
-            ]
+                setMaisonChecked(true),
+                setAppartementChecked(false),
+                setImmeubleChecked(false),
+                setBusinessChecked(false),
+                setAutreChecked(false),
+              ]
         }
       />
       <CheckBox
@@ -662,12 +662,12 @@ function AddQuestScreen(props) {
           appartementChecked
             ? () => setAppartementChecked(false)
             : () => [
-              setAppartementChecked(true),
-              setMaisonChecked(false),
-              setImmeubleChecked(false),
-              setBusinessChecked(false),
-              setAutreChecked(false),
-            ]
+                setAppartementChecked(true),
+                setMaisonChecked(false),
+                setImmeubleChecked(false),
+                setBusinessChecked(false),
+                setAutreChecked(false),
+              ]
         }
       />
       <CheckBox
@@ -687,12 +687,12 @@ function AddQuestScreen(props) {
           immeubleChecked
             ? () => setImmeubleChecked(false)
             : () => [
-              setImmeubleChecked(true),
-              setAppartementChecked(false),
-              setMaisonChecked(false),
-              setBusinessChecked(false),
-              setAutreChecked(false),
-            ]
+                setImmeubleChecked(true),
+                setAppartementChecked(false),
+                setMaisonChecked(false),
+                setBusinessChecked(false),
+                setAutreChecked(false),
+              ]
         }
       />
       <CheckBox
@@ -712,12 +712,12 @@ function AddQuestScreen(props) {
           businessChecked
             ? () => setBusinessChecked(false)
             : () => [
-              setBusinessChecked(true),
-              setAppartementChecked(false),
-              setMaisonChecked(false),
-              setImmeubleChecked(false),
-              setAutreChecked(false),
-            ]
+                setBusinessChecked(true),
+                setAppartementChecked(false),
+                setMaisonChecked(false),
+                setImmeubleChecked(false),
+                setAutreChecked(false),
+              ]
         }
       />
       <CheckBox
@@ -737,12 +737,12 @@ function AddQuestScreen(props) {
           autreChecked
             ? () => setAutreChecked(false)
             : () => [
-              setAutreChecked(true),
-              setAppartementChecked(false),
-              setMaisonChecked(false),
-              setImmeubleChecked(false),
-              setBusinessChecked(false),
-            ]
+                setAutreChecked(true),
+                setAppartementChecked(false),
+                setMaisonChecked(false),
+                setImmeubleChecked(false),
+                setBusinessChecked(false),
+              ]
         }
       />
     </View>
@@ -1541,15 +1541,15 @@ function AddQuestScreen(props) {
 
   let processData = () => {
     // type de logement
-    setType("maison")
+    setType("Maison")
     if (appartementChecked == true) {
-      setType("appartement")
+      setType("Appartement")
     } else if (immeubleChecked == true) {
-      setType("immeuble")
+      setType("Immeuble")
     } else if (businessChecked == true) {
-      setType("local commercial")
+      setType("Local commercial")
     } else if (autreChecked == true) {
-      setType("autre")
+      setType("Autre")
     }
 
     // Date de commercialisation

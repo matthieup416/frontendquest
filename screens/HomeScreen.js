@@ -1,32 +1,42 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, ScrollView, Button, StyleSheet, TouchableOpacity } from "react-native";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from "react"
+import {
+  View,
+  Text,
+  SafeAreaView,
+  ScrollView,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native"
+import { connect } from "react-redux"
 // import { Overlay } from "react-native-elements";
 
-import Header from "../components/header";
-import CreatButton from "../shared/CreatButton";
+import Header from "../components/header"
+import CreatButton from "../shared/CreatButton"
 
-import { MY_IP } from "@env"; /* Variable environnement */
-import { log } from "react-native-reanimated";
+import { MY_IP } from "@env" /* Variable environnement */
+import { log } from "react-native-reanimated"
 
 function HomeScreen(props) {
-  const [data, setData] = useState("");
-  const [quest, setQuest] = useState(0);
+  const [data, setData] = useState("")
+  const [quest, setQuest] = useState(0)
 
   // Au chargement du composant, on obtient toutes les données de l'utilisateur
   useEffect(() => {
     async function userData() {
-      const data = await fetch(`http://${MY_IP}:3000/home/userDetail?token=${props.dataUser.token}`);
-      const body = await data.json();
+      const data = await fetch(
+        `http://${MY_IP}:3000/home/userDetail?token=${props.dataUser.token}`
+      )
+      const body = await data.json()
       if (body.result) {
-        setData(body.user);
-        setQuest(body.user.quests.length);
+        setData(body.user)
+        setQuest(body.user.quests.length)
       } else {
-        console.log("error");
+        console.log("error")
       }
     }
-    userData();
-  }, []);
+    userData()
+  }, [])
   // console.log(data);
 
   // // Overlay
@@ -40,8 +50,8 @@ function HomeScreen(props) {
   var handleResult = async (id) => {
     props.navigation.navigate("Results", {
       questId: id,
-    });
-  };
+    })
+  }
 
   return (
     <SafeAreaView>
@@ -54,15 +64,17 @@ function HomeScreen(props) {
             marginVertical: 10,
             color: "#2C98DA",
             fontWeight: "bold",
-          }}>
+          }}
+        >
           {" "}
           Vos {quest} quêtes en cours
         </Text>
         <TouchableOpacity
           style={styles.Button}
           onPress={() => {
-            props.navigation.navigate("AddQuest", { screen: "AddQuestScreen" });
-          }}>
+            props.navigation.navigate("AddQuest", { screen: "AddQuestScreen" })
+          }}
+        >
           <Text style={styles.buttonText}>Lancez une quête</Text>
         </TouchableOpacity>
         {data.quests?.map((item, i) => {
@@ -74,12 +86,14 @@ function HomeScreen(props) {
                 padding: 15,
                 elevation: 5,
                 marginVertical: 3,
-              }}>
+              }}
+            >
               <View
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
-                }}>
+                }}
+              >
                 <Text>{item.city}</Text>
                 <Text>Rayon {item.rayon} </Text>
               </View>
@@ -91,23 +105,24 @@ function HomeScreen(props) {
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
-                }}>
+                }}
+              >
                 <CreatButton>Détails</CreatButton>
                 <CreatButton
                   onPress={() => {
-                    handleResult(item._id);
-                    console.log(item._id);
+                    handleResult(item._id)
                   }}
-                  buttonStyle={{ backgroundColor: "orange" }}>
+                  buttonStyle={{ backgroundColor: "orange" }}
+                >
                   RESULTATS
                 </CreatButton>
               </View>
             </View>
-          );
+          )
         })}
       </ScrollView>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -120,10 +135,10 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
   },
-});
+})
 
 function mapStateToProps(state) {
-  return { dataUser: state.dataUser };
+  return { dataUser: state.dataUser }
 }
 
-export default connect(mapStateToProps)(HomeScreen);
+export default connect(mapStateToProps)(HomeScreen)
