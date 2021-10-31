@@ -41,18 +41,19 @@ function MessagesScreen(props) {
     async function selectedConversation() {
       const data = await fetch(`http://${MY_IP}:3000/inbox/selectedQuest?id=${selectedQuest}&token=${props.dataUser.token}`);
       const body = await data.json();
-      console.log("body", body);
-      var list = body.conversations.conversation.map((conv) => {
+      // console.log("body", body);
+      var list = body.conversations.map((conv) => {
         return {
           usersLastMessage: {
-            prenom: conv.user.firstName,
-            avatar: conv.user.avatar,
+            prenom: conv.seller.firstName,
+            avatar: conv.seller.avatar,
           },
           lastMessage: conv.lastMessage.text,
           offre: {
-            type: body.conversations.quest[0].type,
-            surface: body.conversations.quest[0].min_surface,
-            price: body.conversations.quest[0].min_price,
+            type: conv.offer[0].type,
+            surface: conv.offer[0].surface,
+            price: conv.offer[0].price,
+            city: conv.offer[0].city,
           },
           conversation: 1,
           _id: conv._id,
@@ -66,10 +67,12 @@ function MessagesScreen(props) {
 
   //Quand on click sur une conversation, on cherche tous ses messages et on les affiche
   var listMsgConversation = async (id) => {
+    console.log("id", id);
+    console.log("token", props.dataUser.token);
     setSelectedConversation(id);
     const data = await fetch(`http://${MY_IP}:3000/inbox/conversation?id=${id}&token=${props.dataUser.token}`);
     const body = await data.json();
-    console.log("body", body);
+    // console.log("body", body);
     var list = body.messages.listMessages.map((msg) => {
       // console.log("msg", msg);
       return {
@@ -150,7 +153,7 @@ function MessagesScreen(props) {
                 {avatar}
                 <ListItem.Content>
                   <ListItem.Title>{d.usersLastMessage.prenom}</ListItem.Title>
-                  <ListItem.Subtitle>{d.offre.type + " - " + d.offre.price + "€ - " + d.offre.surface + "m²"}</ListItem.Subtitle>
+                  <ListItem.Subtitle>{d.offre.type + " - " + d.offre.city + " - " + d.offre.price + "€ - " + d.offre.surface + "m²"}</ListItem.Subtitle>
                   <ListItem.Subtitle>{d.lastMessage}</ListItem.Subtitle>
                 </ListItem.Content>
               </ListItem>
