@@ -11,6 +11,7 @@ import Icon from "react-native-vector-icons/FontAwesome5"
 import { StatusBar } from "expo-status-bar"
 import { Button, Badge, Overlay, ListItem } from "react-native-elements"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
+import MapView, { Marker, Callout } from "react-native-maps"
 
 import { connect } from "react-redux"
 import { MY_IP } from "@env" /* Variable environnement */
@@ -52,20 +53,75 @@ function ListingScreen(props) {
   const [goodType, setGoodType] = useState("")
   const [offerData, setOfferData] = useState({})
   const [sellerData, setSellerData] = useState({})
+  const [mapPreview, setMapPreview] = useState(<View></View>)
   // avatar par défaut pendant le chargement
   const [avatarSource, setAvatarSource] = useState(
     "https://www.luxerecrutement.com/content/files/blank_user.jpg"
   )
   const [pictureList, setPictureList] = useState([])
+  const [otherMarkers, setOtherMarkers] = useState(
+    <Marker
+      pinColor="#2D98DA"
+      coordinate={{
+        latitude: 48.8588897,
+        longitude: 2.320041,
+      }}
+      opacity={1}
+    />
+  )
 
   const [imageSource, setImageSource] = useState(
     "https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png"
   )
-
-  console.log("props.route.params.offerId", props.route.params.offerId)
+  const [listOffer, setListOffer] = useState([])
 
   useEffect(() => {
-    const displayOffer = async () => {
+    async function results() {
+      const data = await fetch(
+        `http://${MY_IP}:3000/resultsmap/?quest_id=${props.route.params.questId}&token=${props.dataUser.token}`
+      )
+      const body = await data.json()
+      var newList = body.listOffers
+      var filteredList = newList.filter(
+        (v) => v.offers._id !== props.route.params.offerId
+      )
+
+      setListOffer(filteredList)
+      var otherMarkersDisplay = filteredList.map((offer, i) => {
+        if (offer.is_pro) {
+          var pro = <Badge status="primary" value="PRO" />
+        }
+        /*  if (
+      new Date(offer.offers.created) >
+      new Date(new Date().setDate(new Date().getDate() - 1))
+    ) {
+      var meteor = (
+        <Icon
+          name="meteor"
+          size={20}
+          color="#FBC531"
+          style={{ marginRight: 5, marginBottom: 5 }}
+        />
+      )
+    } */
+
+        return (
+          <Marker
+            key={i + 1}
+            pinColor="#2D98DA"
+            coordinate={{
+              latitude: offer.offers.latitude,
+              longitude: offer.offers.longitude,
+            }}
+            opacity={0.8}
+          ></Marker>
+        )
+      })
+
+      setOtherMarkers(otherMarkersDisplay)
+    }
+
+    async function displayOffer() {
       const reqFind = await fetch(
         `http://${MY_IP}:3000/display-offer?offerId=${props.route.params.offerId}&token=${props.dataUser.token}`
       )
@@ -73,6 +129,46 @@ function ListingScreen(props) {
 
       setOfferData(resultFind.offerData)
       setSellerData(resultFind.sellerData)
+
+      setMapPreview(
+        <MapView
+          style={{
+            flex: 1,
+            height: deviceHeight / 8,
+            width: deviceWidth,
+            alignSelf: "center",
+          }}
+          initialRegion={{
+            latitude: resultFind.offerData.latitude, // pour centrer la carte
+            longitude: resultFind.offerData.longitude,
+            latitudeDelta: 0.0822, // le rayon à afficher à partir du centre
+            longitudeDelta: 0.0621,
+          }}
+          onPress={() => {
+            props.navigation.navigate("MapScreen", {
+              offerData: resultFind.offerData,
+              questId: props.route.params.questId,
+            })
+          }}
+        >
+          <Marker
+            pinColor="#2D98DA"
+            key={0}
+            coordinate={{
+              latitude: resultFind.offerData.latitude,
+              longitude: resultFind.offerData.longitude,
+            }}
+            opacity={1} // Modifier l'opacité
+            onPress={() => {
+              props.navigation.navigate("MapScreen", {
+                offerData: resultFind.offerData,
+                questId: props.route.params.questId,
+              })
+            }}
+          />
+          {otherMarkers}
+        </MapView>
+      )
       setNewMessage(
         `👋 Bonjour ${resultFind.sellerData.firstName}, je suis intéressé par votre offre (${resultFind.offerData.type} à ${resultFind.offerData.city}). Pouvez-vous m'en dire un peu plus ?`
       )
@@ -85,6 +181,7 @@ function ListingScreen(props) {
         setIsVisibleOutdoor(true)
       }
     }
+    results()
 
     displayOffer()
   }, [])
@@ -289,7 +386,17 @@ function ListingScreen(props) {
         <Text style={{ fontSize: 22, fontWeight: "bold", color: "#2D98DA" }}>
           {offerData.price} €
         </Text>
-        <Text style={{ fontSize: 15, color: "#585858" }}>{offerData.city}</Text>
+        <Text
+          onPress={() => {
+            props.navigation.navigate("MapScreen", {
+              offerData: offerData,
+              questId: props.route.params.questId,
+            })
+          }}
+          style={{ fontSize: 15, color: "#585858" }}
+        >
+          {offerData.city}
+        </Text>
 
         <View
           style={{ flexDirection: "row", alignItems: "center", marginTop: 0 }}
@@ -507,6 +614,7 @@ function ListingScreen(props) {
       >
         {listingContent}
         {detailsContent}
+        {mapPreview}
       </ScrollView>
       <View
         style={{

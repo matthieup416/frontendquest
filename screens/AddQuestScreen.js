@@ -208,7 +208,7 @@ function AddQuestScreen(props) {
     <Slider
       value={Math.round(sliderValue)}
       onValueChange={(value) => setSliderValue(Math.round(value))}
-      maximumValue={30}
+      maximumValue={50}
       minimumValue={0}
       thumbStyle={{ width: 12, height: 12 }}
       style={{ width: 100 }}
