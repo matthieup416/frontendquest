@@ -8,6 +8,7 @@ import {
   StyleSheet,
   SafeAreaView,
   KeyboardAvoidingView,
+  Image,
 } from "react-native"
 
 import { MY_IP } from "@env" /* Variable environnement */
@@ -25,7 +26,6 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker"
 import moment from "moment"
 import "moment/locale/fr"
-import { Overlay } from "react-native-elements/dist/overlay/Overlay"
 
 const customStyles = {
   stepIndicatorSize: 20,
@@ -58,6 +58,7 @@ function AddQuestScreen(props) {
   if (!props.dataUser) {
     props.navigation.navigate("SignIn", { screen: "SignInScreen" })
   }
+
   const [maisonChecked, setMaisonChecked] = useState(true)
   const [appartementChecked, setAppartementChecked] = useState(false)
   const [immeubleChecked, setImmeubleChecked] = useState(false)
@@ -71,7 +72,6 @@ function AddQuestScreen(props) {
   const [fourRoomChecked, setFourRoomChecked] = useState(false)
   const [fiveRoomChecked, setFiveRoomChecked] = useState(false)
   const [moreRoomChecked, setMoreRoomChecked] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
 
   //fonction pour supprimer un nombre de pièces dans piecesList quand on décoche une checkbox
   function handleRemoveRoom(number) {
@@ -153,7 +153,7 @@ function AddQuestScreen(props) {
 
       processData()
       setFormProgress(formProgress + 1)
-    } else {
+    } else if (formProgress == 4) {
       var data = {
         token: props.dataUser.token,
         quest: {
@@ -196,9 +196,7 @@ function AddQuestScreen(props) {
         console.log(
           "tout est bon coté back la quest a été enregistree en BDD !"
         )
-        setIsVisible(true)
-        // redirection vers HomeScreen
-        //  props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" })
+        setFormProgress(formProgress + 1)
       } else {
         console.log("erreur coté back!")
       }
@@ -1748,6 +1746,133 @@ function AddQuestScreen(props) {
         />
       </View>
     )
+
+    //// Ecran de validation de la quête et bouton retour HOME
+  } else if (formProgress == 5) {
+    buttonBottom = (
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-around",
+          alignItems: "center",
+
+          height: deviceHeight / 8,
+        }}
+      >
+        <Button
+          icon={
+            <Icon
+              name="arrow-left"
+              size={15}
+              color="white"
+              style={{
+                marginTop: 3,
+                marginBottom: 3,
+                marginLeft: 5,
+                marginRight: 5,
+              }}
+            />
+          }
+          buttonStyle={{
+            borderRadius: 50,
+            backgroundColor: "white",
+            borderWidth: 0,
+            borderColor: "white",
+          }}
+        />
+        <Button
+          title="Home"
+          icon={
+            <Icon
+              name="home"
+              size={15}
+              color="white"
+              style={{ marginLeft: 8 }}
+            />
+          }
+          buttonStyle={{
+            width: deviceWidth / 3,
+            borderRadius: 50,
+            backgroundColor: "#2D98DA",
+          }}
+          iconRight
+          onPress={() => {
+            props.navigation.navigate("BottomNavigator", {
+              screen: "HomeScreen",
+            })
+          }}
+        />
+      </View>
+    )
+
+    formContent = (
+      <View
+        style={{
+          borderWidth: 0,
+          flexDirection: "column",
+          justifyContent: "space-around",
+          alignItems: "center",
+          height: deviceHeight * 0.5,
+          marginTop: "auto",
+          marginBottom: "auto",
+          borderColor: "#98989E",
+          borderRadius: 20,
+          paddingRight: 10,
+        }}
+      >
+        <View>
+          <Text
+            style={{
+              fontSize: 28,
+              textAlign: "center",
+              color: "#2D98DA",
+              fontWeight: "bold",
+              marginBottom: 15,
+              marginTop: 50,
+            }}
+          >
+            Félicitations 🎉
+          </Text>
+          <Text
+            style={{
+              fontSize: 18,
+              textAlign: "justify",
+              color: "#585858",
+              fontWeight: "bold",
+              marginLeft: 10,
+              marginTop: 30,
+            }}
+          >
+            Votre quête a bien été publiée ! Rendez-vous sur l'espace Home pour
+            accéder aux premières offres qui correspondent à vos critères.
+          </Text>
+        </View>
+      </View>
+    )
+
+    steps = (
+      <View style={{ height: deviceHeight / 5 }}>
+        <View
+          style={{
+            backgroundColor: "#FBC531",
+            width: 120,
+            height: 50,
+            alignSelf: "center",
+            borderRadius: 20,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 50,
+          }}
+        >
+          <Image
+            source={require("../assets/logo.png")}
+            resizeMode="contain"
+            style={{ width: 100, height: 55 }}
+          ></Image>
+        </View>
+      </View>
+    )
   }
 
   let processData = () => {
@@ -1779,9 +1904,6 @@ function AddQuestScreen(props) {
       <View>{steps}</View>
       <ScrollView>{formContent}</ScrollView>
       {buttonBottom}
-      <Overlay visible={{ isVisible }}>
-        <Text>Votre quête est créée !</Text>
-      </Overlay>
     </View>
   )
 }
