@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Image, Dimensions } from "react-native";
+import { View, StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Image, TouchableOpacity } from "react-native";
 import { Card, Text, Button, ListItem, Avatar } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { connect } from "react-redux";
@@ -8,12 +8,8 @@ import { FontAwesome } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import Header from "../components/header";
 import { useIsFocused } from "@react-navigation/native";
-
+import { FontAwesome5 } from "@expo/vector-icons";
 import { MY_IP } from "@env"; /* Variable environnement */
-import { log } from "react-native-reanimated";
-
-let deviceHeight = Dimensions.get("window").height;
-let deviceWidth = Dimensions.get("window").width;
 
 function MessagesScreen(props) {
   const [listQuest, setListQuest] = useState([]);
@@ -88,6 +84,8 @@ function MessagesScreen(props) {
     const body = await data.json();
 
     var list = body.messages.listMessages.map((msg) => {
+      console.log("msg", msg);
+
       return {
         firstName: msg.users[0].firstName,
         avatar: msg.users[0].avatar,
@@ -129,9 +127,6 @@ function MessagesScreen(props) {
     });
     setListQuest(list);
     setSelectedQuest(body.listQuest[0]._id);
-    if (props.route.params?.conversationId) {
-      listMsgConversation(props.route.params.conversationId);
-    }
   }
 
   if (isFocused) {
@@ -147,6 +142,9 @@ function MessagesScreen(props) {
               <Text style={{ color: "#FFFFFF", fontWeight: "700", fontSize: 16 }}>{offerMessages[0].price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")} €</Text>
               <Text style={{ color: "#FFFFFF", fontWeight: "400", fontSize: 12 }}>{offerMessages[0].city}</Text>
             </View>
+            <TouchableOpacity onPress={() => listMsgConversation(selectedConversation)} style={{ marginRight: 10, flex: 0, justifyContent: "center" }}>
+              <FontAwesome5 name={"undo"} size={25} color={"orange"} />
+            </TouchableOpacity>
           </View>
           <Button icon={<Icon name="arrow-left" size={15} color="white" style={{ marginRight: 8 }} />} title="Retour aux discussions" onPress={() => setMsgIsVisible(false)} />
           <ScrollView ref={scrollViewRef} onContentSizeChange={() => scrollViewRef?.current?.scrollToEnd({ animated: true })}>
