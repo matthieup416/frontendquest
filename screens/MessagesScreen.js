@@ -24,6 +24,9 @@ function MessagesScreen(props) {
     async function listQuest() {
       const data = await fetch(`http://${MY_IP}:3000/inbox/?token=${props.dataUser.token}`);
       const body = await data.json();
+      if (props.route.params.conversationId) {
+        listMsgConversation(props.route.params.conversationId);
+      }
       var list = body.listQuest.map((quest) => {
         return {
           value: quest._id,
@@ -32,10 +35,6 @@ function MessagesScreen(props) {
       });
       setListQuest(list);
       setSelectedQuest(body.listQuest[0]._id);
-
-      if (props.route.params?.conversationId) {
-        listMsgConversation(props.route.params.conversationId);
-      }
     }
 
     listQuest();
