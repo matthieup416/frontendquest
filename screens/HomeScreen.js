@@ -34,7 +34,7 @@ function HomeScreen(props) {
       setData(body.user);
       setQuest(body.user.quests.length);
       setOffers(body.user.offers.length)
-      // props.addUser
+      props.addUser
     } else {
       console.log("error");
     }
