@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import RNPickerSelect from "react-native-picker-select";
 import { FontAwesome } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
+import Header from "../components/header";
 
 import { MY_IP } from "@env"; /* Variable environnement */
 
@@ -17,14 +18,15 @@ function MessagesScreen(props) {
   const [msgIsVisible, setMsgIsVisible] = useState(false);
   const [listMessages, setListMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
-  const scrollviewref = useRef(ScrollView);
+  const scrollViewRef = useRef(ScrollView);
 
   //Au chargement du composant, on cherche toutes les quêtes de l'utilisateur pour faire le menu select
   useEffect(() => {
     async function listQuest() {
       const data = await fetch(`http://${MY_IP}:3000/inbox/?token=${props.dataUser.token}`);
       const body = await data.json();
-      if (props.route.params.conversationId) {
+
+      if (props.route.params?.conversationId) {
         listMsgConversation(props.route.params.conversationId);
       }
       var list = body.listQuest.map((quest) => {
@@ -113,8 +115,9 @@ function MessagesScreen(props) {
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor={"#2D98DA"} style="light" />
+        <Header title={props.dataUser.firstName} image={props.dataUser.avatar} />
         <Button icon={<Icon name="arrow-left" size={15} color="white" style={{ marginRight: 8 }} />} title="Retour aux discussions" onPress={() => setMsgIsVisible(false)} />
-        <ScrollView ref={(ref) => (scrollView = ref)} onContentSizeChange={() => scrollView.scrollToEnd({ animated: true })}>
+        <ScrollView ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
           {listMessages.map((msg, i) => {
             if (!msg.avatar) {
               var avatar = <Avatar rounded icon={<FontAwesome name="user" size={24} color="black" />} title={msg.firstName[0]} containerStyle={{ backgroundColor: "#585858" }} />;
@@ -142,8 +145,9 @@ function MessagesScreen(props) {
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor={"#2D98DA"} style="light" />
+        <Header title={props.dataUser.firstName} image={props.dataUser.avatar} />
         {/* Menu select */}
-        <RNPickerSelect onValueChange={(value) => setSelectedQuest(value)} items={listQuest} placeholder={{ label: "Choisir une quête", value: null }} style={pickerSelectStyles} />
+        <RNPickerSelect onValueChange={(value) => setSelectedQuest(value)} items={listQuest} placeholder={{ label: "Choisir une quête", value: null }} value={selectedQuest} style={pickerSelectStyles} />
         {/* Résultat du choix du select */}
         <Card containerStyle={{ padding: 0, flex: 0 }}>
           {listConversation.map((d, i) => {
@@ -174,7 +178,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     justifyContent: "flex-start",
-    paddingTop: 45,
   },
 });
 

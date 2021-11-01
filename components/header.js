@@ -3,7 +3,6 @@ import { Image, StyleSheet, Text, View, Button } from "react-native";
 import { Avatar } from "react-native-elements";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-
 const Header = ({ title, image }) => {
   return (
     <View style={styles.container}>
@@ -11,9 +10,7 @@ const Header = ({ title, image }) => {
         <Image source={{ uri: image }} style={styles.avatar} />
       </View>
       <View style={{ flex: 1, paddingLeft: 10, alignSelf: "center" }}>
-        <Text style={{ color: "white", fontWeight: "bold", fontSize: 20 }}>
-          {title}
-        </Text>
+        <Text style={{ color: "white", fontWeight: "bold", fontSize: 20 }}>{title}</Text>
       </View>
       <View style={{ alignSelf: "flex-end", paddingBottom: 10 }}>
         <FontAwesome5 name={"undo"} size={25} color={"orange"} />
@@ -31,6 +28,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: 15,
     elevation: 5,
+    paddingTop: 20,
   },
   avatar: {
     backgroundColor: "#ccc",

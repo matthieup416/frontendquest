@@ -1,41 +1,34 @@
-import React, { useState, useEffect } from "react"
-import {
-  View,
-  Text,
-  Dimensions,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-} from "react-native"
-import Icon from "react-native-vector-icons/FontAwesome5"
-import { StatusBar } from "expo-status-bar"
-import { Button, Badge, Overlay, ListItem } from "react-native-elements"
-import { MaterialCommunityIcons } from "@expo/vector-icons"
-import MapView, { Marker, Callout } from "react-native-maps"
+import React, { useState, useEffect } from "react";
+import { View, Text, Dimensions, ScrollView, Image, TouchableOpacity } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome5";
+import { StatusBar } from "expo-status-bar";
+import { Button, Badge, Overlay, ListItem } from "react-native-elements";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import MapView, { Marker, Callout } from "react-native-maps";
 
-import { connect } from "react-redux"
-import { MY_IP } from "@env" /* Variable environnement */
+import { connect } from "react-redux";
+import { MY_IP } from "@env"; /* Variable environnement */
 
-let deviceHeight = Dimensions.get("window").height
-let deviceWidth = Dimensions.get("window").width
+let deviceHeight = Dimensions.get("window").height;
+let deviceWidth = Dimensions.get("window").width;
 
 function ListingScreen(props) {
   if (!props.dataUser) {
-    props.navigation.navigate("SignIn", { screen: "SignInScreen" })
+    props.navigation.navigate("SignIn", { screen: "SignInScreen" });
   }
   //Etat pour l'affichage de la surface extérieure s'il y en a
-  const [isVisibleOutdoor, setIsVisibleOutdoor] = useState(false)
+  const [isVisibleOutdoor, setIsVisibleOutdoor] = useState(false);
   // Etat pour l'overlay "détails"
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(false);
   // fonction pour faire apparaitre l'overlay
   const toggleOverlay = () => {
-    setVisible(!visible)
-  }
+    setVisible(!visible);
+  };
 
   // fonction pour mettre la première lettre d'une string en majuscule
   const CapitalizeFirstLetter = (str) => {
-    return str.length ? str.charAt(0).toUpperCase() + str.slice(1) : str
-  }
+    return str.length ? str.charAt(0).toUpperCase() + str.slice(1) : str;
+  };
   // fonction pour vérifier si l'annonce a plus de 24h
   //   const isRecent = (dateToCompare) => {
   //     const oneday = 60 * 60 * 24 * 1000
@@ -48,17 +41,15 @@ function ListingScreen(props) {
   //     }
   //   }
 
-  const [newMessage, setNewMessage] = useState("")
-  const [questId, setQuestId] = useState(props.route.params.questId)
-  const [goodType, setGoodType] = useState("")
-  const [offerData, setOfferData] = useState({})
-  const [sellerData, setSellerData] = useState({})
-  const [mapPreview, setMapPreview] = useState(<View></View>)
+  const [newMessage, setNewMessage] = useState("");
+  const [questId, setQuestId] = useState(props.route.params.questId);
+  const [goodType, setGoodType] = useState("");
+  const [offerData, setOfferData] = useState({});
+  const [sellerData, setSellerData] = useState({});
+  const [mapPreview, setMapPreview] = useState(<View></View>);
   // avatar par défaut pendant le chargement
-  const [avatarSource, setAvatarSource] = useState(
-    "https://www.luxerecrutement.com/content/files/blank_user.jpg"
-  )
-  const [pictureList, setPictureList] = useState([])
+  const [avatarSource, setAvatarSource] = useState("https://www.luxerecrutement.com/content/files/blank_user.jpg");
+  const [pictureList, setPictureList] = useState([]);
   const [otherMarkers, setOtherMarkers] = useState(
     <Marker
       pinColor="#2D98DA"
@@ -68,28 +59,22 @@ function ListingScreen(props) {
       }}
       opacity={1}
     />
-  )
+  );
 
-  const [imageSource, setImageSource] = useState(
-    "https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png"
-  )
-  const [listOffer, setListOffer] = useState([])
+  const [imageSource, setImageSource] = useState("https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png");
+  const [listOffer, setListOffer] = useState([]);
 
   useEffect(() => {
     async function results() {
-      const data = await fetch(
-        `http://${MY_IP}:3000/resultsmap/?quest_id=${props.route.params.questId}&token=${props.dataUser.token}`
-      )
-      const body = await data.json()
-      var newList = body.listOffers
-      var filteredList = newList.filter(
-        (v) => v.offers._id !== props.route.params.offerId
-      )
+      const data = await fetch(`http://${MY_IP}:3000/resultsmap/?quest_id=${props.route.params.questId}&token=${props.dataUser.token}`);
+      const body = await data.json();
+      var newList = body.listOffers;
+      var filteredList = newList.filter((v) => v.offers._id !== props.route.params.offerId);
 
-      setListOffer(filteredList)
+      setListOffer(filteredList);
       var otherMarkersDisplay = filteredList.map((offer, i) => {
         if (offer.is_pro) {
-          var pro = <Badge status="primary" value="PRO" />
+          var pro = <Badge status="primary" value="PRO" />;
         }
         /*  if (
       new Date(offer.offers.created) >
@@ -113,22 +98,19 @@ function ListingScreen(props) {
               latitude: offer.offers.latitude,
               longitude: offer.offers.longitude,
             }}
-            opacity={0.8}
-          ></Marker>
-        )
-      })
+            opacity={0.8}></Marker>
+        );
+      });
 
-      setOtherMarkers(otherMarkersDisplay)
+      setOtherMarkers(otherMarkersDisplay);
     }
 
     async function displayOffer() {
-      const reqFind = await fetch(
-        `http://${MY_IP}:3000/display-offer?offerId=${props.route.params.offerId}&token=${props.dataUser.token}`
-      )
-      const resultFind = await reqFind.json()
+      const reqFind = await fetch(`http://${MY_IP}:3000/display-offer?offerId=${props.route.params.offerId}&token=${props.dataUser.token}`);
+      const resultFind = await reqFind.json();
 
-      setOfferData(resultFind.offerData)
-      setSellerData(resultFind.sellerData)
+      setOfferData(resultFind.offerData);
+      setSellerData(resultFind.sellerData);
 
       setMapPreview(
         <MapView
@@ -148,9 +130,8 @@ function ListingScreen(props) {
             props.navigation.navigate("MapScreen", {
               offerData: resultFind.offerData,
               questId: props.route.params.questId,
-            })
-          }}
-        >
+            });
+          }}>
           <Marker
             pinColor="#2D98DA"
             key={0}
@@ -163,28 +144,26 @@ function ListingScreen(props) {
               props.navigation.navigate("MapScreen", {
                 offerData: resultFind.offerData,
                 questId: props.route.params.questId,
-              })
+              });
             }}
           />
           {otherMarkers}
         </MapView>
-      )
-      setNewMessage(
-        `👋 Bonjour ${resultFind.sellerData.firstName}, je suis intéressé par votre offre (${resultFind.offerData.type} à ${resultFind.offerData.city}). Pouvez-vous m'en dire un peu plus ?`
-      )
-      setGoodType(CapitalizeFirstLetter(resultFind.offerData.type))
-      setAvatarSource(resultFind.sellerData.avatar)
-      setImageSource(resultFind.offerData.pictures[0].url)
-      setPictureList(resultFind.offerData.pictures)
+      );
+      setNewMessage(`👋 Bonjour ${resultFind.sellerData.firstName}, je suis intéressé par votre offre (${resultFind.offerData.type} à ${resultFind.offerData.city}). Pouvez-vous m'en dire un peu plus ?`);
+      setGoodType(CapitalizeFirstLetter(resultFind.offerData.type));
+      setAvatarSource(resultFind.sellerData.avatar);
+      setImageSource(resultFind.offerData.pictures[0].url);
+      setPictureList(resultFind.offerData.pictures);
       //on rend la surface extérieure visible si > 0
       if (resultFind.offerData.outdoor_surface > 0) {
-        setIsVisibleOutdoor(true)
+        setIsVisibleOutdoor(true);
       }
     }
-    results()
+    results();
 
-    displayOffer()
-  }, [])
+    displayOffer();
+  }, []);
 
   /// fonction pour créer une conversation quand on clique sur le bouton bleu handshake
   var createConversation = async () => {
@@ -192,31 +171,17 @@ function ListingScreen(props) {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `sender_token=${props.dataUser.token}&receiver_token=${sellerData.sellerToken}&quest_id=${props.route.params.questId}&offer_id=${offerData._id}&message=${newMessage}`,
-    })
+    });
 
-<<<<<<< HEAD
     const body = await data.json();
-    console.log("body", body.messageSaved._id);
-
-=======
-    const body = await data.json()
->>>>>>> b3e1c2fc6f785d1fb6eb48bab6ebb8fd968d53b7
     if (body.result == true) {
-      console.log(
-        "tout est bon coté back les infos ont bien été envoyées vers Messages !"
-      )
+      console.log("tout est bon coté back les infos ont bien été envoyées vers Messages !");
       // redirection vers MessagesScreen
-<<<<<<< HEAD
       props.navigation.navigate("Messages", { conversationId: body.messageSaved._id });
-=======
-      props.navigation.navigate("Messages", {
-        conversationId: body.messageSaved._id,
-      })
->>>>>>> b3e1c2fc6f785d1fb6eb48bab6ebb8fd968d53b7
     } else {
-      console.log("erreur coté back!")
+      console.log("erreur coté back!");
     }
-  }
+  };
 
   let descriptionOver = (
     <View
@@ -225,21 +190,17 @@ function ListingScreen(props) {
         margin: 5,
         padding: 10,
         borderRadius: 10,
-      }}
-    >
+      }}>
       <Text
         style={{
           fontSize: 20,
           color: "#585858",
-        }}
-      >
+        }}>
         Description :
       </Text>
-      <Text style={{ color: "#585858", textAlign: "justify" }}>
-        {offerData.description}
-      </Text>
+      <Text style={{ color: "#585858", textAlign: "justify" }}>{offerData.description}</Text>
     </View>
-  )
+  );
   // liste des caractéristiques en bas de l'annonce (piscine, fibre, etc)
   let detailsContent = (
     <View
@@ -255,8 +216,7 @@ function ListingScreen(props) {
         alignSelf: "center",
         marginBottom: 20,
         marginTop: 10,
-      }}
-    >
+      }}>
       <Text
         style={{
           padding: 5,
@@ -267,8 +227,7 @@ function ListingScreen(props) {
           fontWeight: "bold",
           marginBottom: 5,
           width: deviceWidth / 1.3,
-        }}
-      >
+        }}>
         Caractéristiques
       </Text>
       <Text
@@ -280,8 +239,7 @@ function ListingScreen(props) {
           fontWeight: "bold",
           marginBottom: 5,
           width: deviceWidth / 1.3,
-        }}
-      >
+        }}>
         Surface habitable : {offerData.surface} m{"\u00b2"}
       </Text>
       <Text
@@ -294,8 +252,7 @@ function ListingScreen(props) {
           marginBottom: 5,
           width: deviceWidth / 1.3,
         }}
-        visible={isVisibleOutdoor}
-      >
+        visible={isVisibleOutdoor}>
         Surface extérieure : {offerData.outdoor_surface} m{"\u00b2"}
       </Text>
 
@@ -308,14 +265,8 @@ function ListingScreen(props) {
           fontWeight: "bold",
           marginBottom: 5,
           width: deviceWidth / 2,
-        }}
-      >
-        <Icon
-          name="check"
-          size={15}
-          color="#FBC531"
-          style={{ marginRight: 15 }}
-        />
+        }}>
+        <Icon name="check" size={15} color="#FBC531" style={{ marginRight: 15 }} />
         {"  "}
         Piscine 🏊‍♂️
       </Text>
@@ -327,14 +278,8 @@ function ListingScreen(props) {
 
           fontWeight: "bold",
           marginBottom: 5,
-        }}
-      >
-        <Icon
-          name="check"
-          size={15}
-          color="#FBC531"
-          style={{ marginRight: 15 }}
-        />
+        }}>
+        <Icon name="check" size={15} color="#FBC531" style={{ marginRight: 15 }} />
         {"  "}
         Stationnement privatif 🚗
       </Text>
@@ -347,19 +292,13 @@ function ListingScreen(props) {
 
           fontWeight: "bold",
           marginBottom: 5,
-        }}
-      >
-        <Icon
-          name="check"
-          size={15}
-          color="#FBC531"
-          style={{ marginRight: 15 }}
-        />
+        }}>
+        <Icon name="check" size={15} color="#FBC531" style={{ marginRight: 15 }} />
         {"  "}
         Raccordé à la fibre optique 👨‍💻
       </Text>
     </View>
-  )
+  );
 
   let listingContent = (
     <View>
@@ -368,64 +307,44 @@ function ListingScreen(props) {
           props.navigation.navigate("ImageScreen", {
             imagesData: pictureList,
           })
-        }
-      >
-        <Image
-          source={{ uri: imageSource }}
-          style={{ width: deviceWidth, height: deviceHeight / 2.8 }}
-          resizeMethod="resize"
-          resizeMode="center"
-        ></Image>
+        }>
+        <Image source={{ uri: imageSource }} style={{ width: deviceWidth, height: deviceHeight / 2.8 }} resizeMethod="resize" resizeMode="center"></Image>
       </TouchableOpacity>
       <View
         style={{
           backgroundColor: "white",
           marginLeft: 10,
           marginRight: 10,
-        }}
-      >
+        }}>
         {/* pour afficher le caractère mètre carré m2 en format UNICODE  >>> \u00b2    */}
         <Text
           style={{
             fontSize: 22,
             fontWeight: "bold",
             color: "#585858",
-          }}
-        >
-          {goodType} {offerData.nb_pieces} pièces {offerData.surface} m
-          {"\u00b2"}
+          }}>
+          {goodType} {offerData.nb_pieces} pièces {offerData.surface} m{"\u00b2"}
         </Text>
-        <Text style={{ fontSize: 22, fontWeight: "bold", color: "#2D98DA" }}>
-          {offerData.price} €
-        </Text>
+        <Text style={{ fontSize: 22, fontWeight: "bold", color: "#2D98DA" }}>{offerData.price} €</Text>
         <Text
           onPress={() => {
             props.navigation.navigate("MapScreen", {
               offerData: offerData,
               questId: props.route.params.questId,
-            })
+            });
           }}
-          style={{ fontSize: 15, color: "#585858" }}
-        >
+          style={{ fontSize: 15, color: "#585858" }}>
           {offerData.city}
         </Text>
 
-        <View
-          style={{ flexDirection: "row", alignItems: "center", marginTop: 0 }}
-        >
-          <Icon
-            name="meteor"
-            size={15}
-            color="#FBC531"
-            style={{ marginRight: 5 }}
-          />
+        <View style={{ flexDirection: "row", alignItems: "center", marginTop: 0 }}>
+          <Icon name="meteor" size={15} color="#FBC531" style={{ marginRight: 5 }} />
           <Text
             style={{
               fontSize: 15,
               fontWeight: "bold",
               color: "#585858",
-            }}
-          >
+            }}>
             EN VENTE DEPUIS MOINS DE 24H
           </Text>
         </View>
@@ -435,8 +354,7 @@ function ListingScreen(props) {
 
             fontWeight: "bold",
           }}
-          visible={offerData.exclusive}
-        >
+          visible={offerData.exclusive}>
           💎 Bien en exclusivité dans notre agence
         </Text>
         <Button
@@ -450,14 +368,7 @@ function ListingScreen(props) {
             marginTop: deviceHeight / 40,
           }}
           onPress={toggleOverlay}
-          icon={
-            <Icon
-              name="book-reader"
-              size={15}
-              color="#585858"
-              style={{ marginRight: 8, marginLeft: 5 }}
-            />
-          }
+          icon={<Icon name="book-reader" size={15} color="#585858" style={{ marginRight: 8, marginLeft: 5 }} />}
           iconLeft
         />
 
@@ -471,22 +382,15 @@ function ListingScreen(props) {
             fontStyle: "italic",
             marginTop: 40,
           }}
-          borderRadius={18}
-        >
-          <Icon
-            name="quote-left"
-            size={50}
-            color="rgba(0,0,0,0.05)"
-            style={{ marginTop: -40, marginLeft: 0 }}
-          />
+          borderRadius={18}>
+          <Icon name="quote-left" size={50} color="rgba(0,0,0,0.05)" style={{ marginTop: -40, marginLeft: 0 }} />
           <View
             style={{
               flexDirection: "row",
               justifyContent: "flex-end",
               marginTop: -90,
               marginRight: -50,
-            }}
-          >
+            }}>
             <View
               style={{
                 flexDirection: "column",
@@ -494,14 +398,9 @@ function ListingScreen(props) {
                 justifyContent: "center",
                 marginRight: 5,
                 marginBottom: 10,
-              }}
-            >
+              }}>
               <Badge value="PRO" badgeStyle={{ backgroundColor: "#2D98DA" }} />
-              <Text
-                style={{ fontSize: 22, fontWeight: "bold", color: "#585858" }}
-              >
-                {sellerData.firstName}
-              </Text>
+              <Text style={{ fontSize: 22, fontWeight: "bold", color: "#585858" }}>{sellerData.firstName}</Text>
             </View>
 
             <Image
@@ -513,8 +412,7 @@ function ListingScreen(props) {
               }}
               resizeMethod="resize"
               resizeMode="center"
-              source={{ uri: avatarSource }}
-            ></Image>
+              source={{ uri: avatarSource }}></Image>
           </View>
           <Text
             style={{
@@ -524,8 +422,7 @@ function ListingScreen(props) {
               marginTop: 10,
               marginBottom: 5,
               color: "#585858",
-            }}
-          >
+            }}>
             {offerData.social_text}
           </Text>
         </View>
@@ -543,7 +440,7 @@ function ListingScreen(props) {
         />
       </View>
     </View>
-  )
+  );
 
   // footer fixe avec les deux boutons pour accepter ou refuser une offre
   let footer = (
@@ -555,8 +452,7 @@ function ListingScreen(props) {
           color: "#2D98DA",
           textAlign: "center",
           marginBottom: 5,
-        }}
-      >
+        }}>
         Intéressé par l'offre de {sellerData.firstName} ?
       </Text>
       <View
@@ -564,8 +460,7 @@ function ListingScreen(props) {
           flexDirection: "row",
           justifyContent: "space-evenly",
           alignItems: "center",
-        }}
-      >
+        }}>
         <View
           style={{
             backgroundColor: "white",
@@ -576,14 +471,8 @@ function ListingScreen(props) {
             paddingRight: 10,
             paddingTop: 5,
             paddingBottom: 5,
-          }}
-        >
-          <MaterialCommunityIcons
-            name="bell-cancel-outline"
-            size={35}
-            color="#98989E"
-            style={{ marginLeft: "auto", marginRight: "auto" }}
-          />
+          }}>
+          <MaterialCommunityIcons name="bell-cancel-outline" size={35} color="#98989E" style={{ marginLeft: "auto", marginRight: "auto" }} />
         </View>
         <View
           style={{
@@ -593,19 +482,12 @@ function ListingScreen(props) {
             paddingRight: 10,
             paddingTop: 5,
             paddingBottom: 5,
-          }}
-        >
-          <Icon
-            name="handshake"
-            size={40}
-            color="white"
-            style={{ marginLeft: "auto", marginRight: "auto" }}
-            onPress={createConversation}
-          />
+          }}>
+          <Icon name="handshake" size={40} color="white" style={{ marginLeft: "auto", marginRight: "auto" }} onPress={createConversation} />
         </View>
       </View>
     </View>
-  )
+  );
 
   return (
     <View
@@ -613,8 +495,7 @@ function ListingScreen(props) {
         flex: 1,
         flexDirection: "column",
         justifyContent: "flex-start",
-      }}
-    >
+      }}>
       <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
         {descriptionOver}
       </Overlay>
@@ -622,8 +503,7 @@ function ListingScreen(props) {
       <ScrollView
         style={{
           backgroundColor: "white",
-        }}
-      >
+        }}>
         {listingContent}
         {detailsContent}
         {mapPreview}
@@ -635,15 +515,14 @@ function ListingScreen(props) {
           justifyContent: "center",
           borderTopWidth: 2,
           borderColor: "#98989E",
-        }}
-      >
+        }}>
         {footer}
       </View>
     </View>
-  )
+  );
 }
 function mapStateToProps(state) {
-  return { dataUser: state.dataUser }
+  return { dataUser: state.dataUser };
 }
 
-export default connect(mapStateToProps)(ListingScreen)
+export default connect(mapStateToProps)(ListingScreen);
