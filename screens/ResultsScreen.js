@@ -21,48 +21,53 @@ function ResultsScreen(props) {
       const data = await fetch(`http://${MY_IP}:3000/results?token=${props.dataUser.token}&quest_id=${props.route.params.questId}`);
       const body = await data.json();
       setListOffer(body.listOffers);
-      console.log("body.listOffers", body.listOffers);
-
       setQuest(body.quest);
     }
     offers();
   }, []);
 
-  return (
-    <View style={{ backgroundColor: "#FFFFFF", height: "100%" }}>
-      {/* <Header title={data.firstName} image={data.avatar} /> */}
-      <StatusBar backgroundColor={"#2D98DA"} style="light" />
-      <ScrollView>
-        {listOffer.map((offer, i) => {
-          if (offer.is_pro) {
-            var pro = <Badge status="primary" value="PRO" />;
-          }
-          if (new Date(offer.offers.created) > new Date(new Date().setDate(new Date().getDate() - 1))) {
-            var meteor = <Icon name="meteor" size={20} color="#FBC531" style={{ marginRight: 5, marginBottom: 5 }} />;
-          }
-          console.log(offer.offers);
-          return (
-            <TouchableOpacity key={i} onPress={() => props.navigation.navigate("Listing", { offerId: offer.offers._id, questId: quest._id })}>
-              <Image source={{ uri: offer.offers.pictures[0].url }} style={{ width: deviceWidth, height: deviceHeight / 2.8 }} resizeMethod="resize" resizeMode="center"></Image>
-              <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
-                <View style={{ marginLeft: 20, marginRight: 10 }}>
-                  <Text style={{ fontSize: 22, fontWeight: "bold", color: "#585858" }}>
-                    {offer.offers.type} {offer.offers.nb_pieces} pièces {offer.offers.surface} m2
-                  </Text>
-                  <Text style={{ fontSize: 22, fontWeight: "bold", color: "#2D98DA" }}>{offer.offers.price} €</Text>
-                  <Text style={{ fontSize: 15, color: "#585858" }}>{offer.offers.city}</Text>
+  if (listOffer && !listOffer.length) {
+    return (
+      <View style={{ flex: 1 }}>
+        <Text>Aucun résultat</Text>
+      </View>
+    );
+  } else {
+    return (
+      <View style={{ backgroundColor: "#FFFFFF", height: "100%" }}>
+        {/* <Header title={data.firstName} image={data.avatar} /> */}
+        <StatusBar backgroundColor={"#2D98DA"} style="light" />
+        <ScrollView>
+          {listOffer.map((offer, i) => {
+            if (offer.is_pro) {
+              var pro = <Badge status="primary" value="PRO" />;
+            }
+            if (new Date(offer.offers.created) > new Date(new Date().setDate(new Date().getDate() - 1))) {
+              var meteor = <Icon name="meteor" size={20} color="#FBC531" style={{ marginRight: 5, marginBottom: 5 }} />;
+            }
+            return (
+              <TouchableOpacity key={i} onPress={() => props.navigation.navigate("Listing", { offerId: offer.offers._id, questId: quest._id })}>
+                <Image source={{ uri: offer.offers.pictures[0].url }} style={{ width: deviceWidth, height: deviceHeight / 2.8 }} resizeMethod="resize" resizeMode="center"></Image>
+                <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
+                  <View style={{ marginLeft: 20, marginRight: 10 }}>
+                    <Text style={{ fontSize: 22, fontWeight: "bold", color: "#585858" }}>
+                      {offer.offers.type} {offer.offers.nb_pieces} pièces {offer.offers.surface} m2
+                    </Text>
+                    <Text style={{ fontSize: 22, fontWeight: "bold", color: "#2D98DA" }}>{offer.offers.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")} €</Text>
+                    <Text style={{ fontSize: 15, color: "#585858" }}>{offer.offers.city}</Text>
+                  </View>
+                  <View style={{ flexDirection: "column", alignItems: "flex-end", marginRight: 20, marginTop: 10 }}>
+                    {meteor}
+                    {pro}
+                  </View>
                 </View>
-                <View style={{ flexDirection: "column", alignItems: "flex-end", marginRight: 20, marginTop: 10 }}>
-                  {meteor}
-                  {pro}
-                </View>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
-    </View>
-  );
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      </View>
+    );
+  }
 }
 
 function mapStateToProps(state) {
