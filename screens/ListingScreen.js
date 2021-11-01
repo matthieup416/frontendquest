@@ -200,7 +200,9 @@ function ListingScreen(props) {
         "tout est bon coté back les infos ont bien été envoyées vers Messages !"
       )
       // redirection vers MessagesScreen
-      props.navigation.navigate("Messages", { screen: "MessagesScreen" })
+      props.navigation.navigate("Messages", {
+        conversationId: body.messageSaved._id,
+      })
     } else {
       console.log("erreur coté back!")
     }
