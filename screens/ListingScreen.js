@@ -83,10 +83,12 @@ function ListingScreen(props) {
     });
 
     const body = await data.json();
+    console.log("body", body.messageSaved._id);
+
     if (body.result == true) {
       console.log("tout est bon coté back les infos ont bien été envoyées vers Messages !");
       // redirection vers MessagesScreen
-      props.navigation.navigate("Messages", { screen: "MessagesScreen" });
+      props.navigation.navigate("Messages", { conversationId: body.messageSaved._id });
     } else {
       console.log("erreur coté back!");
     }

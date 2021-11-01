@@ -32,7 +32,12 @@ function MessagesScreen(props) {
       });
       setListQuest(list);
       setSelectedQuest(body.listQuest[0]._id);
+
+      if (props.route.params.conversationId) {
+        listMsgConversation(props.route.params.conversationId);
+      }
     }
+
     listQuest();
   }, []);
 
