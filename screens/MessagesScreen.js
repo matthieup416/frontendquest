@@ -33,7 +33,7 @@ function MessagesScreen(props) {
       setListQuest(list);
       setSelectedQuest(body.listQuest[0]._id);
 
-      if (props.route.params.conversationId) {
+      if (props.route.params?.conversationId) {
         listMsgConversation(props.route.params.conversationId);
       }
     }
@@ -101,7 +101,7 @@ function MessagesScreen(props) {
     });
 
     const body = await data.json();
-    console.log("log de body ", body);
+    // console.log("log de body ", body);
     if (body.result) {
       listMsgConversation(body.messageSaved._id);
     }
