@@ -15,11 +15,8 @@ function SignInScreen(props) {
   useEffect(() => {
     AsyncStorage.getItem("token", function (error, value) {
       if (value) {
-        // requête backend user (avec le token)
-        // modifier addUser pour stocker l'ensemble de l'utilisateur
         props.addUser({ token: value });
         props.navigation.navigate("BottomNavigator", { screen: "HomeScreen" });
-        // console.log(value)
       } else {
         console.log("Connectez-vous!");
       }
@@ -115,7 +112,7 @@ const styles = StyleSheet.create({
     width: 200,
     top: 135,
     left: 100,
-    borderRadius: 99,
+    // borderRadius: 99,
     alignSelf: "center",
   },
   Button: {
