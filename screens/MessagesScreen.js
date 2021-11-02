@@ -122,7 +122,7 @@ function MessagesScreen(props) {
     var list = body.listQuest.map((quest) => {
       return {
         value: quest._id,
-        label: `${quest.type} : ${quest.city} - ${quest.min_price}/${quest.max_price}€`,
+        label: `${quest.type} : ${quest.city} - ${quest.min_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}/${quest.max_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}€`,
       };
     });
     setListQuest(list);
@@ -191,7 +191,7 @@ function MessagesScreen(props) {
                   {avatar}
                   <ListItem.Content>
                     <ListItem.Title>{d.usersLastMessage.prenom}</ListItem.Title>
-                    <ListItem.Subtitle>{d.offre.type + " - " + d.offre.city + " - " + d.offre.price + "€ - " + d.offre.surface + "m²"}</ListItem.Subtitle>
+                    <ListItem.Subtitle>{d.offre.type + " - " + d.offre.city + " - " + d.offre.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + "€ - " + d.offre.surface + "m²"}</ListItem.Subtitle>
                     <ListItem.Subtitle>{d.lastMessage}</ListItem.Subtitle>
                   </ListItem.Content>
                 </ListItem>
