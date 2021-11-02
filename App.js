@@ -82,7 +82,6 @@ export default function App() {
           <Stack.Screen name="Results" component={ResultsScreen} />
           <Stack.Screen name="ImageScreen" component={ImageScreen} />
           <Stack.Screen name="MapScreen" component={MapScreen} />
-
           <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
         </Stack.Navigator>
       </NavigationContainer>

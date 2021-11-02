@@ -19,6 +19,10 @@ import { MY_IP } from "@env" /* Variable environnement */
 import { log } from "react-native-reanimated"
 import { useIsFocused, useFocusEffect } from "@react-navigation/native"
 
+import Icon from "react-native-vector-icons/FontAwesome5";
+
+
+
 function HomeScreen(props) {
   const [data, setData] = useState("")
   const [overlay, setOverlay] = useState(<></>) // Etat d'overlay
@@ -87,6 +91,31 @@ function HomeScreen(props) {
         onBackdropPress={() => setOverlay(<></>)}
       >
         <View style={{ padding: 15 }}>
+<<<<<<< HEAD
+          <Text style={styles.title} >Vos critères de recherche <Icon
+            name="search"
+            size={15}
+            color="#2D98DA"
+            style={{ marginLeft: 10 }}
+          /> : </Text>
+          <Text style={styles.overT}>Date de création : {item.created && item.created.split("T")[0].replace(/-/g, "/")}</Text>
+          <Text style={styles.overText}>Ville : {item.city}</Text>
+          <Text style={styles.overText}>Type : {item.type}</Text>
+          <Text style={styles.overText}>Prix : {item.min_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")} à {item.max_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}€</Text>
+          <Text style={styles.overText}>Surface : {item.min_surface} à {item.max_surface} ㎡</Text>
+          <Text style={styles.overText}>Surface extérieure : {item.outdoor_surface} ㎡</Text>
+          <Text style={styles.overText}>Nombre de pièces : {item.pieces_min} / {item.pieces_max}</Text>
+          <Text style={styles.overText}>Ascenseur : {item.elevator ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+          <Text style={styles.overText}>Parking : {item.parking ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+          <Text style={styles.overText}>Ancien : {item.is_old ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+          <Text style={styles.overText}>Neuf : {item.is_new ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+          <Text style={styles.overText}>Fibre optique : {item.fiber_optics ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+          <Text style={styles.overText}>Piscine : {item.pool ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+          <Text style={styles.overText}>Balcon : {item.balcony ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+          <Text style={styles.overText}>Terrasse : {item.terrace ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+          <Text style={styles.overText}>Date de commercialisation : {item.market_date ? "oui" : "Pas de préférence"}</Text>
+          <Text style={styles.overText}>Joignable par les pro : {item.open_to_pro ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+=======
           <Text style={styles.title}>Vos options de quêtes!</Text>
           <Text style={styles.overText}>
             Prix minimum:{" "}
@@ -141,10 +170,12 @@ function HomeScreen(props) {
           <Text style={styles.overText}>
             Disponible aux pro: {item.open_to_pro ? "oui" : "non"}
           </Text>
+>>>>>>> d45d611f268670c9543f3c09bf156057a6a30e32
         </View>
       </Overlay>
     )
   }
+
 
   // Réutilisation de la fonction pour le refresh de la page.
   async function userData() {
@@ -199,10 +230,15 @@ function HomeScreen(props) {
               marginVertical: 10,
               color: "#2C98DA",
               fontWeight: "bold",
+<<<<<<< HEAD
+            }}>
+            {quest === 1 ? "Votre quête" : `Vos ${quest} quêtes en cours`}
+=======
             }}
             onPress={() => viewexclusivity()}
           >
             Vos {quest} quêtes en cours
+>>>>>>> d45d611f268670c9543f3c09bf156057a6a30e32
           </Text>
           <TouchableOpacity
             style={styles.Button}
@@ -213,6 +249,12 @@ function HomeScreen(props) {
             }}
           >
             <Text style={styles.buttonText}>Lancez une quête</Text>
+            <Icon
+              name="search-plus"
+              size={20}
+              color="#2D98DA"
+              style={{ marginLeft: 10 }}
+            />
           </TouchableOpacity>
           {data.quests?.map((item, i) => {
             return (
@@ -263,11 +305,16 @@ function HomeScreen(props) {
                   style={{
                     flexDirection: "row",
                     justifyContent: "space-between",
+<<<<<<< HEAD
+                  }}>
+                  <CreatButton textStyle={{ fontWeight: "bold" }} onPress={() => toggleOverlay(item)}>Détails</CreatButton>
+=======
                   }}
                 >
                   <CreatButton onPress={() => toggleOverlay(item)}>
                     Détails
                   </CreatButton>
+>>>>>>> d45d611f268670c9543f3c09bf156057a6a30e32
                   <CreatButton
                     result={results[i]}
                     onPress={() => {
@@ -300,6 +347,8 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     marginTop: 5,
     marginBottom: 5,
+    flexDirection: "row",
+    justifyContent: "flex-start",
   },
   text: {
     color: "#585858",
@@ -311,6 +360,17 @@ const styles = StyleSheet.create({
   },
   overText: {
     fontSize: 15,
+    color: "#585858",
+    marginBottom: 5,
+  },
+  overT: {
+    fontSize: 15,
+    color: "#585858",
+    marginBottom: 5,
+    opacity: 0.5,
+  },
+  buttonText: {
+    fontWeight: "bold",
     color: "#585858",
   },
   textButton: {

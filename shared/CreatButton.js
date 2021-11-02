@@ -15,13 +15,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#2C8BC6",
     paddingHorizontal: 25,
     paddingVertical: 17,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
     elevation: 10,
     borderRadius: 25,
-  },
-  buttonWrapper: {
-    alignItems: "flex-end",
-    paddingRight: 50,
-    paddingTop: 50,
   },
   signupText: {
     color: "#fff",
