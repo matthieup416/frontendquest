@@ -47,7 +47,11 @@ function ExplorerScreen(props) {
       var list = body.listQuest.map((quest) => {
         return {
           value: quest._id,
-          label: `${quest.city} - ${quest.min_price}/${quest.max_price}€`,
+          label: `${quest.city} - ${quest.min_price
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, " ")}/${quest.max_price
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, " ")}€`,
         }
       })
       setListQuest(list)
@@ -191,7 +195,10 @@ function ExplorerScreen(props) {
                       {offer.offers.city}
                     </Text>
                     <Text style={{ fontSize: 18, color: "#585858" }}>
-                      {offer.offers.price} €
+                      {offer.offers.price
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, " ")}{" "}
+                      €
                     </Text>
                     {pro}
                   </View>

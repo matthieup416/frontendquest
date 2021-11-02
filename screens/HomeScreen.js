@@ -71,7 +71,9 @@ function HomeScreen(props) {
         overlayStyle={{ backgroundColor: "#F8F7FF" }}
         onBackdropPress={() => setExclusivity(<></>)}
       >
-        <Text style={styles.title}>Super exclusivité</Text>
+        <View style={{ flexDirection: "column" }}>
+          <Text style={styles.title}>Nouveau message de Jean-Marc</Text>
+        </View>
       </Overlay>
     )
   }
@@ -198,7 +200,7 @@ function HomeScreen(props) {
               color: "#2C98DA",
               fontWeight: "bold",
             }}
-            onPress={() => viewExclusivity()}
+            onPress={() => viewexclusivity()}
           >
             Vos {quest} quêtes en cours
           </Text>
