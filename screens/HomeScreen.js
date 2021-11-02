@@ -88,18 +88,6 @@ function HomeScreen(props) {
           <Text style={styles.overText}>Terrasse : {item.terrace ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
           <Text style={styles.overText}>Date de commercialisation : {item.market_date ? "oui" : "Pas de préférence"}</Text>
           <Text style={styles.overText}>Joignable par les pro : {item.open_to_pro ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
-
-          <Text style={styles.overText}>Ascenseur: {item.elevator ? "oui" : "non"}</Text>
-          <Text style={styles.overText}>Parking: {item.parking ? "oui" : "non"}</Text>
-          <Text style={styles.overText}>Ancien: {item.is_old ? "oui" : "non"}</Text>
-          <Text style={styles.overText}>Neuf: {item.is_new ? "oui" : "non"}</Text>
-          <Text style={styles.overText}>Fibre optique: {item.fiber_optics ? "oui" : "non"}</Text>
-          <Text style={styles.overText}>Piscine: {item.pool ? "oui" : "non"}</Text>
-          <Text style={styles.overText}>Balcon: {item.balcony ? "oui" : "non"}</Text>
-          <Text style={styles.overText}>Terrasse: {item.terrace ? "oui" : "non"}</Text>
-          <Text style={styles.overText}>Date de création: {item.created && item.created.split("T")[0].replace(/-/g, "/")}</Text>
-          <Text style={styles.overText}>Date du marché: {item.market_date ? "oui" : "non"}</Text>
-          <Text style={styles.overText}>Disponible aux pro: {item.open_to_pro ? "oui" : "non"}</Text>
         </View>
       </Overlay>
     );
