@@ -22,6 +22,7 @@ import { useIsFocused, useFocusEffect } from "@react-navigation/native"
 function HomeScreen(props) {
   const [data, setData] = useState("")
   const [overlay, setOverlay] = useState(<></>) // Etat d'overlay
+  const [exclusivity, setExclusivity] = useState(<></>) // Etat d'exclusivité
   const [quest, setQuest] = useState(0)
   const [offers, setOffers] = useState(0)
   const [results, setResults] = useState([])
@@ -62,6 +63,18 @@ function HomeScreen(props) {
       userData()
     }, [])
   )
+
+  const viewexclusivity = () => {
+    setExclusivity(
+      <Overlay
+        isVisible={true}
+        overlayStyle={{ backgroundColor: "#F8F7FF" }}
+        onBackdropPress={() => setExclusivity(<></>)}
+      >
+        <Text style={styles.title}>Super exclusivité</Text>
+      </Overlay>
+    )
+  }
 
   // Fonction de l'overlay pour le rendre visible ou non.
   const toggleOverlay = (item) => {
@@ -170,6 +183,7 @@ function HomeScreen(props) {
     return (
       <SafeAreaView>
         {overlay}
+        {exclusivity}
         <ScrollView>
           <Header
             onRefresh={userData}
@@ -184,6 +198,7 @@ function HomeScreen(props) {
               color: "#2C98DA",
               fontWeight: "bold",
             }}
+            onPress={() => viewExclusivity()}
           >
             Vos {quest} quêtes en cours
           </Text>
