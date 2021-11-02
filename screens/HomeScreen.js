@@ -35,6 +35,13 @@ function HomeScreen(props) {
       )
       const body = await data.json()
       if (body.result) {
+        // var countresult = [];
+        // for (let i = 0; i < body.user.quests.length; i++) {
+        //   const res = await fetch(`http://${MY_IP}:3000/countresults?token=${props.dataUser.token}&quest_id=${body.user.quests[i]._id}`);
+        //   const count = await res.json();
+        //   countresult.push(count.listOffers);
+        // }
+        // setResults(countresult);
         setData(body.user)
         setQuest(body.user.quests.length)
         props.addUser({
@@ -48,6 +55,13 @@ function HomeScreen(props) {
     }
     userData()
   }, [])
+
+  //Relance la fonction useData à chaque fois que l'écran est focus
+  useFocusEffect(
+    useCallback(() => {
+      userData()
+    }, [])
+  )
 
   // Fonction de l'overlay pour le rendre visible ou non.
   const toggleOverlay = (item) => {
@@ -130,9 +144,11 @@ function HomeScreen(props) {
           `http://${MY_IP}:3000/countresults?token=${props.dataUser.token}&quest_id=${body.user.quests[i]._id}`
         )
         const count = await res.json()
+        console.log(count.listOffers)
         countresult.push(count.listOffers)
       }
       setResults(countresult)
+      console.log("countresult", countresult)
       setData(body.user)
       setQuest(body.user.quests.length)
       setOffers(body.user.offers.length)
@@ -232,72 +248,9 @@ function HomeScreen(props) {
                     justifyContent: "space-between",
                   }}
                 >
-                  <CreatButton onPress={toggleOverlay}>Détails</CreatButton>
-                  <Overlay
-                    isVisible={overlayVisibility}
-                    overlayStyle={{ backgroundColor: "#F8F7FF" }}
-                    onBackdropPress={toggleOverlay}
-                  >
-                    <View style={{ padding: 15 }}>
-                      <Text style={styles.title}>Vos options de quêtes!</Text>
-                      <Text style={styles.overText}>
-                        Prix maximum: {item.max_price}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Prix minimum: {item.min_price}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Surface maximum: {item.max_surface}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Surface minimum: {item.min_surface}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Surface extérieur: {item.outdoor_surface}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Pieces maximum: {item.pieces_max}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Pieces minimum: {item.pieces_min}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Ascenseur: {item.elevator ? "oui" : "non"}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Parking: {item.parking ? "oui" : "non"}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Ancien: {item.is_old ? "oui" : "non"}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Neuf: {item.is_new ? "oui" : "non"}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Fibre optique: {item.fiber_optics ? "oui" : "non"}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Piscine: {item.pool ? "oui" : "non"}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Balcon: {item.balcony ? "oui" : "non"}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Terrasse: {item.terrace ? "oui" : "non"}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Date de création:{" "}
-                        {item.created &&
-                          item.created.split("T")[0].replace(/-/g, "/")}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Date du marché: {item.market_date ? "oui" : "non"}
-                      </Text>
-                      <Text style={styles.overText}>
-                        Disponible aux pro: {item.open_to_pro ? "oui" : "non"}
-                      </Text>
-                    </View>
-                  </Overlay>
+                  <CreatButton onPress={() => toggleOverlay(item)}>
+                    Détails
+                  </CreatButton>
                   <CreatButton
                     result={results[i]}
                     onPress={() => {
@@ -306,7 +259,7 @@ function HomeScreen(props) {
                     buttonStyle={{ backgroundColor: "rgba(251, 197, 49, 1)" }}
                   >
                     <Text style={[styles.textButton, styles[results[i]]]}>
-                      {results[i]} {results[i] > 0 ? "RÉSULTATS" : "RÉSULTAT"}
+                      {results[i]} {results[i] > 1 ? "RÉSULTATS" : "RÉSULTAT"}
                     </Text>
                   </CreatButton>
                 </View>
