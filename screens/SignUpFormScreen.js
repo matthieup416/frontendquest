@@ -82,7 +82,7 @@ function SignUpFormScreen(props) {
                 <Text style={styles.text}>
                   Password
                 </Text>
-                <TextInput style={styles.inputStyle} onChangeText={(number) => setSignUpPassword(number)}
+                <TextInput style={styles.inputStyle} secureTextEntry={true} onChangeText={(number) => setSignUpPassword(number)}
                   value={signUpPassword} />
               </View>
               <View style={styles.inputWrapper}>
@@ -161,6 +161,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#2C8BC6",
     paddingHorizontal: 50,
     paddingVertical: 17,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
     elevation: 10,
     borderRadius: 25,
   },
@@ -176,6 +180,10 @@ const styles = StyleSheet.create({
   formContainer: {
     backgroundColor: "#F8F7FF",
     paddingVertical: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
     elevation: 10,
     paddingHorizontal: 15,
   },
