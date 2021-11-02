@@ -14,6 +14,7 @@ import { useIsFocused, useFocusEffect } from "@react-navigation/native";
 function HomeScreen(props) {
   const [data, setData] = useState("");
   const [overlay, setOverlay] = useState(<></>); // Etat d'overlay
+  const [exclusivity, setExclusivity] = useState(<></>); // Etat d'exclusivité
   const [quest, setQuest] = useState(0);
   const [offers, setOffers] = useState(0);
   const [results, setResults] = useState([]);
@@ -48,6 +49,14 @@ function HomeScreen(props) {
       userData();
     }, [])
   );
+
+  const viewexclusivity = () => {
+    setExclusivity(
+      <Overlay isVisible={true} overlayStyle={{ backgroundColor: "#F8F7FF" }} onBackdropPress={() => setExclusivity(<></>)}>
+        <Text style={styles.title}>Super exclusivité</Text>
+      </Overlay>
+    );
+  };
 
   // Fonction de l'overlay pour le rendre visible ou non.
   const toggleOverlay = (item) => {
@@ -90,6 +99,7 @@ function HomeScreen(props) {
         countresult.push(count.listOffers);
       }
       setResults(countresult);
+      console.log("countresult", countresult);
       setData(body.user);
       setQuest(body.user.quests.length);
       setOffers(body.user.offers.length);
@@ -111,6 +121,7 @@ function HomeScreen(props) {
     return (
       <SafeAreaView>
         {overlay}
+        {exclusivity}
         <ScrollView>
           <Header onRefresh={userData} title={data.firstName} image={data.avatar} />
           <Text
@@ -120,7 +131,8 @@ function HomeScreen(props) {
               marginVertical: 10,
               color: "#2C98DA",
               fontWeight: "bold",
-            }}>
+            }}
+            onPress={() => viewexclusivity()}>
             Vos {quest} quêtes en cours
           </Text>
           <TouchableOpacity
@@ -173,7 +185,7 @@ function HomeScreen(props) {
                     }}
                     buttonStyle={{ backgroundColor: "rgba(251, 197, 49, 1)" }}>
                     <Text style={[styles.textButton, styles[results[i]]]}>
-                      {results[i]} {results[i] > 0 ? "RÉSULTATS" : "RÉSULTAT"}
+                      {results[i]} {results[i] > 1 ? "RÉSULTATS" : "RÉSULTAT"}
                     </Text>
                   </CreatButton>
                 </View>
