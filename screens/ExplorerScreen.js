@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react"
-import { View, Dimensions, StyleSheet } from "react-native"
+import { View, Dimensions, StyleSheet, Image } from "react-native"
 import Icon from "react-native-vector-icons/FontAwesome5"
 import { connect } from "react-redux"
 import { StatusBar } from "expo-status-bar"
+///// WebView permettra d'afficher les miniatures des photos sur la carte via du code HTML (problème des images sur react-native-maps)
+import { WebView } from "react-native-webview"
 
 import MapView, { Marker, Callout } from "react-native-maps"
 import {
@@ -23,6 +25,8 @@ let deviceWidth = Dimensions.get("window").width
 function ExplorerScreen(props) {
   const [listQuest, setListQuest] = useState([])
   const [listOffer, setListOffer] = useState([])
+  const [listAllOffer, setListAllOffer] = useState([])
+
   const [selectedQuest, setSelectedQuest] = useState("")
   // Sans choix de quete on affiche la carte centrée sur Paris
   const [questCityCoord, setQuestCityCoord] = useState({
@@ -48,7 +52,7 @@ function ExplorerScreen(props) {
         }
       })
       setListQuest(list)
-      //   setSelectedQuest(body.listQuest[0]._id)
+      setSelectedQuest(body.listQuest[0]._id)
     }
     listQuest()
   }, [])
@@ -62,7 +66,7 @@ function ExplorerScreen(props) {
       const body = await data.json()
 
       setListOffer(body.listOffers)
-      console.log(body)
+      console.log("body", body)
       setQuestCityCoord({
         latitude: body.cityCoord.latitude,
         longitude: body.cityCoord.longitude,
@@ -95,6 +99,7 @@ function ExplorerScreen(props) {
             color: "white",
             width: (deviceWidth * 2) / 3,
             marginTop: 10,
+            marginLeft: 10,
           }}
         >
           Les dernières offres :
@@ -104,6 +109,7 @@ function ExplorerScreen(props) {
           items={listQuest}
           placeholder={{ label: "Choisir une quête", value: null }}
           style={pickerSelectStyles}
+          value={selectedQuest}
         />
       </View>
       <MapView
@@ -125,20 +131,9 @@ function ExplorerScreen(props) {
         {listOffer.map((offer, i) => {
           if (offer.is_pro) {
             var pro = <Badge status="primary" value="PRO" />
+          } else {
+            var pro = <Text></Text>
           }
-          /*  if (
-            new Date(offer.offers.created) >
-            new Date(new Date().setDate(new Date().getDate() - 1))
-          ) {
-            var meteor = (
-              <Icon
-                name="meteor"
-                size={20}
-                color="#FBC531"
-                style={{ marginRight: 5, marginBottom: 5 }}
-              />
-            )
-          } */
 
           return (
             <Marker
@@ -150,42 +145,59 @@ function ExplorerScreen(props) {
               }}
               opacity={1}
             >
-              <Callout
-                onPress={() => {
-                  props.navigation.navigate("Listing", {
-                    questId: selectedQuest._id,
-                    offerId: offer.offers._id,
-                  })
-                }}
-              >
-                <View style={{ flexDirection: "column", width: 180 }}>
-                  <Text
+              <View style={{ borderRadius: 10 }}>
+                <Callout
+                  onPress={() => {
+                    console.log(selectedQuest)
+                    props.navigation.navigate("Listing", {
+                      questId: selectedQuest,
+                      offerId: offer.offers._id,
+                    })
+                  }}
+                >
+                  <View
                     style={{
-                      fontSize: 18,
-                      fontWeight: "bold",
-                      color: "#2D98DA",
-                      marginTop: 0,
-                      width: 180,
+                      flexDirection: "column",
+                      width: 250,
+                      alignItems: "flex-start",
                     }}
                   >
-                    {offer.offers.type} {offer.offers.surface} m{"\u00b2"}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      fontWeight: "bold",
-                      color: "#2D98DA",
-                      marginTop: 0,
-                      width: 180,
-                    }}
-                  >
-                    {offer.offers.city}
-                  </Text>
-                  <Text style={{ fontSize: 18, color: "#585858" }}>
-                    {offer.offers.price} €
-                  </Text>
-                </View>
-              </Callout>
+                    <WebView
+                      style={{ width: 250, height: 150 }}
+                      source={{
+                        html: `<img src='${offer.offers.pictures[0].url}' width="100%"/>`,
+                      }}
+                    ></WebView>
+
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "bold",
+                        color: "#2D98DA",
+                        marginTop: 0,
+                        width: 180,
+                      }}
+                    >
+                      {offer.offers.type} {offer.offers.surface} m{"\u00b2"}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "bold",
+                        color: "#2D98DA",
+                        marginTop: 0,
+                        width: 180,
+                      }}
+                    >
+                      {offer.offers.city}
+                    </Text>
+                    <Text style={{ fontSize: 18, color: "#585858" }}>
+                      {offer.offers.price} €
+                    </Text>
+                    {pro}
+                  </View>
+                </Callout>
+              </View>
             </Marker>
           )
         })}
