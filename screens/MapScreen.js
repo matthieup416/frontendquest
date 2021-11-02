@@ -5,13 +5,13 @@ import { connect } from "react-redux"
 import MapView, { Marker, Callout } from "react-native-maps"
 import { Card, Text, Button, ListItem, Avatar } from "react-native-elements"
 import { MY_IP } from "@env" /* Variable environnement */
+import { WebView } from "react-native-webview"
 
 let deviceHeight = Dimensions.get("window").height
 let deviceWidth = Dimensions.get("window").width
 
 function MapScreen(props) {
   const [mapDisplay, setMapDisplay] = useState(<View></View>)
-  console.log(props.route.params.offerData.latitude)
   let listingInfo = (
     <View
       style={{
@@ -108,7 +108,13 @@ function MapScreen(props) {
               })
             }}
           >
-            <View style={{ flexDirection: "column", width: 180 }}>
+            <View style={{ flexDirection: "column", width: 250 }}>
+              <WebView
+                style={{ width: 250, height: 150 }}
+                source={{
+                  html: `<img src='${props.route.params.offerData.pictures[0].url}' width="100%"/>`,
+                }}
+              ></WebView>
               <Text
                 style={{
                   fontSize: 18,
