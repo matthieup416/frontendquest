@@ -29,11 +29,7 @@ function HomeScreen(props) {
   const [overlay, setOverlay] = useState(<></>) // Etat d'overlay
   const [exclusivity, setExclusivity] = useState(<></>) // Etat d'exclusivité
   const [quest, setQuest] = useState(0)
-  const newMessage = `Bonjour ${props.dataUser.firstName}, je m'apprête à signer un mandat de vente pour un
-  bien qui correspond à votre qûete. Il s'agit d'une villa avec
-  piscine à Vence, entièrement rénovée en 2019. Le
-  propriétaire souhaite vendre rapidement suite à une mutation à
-  l'étranger....`
+  const newMessage = `Bonjour ${props.dataUser.firstName}, je m'apprête à signer un mandat de vente pour un bien qui correspond à votre qûete. Il s'agit d'une villa avec piscine à Vence, entièrement rénovée en 2019. Le propriétaire souhaite vendre rapidement suite à une mutation à l'étranger. Je vous propose de nous rencontrer dans les jours à venir. Cordialement, Renaud`
   const [offers, setOffers] = useState(0)
   const [results, setResults] = useState([])
   const [loaderVisible, setLoaderVisible] = useState(true)
