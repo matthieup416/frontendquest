@@ -568,7 +568,7 @@ function ListingScreen(props) {
         overlayColor="rgba(255,255,255,0.75)"
         animationStyle={styles.lottie}
         speed={1}
-        source={require("../assets/loader_map.json")}
+        source={require("../assets/loader.json")}
       >
         <Text></Text>
       </AnimatedLoader>

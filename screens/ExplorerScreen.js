@@ -87,6 +87,7 @@ function ExplorerScreen(props) {
     }
     results()
   }, [selectedQuest])
+
   return (
     <View style={{ flex: 1, marginTop: 25 }}>
       <AnimatedLoader

@@ -29,12 +29,11 @@ function HomeScreen(props) {
   const [overlay, setOverlay] = useState(<></>) // Etat d'overlay
   const [exclusivity, setExclusivity] = useState(<></>) // Etat d'exclusivité
   const [quest, setQuest] = useState(0)
-  const [newMessage, setNewMessage] =
-    useState(`Bonjour ${props.dataUser.firstName}, je m'apprête à signer un mandat de vente pour un
+  const newMessage = `Bonjour ${props.dataUser.firstName}, je m'apprête à signer un mandat de vente pour un
   bien qui correspond à votre qûete. Il s'agit d'une villa avec
-  piscine dans l'arrière pays Niçois, entièrement rénovée en 2019. Le
+  piscine à Vence, entièrement rénovée en 2019. Le
   propriétaire souhaite vendre rapidement suite à une mutation à
-  l'étranger....`)
+  l'étranger....`
   const [offers, setOffers] = useState(0)
   const [results, setResults] = useState([])
   const [loaderVisible, setLoaderVisible] = useState(true)
@@ -73,7 +72,7 @@ function HomeScreen(props) {
     const data = await fetch(`http://${MY_IP}:3000/inbox/addMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `sender_token=${props.dataUser.token}&receiver_token=UdQxBmsipgFdvtQvrsqQTg_WopWmh9Jj&quest_id=${props.dataUser.quest[0]._id}&offer_id=617ef1724a67b6421214b74e&message=${newMessage}`,
+      body: `sender_token=UdQxBmsipgFdvtQvrsqQTg_WopWmh9Jj&buyer_token=${props.dataUser.token}&seller_token=UdQxBmsipgFdvtQvrsqQTg_WopWmh9Jj&quest_id=${props.dataUser.quest[1]._id}&offer_id=617ef1724a67b6421214b74e&message=${newMessage}`,
     })
 
     const body = await data.json()
@@ -178,7 +177,7 @@ function HomeScreen(props) {
               fontWeight: "bold",
             }}
           >
-            Maison 220m{"\u00b2"} à Nice
+            Maison 220m{"\u00b2"} à Vence
           </Text>
           <Text
             style={{
