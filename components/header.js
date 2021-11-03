@@ -1,13 +1,19 @@
 import React from "react";
 import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
-// import { Avatar } from "react-native-elements";
+import { Avatar } from "react-native-elements";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 const Header = ({ title, image, onRefresh }) => {
+  if (!image) {
+    var avatar = <Avatar rounded icon={{ name: "user", type: "font-awesome" }} size={64} activeOpacity={0.7} containerStyle={styles.avatar} />;
+  } else {
+    var avatar = <Avatar source={{ uri: image }} avatarStyle={{ borderRadius: 50, overflow: "hidden" }} size={"medium"} />;
+  }
   return (
     <View style={styles.container}>
       <View style={styles.item}>
-        <Image source={{ uri: image }} style={styles.avatar} />
+        {/* <Image source={{ uri: image }} style={styles.avatar} /> */}
+        {avatar}
       </View>
       <View style={{ flex: 1, paddingLeft: 30, alignSelf: "center" }}>
         <Text style={{ color: "white", fontWeight: "bold", fontSize: 30 }}>{title}</Text>

@@ -1,11 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View, Text, StyleSheet, Dimensions, TextInput, ScrollView } from "react-native";
-import { Avatar } from "react-native-elements";
+import { Avatar, Accessory, Button } from "react-native-elements";
 import { connect } from "react-redux";
 import CreatButton from "../shared/CreatButton";
 import { showMessage, hideMessage } from "react-native-flash-message";
-
+import Icon from "react-native-vector-icons/FontAwesome";
+import { FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Camera } from "expo-camera";
+import { useIsFocused } from "@react-navigation/native";
 
 import { MY_IP } from "@env"; /* Variable environnement */
 
@@ -24,7 +27,8 @@ function ProfileScreen(props) {
   const [focusPhone, setFocusPhone] = useState(false);
   const [focusJob, setFocusJob] = useState(false);
   const [focusDescription, setFocusDescription] = useState(false);
-  const scrollViewRef = useRef(ScrollView);
+
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     async function userData() {
@@ -57,12 +61,21 @@ function ProfileScreen(props) {
   if (!data) {
     return null;
   }
+  if (!data.avatar) {
+    var avatar = (
+      <Avatar rounded icon={{ name: "user", type: "font-awesome" }} size={"xlarge"} onPress={() => props.navigation.navigate("Camera")} activeOpacity={0.7} containerStyle={{ margin: 20, backgroundColor: "#2C8BC6" }}>
+        <Accessory style={{ width: 50, height: 50, borderRadius: 50 }} size="36" />
+      </Avatar>
+    );
+  } else {
+    var avatar = <Avatar source={{ uri: data.avatar }} avatarStyle={{ borderRadius: 50, overflow: "hidden" }} size={"xlarge"} title={data.firstName[0]} />;
+  }
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView ref={scrollViewRef}>
+      <ScrollView>
         <View style={styles.upperContainer}>
-          <Avatar source={{ uri: data.avatar }} avatarStyle={{ borderRadius: 50, overflow: "hidden" }} size={"xlarge"} />
+          {avatar}
           <Text style={styles.heading}>
             {data.firstName} {data.lastName}
           </Text>
@@ -125,7 +138,7 @@ function ProfileScreen(props) {
           <TextInput
             value={data.description}
             multiline={true}
-            numberOfLines={5}
+            numberOfLines={3}
             onChangeText={(value) => {
               // setEdit(true);
               setData({ ...data, description: value });
