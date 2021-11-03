@@ -3,8 +3,9 @@ import { View, Dimensions, StyleSheet, Image } from "react-native"
 import Icon from "react-native-vector-icons/FontAwesome5"
 import { connect } from "react-redux"
 import { StatusBar } from "expo-status-bar"
-///// WebView permettra d'afficher les miniatures des photos sur la carte via du code HTML (problème des images sur react-native-maps)
+// WebView permettra d'afficher les miniatures des photos sur la carte via du code HTML (problème des images sur react-native-maps)
 import { WebView } from "react-native-webview"
+import AnimatedLoader from "react-native-animated-loader"
 
 import MapView, { Marker, Callout } from "react-native-maps"
 import {
@@ -27,6 +28,7 @@ function ExplorerScreen(props) {
   const [listQuest, setListQuest] = useState([])
   const [listOffer, setListOffer] = useState([])
   const [selectedQuest, setSelectedQuest] = useState("")
+  const [loaderVisible, setLoaderVisible] = useState(true)
   // Sans choix de quete on affiche la carte centrée sur Paris
   const [questCityCoord, setQuestCityCoord] = useState({
     latitude: 48.8588897,
@@ -69,7 +71,6 @@ function ExplorerScreen(props) {
       const body = await data.json()
 
       setListOffer(body.listOffers)
-      console.log("body", body)
       setQuestCityCoord({
         latitude: body.cityCoord.latitude,
         longitude: body.cityCoord.longitude,
@@ -82,11 +83,21 @@ function ExplorerScreen(props) {
         latitudeDelta: newLatitudeDelta,
         longitudeDelta: newLongitudeDelta,
       })
+      setLoaderVisible(false)
     }
     results()
   }, [selectedQuest])
   return (
     <View style={{ flex: 1, marginTop: 25 }}>
+      <AnimatedLoader
+        visible={loaderVisible}
+        overlayColor="rgba(255,255,255,0.75)"
+        animationStyle={styles.lottie}
+        speed={1}
+        source={require("../assets/loader_map.json")}
+      >
+        <Text></Text>
+      </AnimatedLoader>
       <StatusBar backgroundColor={"#2D98DA"} style="light" />
 
       <View
@@ -151,7 +162,6 @@ function ExplorerScreen(props) {
               <View style={{ borderRadius: 10 }}>
                 <Callout
                   onPress={() => {
-                    console.log(selectedQuest)
                     props.navigation.navigate("Listing", {
                       questId: selectedQuest,
                       offerId: offer.offers._id,
@@ -211,6 +221,13 @@ function ExplorerScreen(props) {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  lottie: {
+    width: 250,
+    height: 250,
+  },
+})
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {

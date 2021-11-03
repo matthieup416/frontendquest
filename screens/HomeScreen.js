@@ -14,15 +14,15 @@ import { MaterialCommunityIcons } from "@expo/vector-icons"
 
 import { connect } from "react-redux"
 
-import { Overlay } from "react-native-elements"
+import { Overlay } from "react-native-elements";
+import AnimatedLoader from "react-native-animated-loader";
+import Header from "../components/header";
+import CreatButton from "../shared/CreatButton";
 
-import Header from "../components/header"
-import CreatButton from "../shared/CreatButton"
+import { MY_IP } from "@env"; /* Variable environnement */
+import { useIsFocused, useFocusEffect } from "@react-navigation/native";
 
-import { MY_IP } from "@env" /* Variable environnement */
-import { log } from "react-native-reanimated"
-import { useIsFocused, useFocusEffect } from "@react-navigation/native"
-
+<<<<<<< HEAD
 import Icon from "react-native-vector-icons/FontAwesome5"
 
 function HomeScreen(props) {
@@ -35,30 +35,35 @@ function HomeScreen(props) {
   const isFocused = useIsFocused()
   let deviceHeight = Dimensions.get("window").height
   let deviceWidth = Dimensions.get("window").width
+=======
+import Icon from "react-native-vector-icons/FontAwesome5";
+
+function HomeScreen(props) {
+  const [data, setData] = useState("");
+  const [overlay, setOverlay] = useState(<></>); // Etat d'overlay
+  const [exclusivity, setExclusivity] = useState(<></>); // Etat d'exclusivité
+  const [loaderVisible, setLoaderVisible] = useState(true);
+  const [quest, setQuest] = useState(0);
+  const [offers, setOffers] = useState(0);
+  const [results, setResults] = useState([]);
+  const isFocused = useIsFocused();
+
+>>>>>>> 98e361f2c4e6ef0b6d85dfdafab41d4540d1834d
   // Au chargement du composant, on obtient toutes les données de l'utilisateur.
   useEffect(() => {
     async function userData() {
-      const data = await fetch(
-        `http://${MY_IP}:3000/home/userDetail?token=${props.dataUser.token}`
-      )
-      const body = await data.json()
+      const data = await fetch(`http://${MY_IP}:3000/home/userDetail?token=${props.dataUser.token}`);
+      const body = await data.json();
       if (body.result) {
-        // var countresult = [];
-        // for (let i = 0; i < body.user.quests.length; i++) {
-        //   const res = await fetch(`http://${MY_IP}:3000/countresults?token=${props.dataUser.token}&quest_id=${body.user.quests[i]._id}`);
-        //   const count = await res.json();
-        //   countresult.push(count.listOffers);
-        // }
-        // setResults(countresult);
-        setData(body.user)
-        setQuest(body.user.quests.length)
+        setData(body.user);
+        setQuest(body.user.quests.length);
         props.addUser({
           token: body.user.token,
           firstName: body.user.firstName,
           avatar: body.user.avatar,
-        })
+        });
       } else {
-        console.log("error")
+        console.log("error");
       }
     }
     userData()
@@ -90,322 +95,73 @@ function HomeScreen(props) {
   //Relance la fonction useData à chaque fois que l'écran est focus
   useFocusEffect(
     useCallback(() => {
-      userData()
+      userData();
     }, [])
-  )
+  );
 
-  const viewexclusivity = () => {
+  const viewExclusivity = () => {
     setExclusivity(
-      <Overlay
-        isVisible={true}
-        overlayStyle={{ backgroundColor: "#F8F7FF" }}
-        onBackdropPress={() => setExclusivity(<></>)}
-      >
-        <View style={{ flexDirection: "column" }}>
-          <Text style={styles.title}>Jean-Marc vous a envoyé un message </Text>
-          <View>
-            <Image
-              style={{
-                width: deviceWidth / 4.5,
-                height: deviceWidth / 4.5,
-                borderRadius: 70,
-                marginRight: 40,
-              }}
-              resizeMethod="resize"
-              resizeMode="center"
-              source={{ uri: avatarSource }}
-            ></Image>
-          </View>
-          <Text>
-            Bonjour Nicolas, comment allez-vous ? Je m'apprête à signer un
-            mandat pour un bien correspondant à votre recherche. Je pense que
-            vous pourriez être intéressé, il s'agit d'une villa de 220m2 à
-            l'Ouest d'Aix sur la commune d'Eguilles qui a été entièrement
-            rénovée en 2019. Le propriétaire actuel souhaite vendre rapidement.
-            L'annonce n'est pas encore en ligne. Je répondrai volontiers à vos
-            questions et serai ravi de vous rencontrer pour vous présenter ce
-            bien. À très vite, Renaud.{" "}
-          </Text>
-          <View
-            style={{
-              backgroundColor: "white",
-              borderWidth: 3,
-              borderColor: "#98989E",
-              borderRadius: 20,
-              paddingLeft: 10,
-              paddingRight: 10,
-              paddingTop: 5,
-              paddingBottom: 5,
-            }}
-          >
-            <MaterialCommunityIcons
-              name="bell-cancel-outline"
-              size={35}
-              color="#98989E"
-              style={{ marginLeft: "auto", marginRight: "auto" }}
-            />
-          </View>
-          <Pressable
-            style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1.0 }]}
-            onPress={createConversation}
-          >
-            <View
-              style={{
-                backgroundColor: "#2D98DA",
-                borderRadius: 20,
-                paddingLeft: 10,
-                paddingRight: 10,
-                paddingTop: 5,
-                paddingBottom: 5,
-              }}
-            >
-              <Icon
-                name="handshake"
-                size={40}
-                color="white"
-                style={{ marginLeft: "auto", marginRight: "auto" }}
-              />
-            </View>
-          </Pressable>
-        </View>
+      <Overlay isVisible={true} overlayStyle={{ backgroundColor: "#F8F7FF" }} onBackdropPress={() => setExclusivity(<></>)}>
+        <Text style={styles.title}>Super exclusivité</Text>
       </Overlay>
-    )
-  }
+    );
+  };
 
   // Fonction de l'overlay pour le rendre visible ou non.
   const toggleOverlay = (item) => {
     setOverlay(
-      <Overlay
-        isVisible={true}
-        overlayStyle={{ backgroundColor: "#F8F7FF" }}
-        onBackdropPress={() => setOverlay(<></>)}
-      >
-        <View style={{ padding: 15, width: deviceWidth * 0.8 }}>
+      <Overlay isVisible={true} overlayStyle={{ backgroundColor: "#F8F7FF" }} onBackdropPress={() => setOverlay(<></>)}>
+        <View style={{ padding: 15 }}>
           <Text style={styles.title}>
-            Vos critères de recherche{" "}
-            <Icon
-              name="search"
-              size={15}
-              color="#2D98DA"
-              style={{ marginLeft: 10 }}
-            />{" "}
-            :{" "}
+            Vos critères de recherche <Icon name="search" size={15} color="#2D98DA" style={{ marginLeft: 10 }} /> :{" "}
           </Text>
-          <Text style={styles.overT}>
-            Date de création :{" "}
-            {item.created && item.created.split("T")[0].replace(/-/g, "/")}
-          </Text>
+          <Text style={styles.overT}>Date de création : {item.created && item.created.split("T")[0].replace(/-/g, "/")}</Text>
           <Text style={styles.overText}>Ville : {item.city}</Text>
           <Text style={styles.overText}>Type : {item.type}</Text>
           <Text style={styles.overText}>
-            Prix :{" "}
-            {item.min_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")} à{" "}
-            {item.max_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}€
+            Prix : {item.min_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")} à {item.max_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}€
           </Text>
           <Text style={styles.overText}>
             Surface : {item.min_surface} à {item.max_surface} ㎡
           </Text>
-          <Text style={styles.overText}>
-            Surface extérieure : {item.outdoor_surface} ㎡
-          </Text>
+          <Text style={styles.overText}>Surface extérieure : {item.outdoor_surface} ㎡</Text>
           <Text style={styles.overText}>
             Nombre de pièces : {item.pieces_min} / {item.pieces_max}
           </Text>
-          <Text style={styles.overText}>
-            Ascenseur :{" "}
-            {item.elevator ? (
-              <Icon
-                name="check"
-                size={10}
-                color="#4cd137"
-                style={{ marginLeft: 10 }}
-              />
-            ) : (
-              <Icon
-                name="times"
-                size={15}
-                color="#e84118"
-                style={{ marginLeft: 10 }}
-              />
-            )}
-          </Text>
-          <Text style={styles.overText}>
-            Parking :{" "}
-            {item.parking ? (
-              <Icon
-                name="check"
-                size={10}
-                color="#4cd137"
-                style={{ marginLeft: 10 }}
-              />
-            ) : (
-              <Icon
-                name="times"
-                size={15}
-                color="#e84118"
-                style={{ marginLeft: 10 }}
-              />
-            )}
-          </Text>
-          <Text style={styles.overText}>
-            Ancien :{" "}
-            {item.is_old ? (
-              <Icon
-                name="check"
-                size={10}
-                color="#4cd137"
-                style={{ marginLeft: 10 }}
-              />
-            ) : (
-              <Icon
-                name="times"
-                size={15}
-                color="#e84118"
-                style={{ marginLeft: 10 }}
-              />
-            )}
-          </Text>
-          <Text style={styles.overText}>
-            Neuf :{" "}
-            {item.is_new ? (
-              <Icon
-                name="check"
-                size={10}
-                color="#4cd137"
-                style={{ marginLeft: 10 }}
-              />
-            ) : (
-              <Icon
-                name="times"
-                size={15}
-                color="#e84118"
-                style={{ marginLeft: 10 }}
-              />
-            )}
-          </Text>
-          <Text style={styles.overText}>
-            Fibre optique :{" "}
-            {item.fiber_optics ? (
-              <Icon
-                name="check"
-                size={10}
-                color="#4cd137"
-                style={{ marginLeft: 10 }}
-              />
-            ) : (
-              <Icon
-                name="times"
-                size={15}
-                color="#e84118"
-                style={{ marginLeft: 10 }}
-              />
-            )}
-          </Text>
-          <Text style={styles.overText}>
-            Piscine :{" "}
-            {item.pool ? (
-              <Icon
-                name="check"
-                size={10}
-                color="#4cd137"
-                style={{ marginLeft: 10 }}
-              />
-            ) : (
-              <Icon
-                name="times"
-                size={15}
-                color="#e84118"
-                style={{ marginLeft: 10 }}
-              />
-            )}
-          </Text>
-          <Text style={styles.overText}>
-            Balcon :{" "}
-            {item.balcony ? (
-              <Icon
-                name="check"
-                size={10}
-                color="#4cd137"
-                style={{ marginLeft: 10 }}
-              />
-            ) : (
-              <Icon
-                name="times"
-                size={15}
-                color="#e84118"
-                style={{ marginLeft: 10 }}
-              />
-            )}
-          </Text>
-          <Text style={styles.overText}>
-            Terrasse :{" "}
-            {item.terrace ? (
-              <Icon
-                name="check"
-                size={10}
-                color="#4cd137"
-                style={{ marginLeft: 10 }}
-              />
-            ) : (
-              <Icon
-                name="times"
-                size={15}
-                color="#e84118"
-                style={{ marginLeft: 10 }}
-              />
-            )}
-          </Text>
-          <Text style={styles.overText}>
-            Date de commercialisation :{" "}
-            {item.market_date ? "oui" : "Pas de préférence"}
-          </Text>
-          <Text style={styles.overText}>
-            Joignable par les pro :{" "}
-            {item.open_to_pro ? (
-              <Icon
-                name="check"
-                size={10}
-                color="#4cd137"
-                style={{ marginLeft: 10 }}
-              />
-            ) : (
-              <Icon
-                name="times"
-                size={15}
-                color="#e84118"
-                style={{ marginLeft: 10 }}
-              />
-            )}
-          </Text>
+          <Text style={styles.overText}>Ascenseur : {item.elevator ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+          <Text style={styles.overText}>Parking : {item.parking ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+          <Text style={styles.overText}>Ancien : {item.is_old ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+          <Text style={styles.overText}>Neuf : {item.is_new ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+          <Text style={styles.overText}>Fibre optique : {item.fiber_optics ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+          <Text style={styles.overText}>Piscine : {item.pool ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+          <Text style={styles.overText}>Balcon : {item.balcony ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+          <Text style={styles.overText}>Terrasse : {item.terrace ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
+          <Text style={styles.overText}>Date de commercialisation : {item.market_date ? "oui" : "Pas de préférence"}</Text>
+          <Text style={styles.overText}>Joignable par les pro : {item.open_to_pro ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
         </View>
       </Overlay>
-    )
-  }
+    );
+  };
 
   // Réutilisation de la fonction pour le refresh de la page.
   async function userData() {
-    const data = await fetch(
-      `http://${MY_IP}:3000/home/userDetail?token=${props.dataUser.token}`
-    )
-    const body = await data.json()
+    const data = await fetch(`http://${MY_IP}:3000/home/userDetail?token=${props.dataUser.token}`);
+    const body = await data.json();
     if (body.result) {
-      var countresult = []
+      var countresult = [];
       for (let i = 0; i < body.user.quests.length; i++) {
-        const res = await fetch(
-          `http://${MY_IP}:3000/countresults?token=${props.dataUser.token}&quest_id=${body.user.quests[i]._id}`
-        )
-        const count = await res.json()
-        console.log(count.listOffers)
-        countresult.push(count.listOffers)
+        const res = await fetch(`http://${MY_IP}:3000/countresults?token=${props.dataUser.token}&quest_id=${body.user.quests[i]._id}`);
+        const count = await res.json();
+        countresult.push(count.listOffers);
       }
-      setResults(countresult)
-      console.log("countresult", countresult)
-      setData(body.user)
-      setQuest(body.user.quests.length)
-      setOffers(body.user.offers.length)
-      props.addUser
+      setResults(countresult);
+      setData(body.user);
+      setQuest(body.user.quests.length);
+      setOffers(body.user.offers.length);
+      props.addUser;
+      setLoaderVisible(false);
     } else {
-      console.log("error")
+      console.log("error");
     }
   }
 
@@ -414,31 +170,28 @@ function HomeScreen(props) {
     props.navigation.navigate("Results", {
       screen: "ResultsScreen",
       questId: id,
-    })
-  }
+    });
+  };
 
   if (isFocused) {
     return (
       <SafeAreaView>
         {overlay}
         {exclusivity}
-        <ScrollView style={{ backgroundColor: "white" }}>
-          <Header
-            onRefresh={userData}
-            title={data.firstName}
-            image={data.avatar}
-          />
+        <AnimatedLoader visible={loaderVisible} overlayColor="rgba(255,255,255,0.75)" animationStyle={styles.lottie} speed={1} source={require("../assets/loader.json")}>
+          <Text></Text>
+        </AnimatedLoader>
+        <ScrollView>
+          <Header onRefresh={userData} title={data.firstName} image={data.avatar} />
           <Text
+            onPress={() => viewExclusivity()}
             style={{
               textAlign: "center",
               fontSize: 20,
               marginVertical: 10,
               color: "#2C98DA",
               fontWeight: "bold",
-            }}
-            onPress={() => viewexclusivity()}
-          >
-            {" "}
+            }}>
             {quest === 1 ? "Votre quête" : `Vos ${quest} quêtes en cours`}
           </Text>
           <TouchableOpacity
@@ -446,16 +199,10 @@ function HomeScreen(props) {
             onPress={() => {
               props.navigation.navigate("AddQuest", {
                 screen: "AddQuestScreen",
-              })
-            }}
-          >
+              });
+            }}>
             <Text style={styles.buttonText}>Lancez une quête</Text>
-            <Icon
-              name="search-plus"
-              size={20}
-              color="#2D98DA"
-              style={{ marginLeft: 10 }}
-            />
+            <Icon name="search-plus" size={20} color="#2D98DA" style={{ marginLeft: 10 }} />
           </TouchableOpacity>
           {data.quests?.map((item, i) => {
             return (
@@ -468,14 +215,12 @@ function HomeScreen(props) {
                   marginVertical: 5,
                   borderRadius: 10,
                   marginHorizontal: 10,
-                }}
-              >
+                }}>
                 <View
                   style={{
                     flexDirection: "row",
                     justifyContent: "space-between",
-                  }}
-                >
+                  }}>
                   <Text style={styles.text}>{item.type}</Text>
                   <Text style={styles.text}>{item.city}</Text>
                   <Text style={styles.text}>Rayon {item.rayon} </Text>
@@ -485,22 +230,9 @@ function HomeScreen(props) {
                     marginVertical: 20,
                     flexDirection: "row",
                     justifyContent: "space-between",
-                  }}
-                >
-                  <Text style={styles.text}>
-                    prix min :{" "}
-                    {item.min_price
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, " ")}
-                    €
-                  </Text>
-                  <Text style={styles.text}>
-                    prix max :{" "}
-                    {item.max_price
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, " ")}
-                    €
-                  </Text>
+                  }}>
+                  <Text style={styles.text}>prix min : {item.min_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}€</Text>
+                  <Text style={styles.text}>prix max : {item.max_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}€</Text>
                 </View>
                 <View
                   style={{
@@ -517,28 +249,22 @@ function HomeScreen(props) {
                   <CreatButton
                     result={results[i]}
                     onPress={() => {
-                      handleResult(item._id)
+                      handleResult(item._id);
                     }}
-                    buttonStyle={{
-                      backgroundColor: "white",
-                      borderWidth: 2,
-                      borderColor: "rgba(251, 197, 49, 1)",
-                      padding: 0,
-                    }}
-                  >
+                    buttonStyle={{ backgroundColor: "rgba(251, 197, 49, 1)" }}>
                     <Text style={[styles.textButton, styles[results[i]]]}>
                       {results[i]} {results[i] > 1 ? "RÉSULTATS" : "RÉSULTAT"}
                     </Text>
                   </CreatButton>
                 </View>
               </View>
-            )
+            );
           })}
         </ScrollView>
       </SafeAreaView>
-    )
+    );
   } else {
-    return <View style={{ flex: 1 }}></View>
+    return <View style={{ flex: 1 }}></View>;
   }
 }
 
@@ -584,18 +310,22 @@ const styles = StyleSheet.create({
   0: {
     color: "rgba(0, 0, 0, 0.2)",
   },
-})
+  lottie: {
+    width: 250,
+    height: 250,
+  },
+});
 
 function mapStateToProps(state) {
-  return { dataUser: state.dataUser }
+  return { dataUser: state.dataUser };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     addUser: function (dataUser) {
-      dispatch({ type: "addUser", dataUser: dataUser })
+      dispatch({ type: "addUser", dataUser: dataUser });
     },
-  }
+  };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
