@@ -7,7 +7,11 @@ import {
   Button,
   StyleSheet,
   TouchableOpacity,
+  Dimensions,
 } from "react-native"
+import Icon from "react-native-vector-icons/FontAwesome5"
+import { MaterialCommunityIcons } from "@expo/vector-icons"
+
 import { connect } from "react-redux"
 
 import { Overlay } from "react-native-elements"
@@ -19,9 +23,7 @@ import { MY_IP } from "@env" /* Variable environnement */
 import { log } from "react-native-reanimated"
 import { useIsFocused, useFocusEffect } from "@react-navigation/native"
 
-import Icon from "react-native-vector-icons/FontAwesome5";
-
-
+import Icon from "react-native-vector-icons/FontAwesome5"
 
 function HomeScreen(props) {
   const [data, setData] = useState("")
@@ -31,7 +33,8 @@ function HomeScreen(props) {
   const [offers, setOffers] = useState(0)
   const [results, setResults] = useState([])
   const isFocused = useIsFocused()
-
+  let deviceHeight = Dimensions.get("window").height
+  let deviceWidth = Dimensions.get("window").width
   // Au chargement du composant, on obtient toutes les données de l'utilisateur.
   useEffect(() => {
     async function userData() {
@@ -60,6 +63,29 @@ function HomeScreen(props) {
     }
     userData()
   }, [])
+  //// Fonction pour creer une conversation suite à l'apparition du message EXCLUSIVE sur l'overlay
+  var createConversation = async () => {
+    const data = await fetch(`http://${MY_IP}:3000/inbox/addMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `sender_token=${props.dataUser.token}&receiver_token=${sellerData.sellerToken}&quest_id=${props.route.params.questId}&offer_id=${offerData._id}&message=${newMessage}`,
+    })
+
+    const body = await data.json()
+    if (body.result == true) {
+      console.log(
+        "tout est bon coté back les infos ont bien été envoyées vers Messages !"
+      )
+      //fermeture de l'overlay avant d'aller sur Messages
+      setExclusivity(<></>)
+      // redirection vers MessagesScreen
+      props.navigation.navigate("Messages", {
+        conversationId: body.messageSaved._id,
+      })
+    } else {
+      console.log("erreur coté back!")
+    }
+  }
 
   //Relance la fonction useData à chaque fois que l'écran est focus
   useFocusEffect(
@@ -76,7 +102,71 @@ function HomeScreen(props) {
         onBackdropPress={() => setExclusivity(<></>)}
       >
         <View style={{ flexDirection: "column" }}>
-          <Text style={styles.title}>Nouveau message de Jean-Marc</Text>
+          <Text style={styles.title}>Jean-Marc vous a envoyé un message </Text>
+          <View>
+            <Image
+              style={{
+                width: deviceWidth / 4.5,
+                height: deviceWidth / 4.5,
+                borderRadius: 70,
+                marginRight: 40,
+              }}
+              resizeMethod="resize"
+              resizeMode="center"
+              source={{ uri: avatarSource }}
+            ></Image>
+          </View>
+          <Text>
+            Bonjour Nicolas, comment allez-vous ? Je m'apprête à signer un
+            mandat pour un bien correspondant à votre recherche. Je pense que
+            vous pourriez être intéressé, il s'agit d'une villa de 220m2 à
+            l'Ouest d'Aix sur la commune d'Eguilles qui a été entièrement
+            rénovée en 2019. Le propriétaire actuel souhaite vendre rapidement.
+            L'annonce n'est pas encore en ligne. Je répondrai volontiers à vos
+            questions et serai ravi de vous rencontrer pour vous présenter ce
+            bien. À très vite, Renaud.{" "}
+          </Text>
+          <View
+            style={{
+              backgroundColor: "white",
+              borderWidth: 3,
+              borderColor: "#98989E",
+              borderRadius: 20,
+              paddingLeft: 10,
+              paddingRight: 10,
+              paddingTop: 5,
+              paddingBottom: 5,
+            }}
+          >
+            <MaterialCommunityIcons
+              name="bell-cancel-outline"
+              size={35}
+              color="#98989E"
+              style={{ marginLeft: "auto", marginRight: "auto" }}
+            />
+          </View>
+          <Pressable
+            style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1.0 }]}
+            onPress={createConversation}
+          >
+            <View
+              style={{
+                backgroundColor: "#2D98DA",
+                borderRadius: 20,
+                paddingLeft: 10,
+                paddingRight: 10,
+                paddingTop: 5,
+                paddingBottom: 5,
+              }}
+            >
+              <Icon
+                name="handshake"
+                size={40}
+                color="white"
+                style={{ marginLeft: "auto", marginRight: "auto" }}
+              />
+            </View>
+          </Pressable>
         </View>
       </Overlay>
     )
@@ -90,92 +180,207 @@ function HomeScreen(props) {
         overlayStyle={{ backgroundColor: "#F8F7FF" }}
         onBackdropPress={() => setOverlay(<></>)}
       >
-        <View style={{ padding: 15 }}>
-<<<<<<< HEAD
-          <Text style={styles.title} >Vos critères de recherche <Icon
-            name="search"
-            size={15}
-            color="#2D98DA"
-            style={{ marginLeft: 10 }}
-          /> : </Text>
-          <Text style={styles.overT}>Date de création : {item.created && item.created.split("T")[0].replace(/-/g, "/")}</Text>
-          <Text style={styles.overText}>Ville : {item.city}</Text>
-          <Text style={styles.overText}>Type : {item.type}</Text>
-          <Text style={styles.overText}>Prix : {item.min_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")} à {item.max_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}€</Text>
-          <Text style={styles.overText}>Surface : {item.min_surface} à {item.max_surface} ㎡</Text>
-          <Text style={styles.overText}>Surface extérieure : {item.outdoor_surface} ㎡</Text>
-          <Text style={styles.overText}>Nombre de pièces : {item.pieces_min} / {item.pieces_max}</Text>
-          <Text style={styles.overText}>Ascenseur : {item.elevator ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
-          <Text style={styles.overText}>Parking : {item.parking ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
-          <Text style={styles.overText}>Ancien : {item.is_old ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
-          <Text style={styles.overText}>Neuf : {item.is_new ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
-          <Text style={styles.overText}>Fibre optique : {item.fiber_optics ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
-          <Text style={styles.overText}>Piscine : {item.pool ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
-          <Text style={styles.overText}>Balcon : {item.balcony ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
-          <Text style={styles.overText}>Terrasse : {item.terrace ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
-          <Text style={styles.overText}>Date de commercialisation : {item.market_date ? "oui" : "Pas de préférence"}</Text>
-          <Text style={styles.overText}>Joignable par les pro : {item.open_to_pro ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
-=======
-          <Text style={styles.title}>Vos options de quêtes!</Text>
-          <Text style={styles.overText}>
-            Prix minimum:{" "}
-            {item.min_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}
+        <View style={{ padding: 15, width: deviceWidth * 0.8 }}>
+          <Text style={styles.title}>
+            Vos critères de recherche{" "}
+            <Icon
+              name="search"
+              size={15}
+              color="#2D98DA"
+              style={{ marginLeft: 10 }}
+            />{" "}
+            :{" "}
           </Text>
-          <Text style={styles.overText}>
-            Prix maximum:{" "}
-            {item.max_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}
-          </Text>
-          <Text style={styles.overText}>
-            Surface maximum: {item.max_surface}
-          </Text>
-          <Text style={styles.overText}>
-            Surface minimum: {item.min_surface}
-          </Text>
-          <Text style={styles.overText}>
-            Surface extérieur: {item.outdoor_surface}
-          </Text>
-          <Text style={styles.overText}>Pieces maximum: {item.pieces_max}</Text>
-          <Text style={styles.overText}>Pieces minimum: {item.pieces_min}</Text>
-          <Text style={styles.overText}>
-            Ascenseur: {item.elevator ? "oui" : "non"}
-          </Text>
-          <Text style={styles.overText}>
-            Parking: {item.parking ? "oui" : "non"}
-          </Text>
-          <Text style={styles.overText}>
-            Ancien: {item.is_old ? "oui" : "non"}
-          </Text>
-          <Text style={styles.overText}>
-            Neuf: {item.is_new ? "oui" : "non"}
-          </Text>
-          <Text style={styles.overText}>
-            Fibre optique: {item.fiber_optics ? "oui" : "non"}
-          </Text>
-          <Text style={styles.overText}>
-            Piscine: {item.pool ? "oui" : "non"}
-          </Text>
-          <Text style={styles.overText}>
-            Balcon: {item.balcony ? "oui" : "non"}
-          </Text>
-          <Text style={styles.overText}>
-            Terrasse: {item.terrace ? "oui" : "non"}
-          </Text>
-          <Text style={styles.overText}>
-            Date de création:{" "}
+          <Text style={styles.overT}>
+            Date de création :{" "}
             {item.created && item.created.split("T")[0].replace(/-/g, "/")}
           </Text>
+          <Text style={styles.overText}>Ville : {item.city}</Text>
+          <Text style={styles.overText}>Type : {item.type}</Text>
           <Text style={styles.overText}>
-            Date du marché: {item.market_date ? "oui" : "non"}
+            Prix :{" "}
+            {item.min_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")} à{" "}
+            {item.max_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}€
           </Text>
           <Text style={styles.overText}>
-            Disponible aux pro: {item.open_to_pro ? "oui" : "non"}
+            Surface : {item.min_surface} à {item.max_surface} ㎡
           </Text>
->>>>>>> d45d611f268670c9543f3c09bf156057a6a30e32
+          <Text style={styles.overText}>
+            Surface extérieure : {item.outdoor_surface} ㎡
+          </Text>
+          <Text style={styles.overText}>
+            Nombre de pièces : {item.pieces_min} / {item.pieces_max}
+          </Text>
+          <Text style={styles.overText}>
+            Ascenseur :{" "}
+            {item.elevator ? (
+              <Icon
+                name="check"
+                size={10}
+                color="#4cd137"
+                style={{ marginLeft: 10 }}
+              />
+            ) : (
+              <Icon
+                name="times"
+                size={15}
+                color="#e84118"
+                style={{ marginLeft: 10 }}
+              />
+            )}
+          </Text>
+          <Text style={styles.overText}>
+            Parking :{" "}
+            {item.parking ? (
+              <Icon
+                name="check"
+                size={10}
+                color="#4cd137"
+                style={{ marginLeft: 10 }}
+              />
+            ) : (
+              <Icon
+                name="times"
+                size={15}
+                color="#e84118"
+                style={{ marginLeft: 10 }}
+              />
+            )}
+          </Text>
+          <Text style={styles.overText}>
+            Ancien :{" "}
+            {item.is_old ? (
+              <Icon
+                name="check"
+                size={10}
+                color="#4cd137"
+                style={{ marginLeft: 10 }}
+              />
+            ) : (
+              <Icon
+                name="times"
+                size={15}
+                color="#e84118"
+                style={{ marginLeft: 10 }}
+              />
+            )}
+          </Text>
+          <Text style={styles.overText}>
+            Neuf :{" "}
+            {item.is_new ? (
+              <Icon
+                name="check"
+                size={10}
+                color="#4cd137"
+                style={{ marginLeft: 10 }}
+              />
+            ) : (
+              <Icon
+                name="times"
+                size={15}
+                color="#e84118"
+                style={{ marginLeft: 10 }}
+              />
+            )}
+          </Text>
+          <Text style={styles.overText}>
+            Fibre optique :{" "}
+            {item.fiber_optics ? (
+              <Icon
+                name="check"
+                size={10}
+                color="#4cd137"
+                style={{ marginLeft: 10 }}
+              />
+            ) : (
+              <Icon
+                name="times"
+                size={15}
+                color="#e84118"
+                style={{ marginLeft: 10 }}
+              />
+            )}
+          </Text>
+          <Text style={styles.overText}>
+            Piscine :{" "}
+            {item.pool ? (
+              <Icon
+                name="check"
+                size={10}
+                color="#4cd137"
+                style={{ marginLeft: 10 }}
+              />
+            ) : (
+              <Icon
+                name="times"
+                size={15}
+                color="#e84118"
+                style={{ marginLeft: 10 }}
+              />
+            )}
+          </Text>
+          <Text style={styles.overText}>
+            Balcon :{" "}
+            {item.balcony ? (
+              <Icon
+                name="check"
+                size={10}
+                color="#4cd137"
+                style={{ marginLeft: 10 }}
+              />
+            ) : (
+              <Icon
+                name="times"
+                size={15}
+                color="#e84118"
+                style={{ marginLeft: 10 }}
+              />
+            )}
+          </Text>
+          <Text style={styles.overText}>
+            Terrasse :{" "}
+            {item.terrace ? (
+              <Icon
+                name="check"
+                size={10}
+                color="#4cd137"
+                style={{ marginLeft: 10 }}
+              />
+            ) : (
+              <Icon
+                name="times"
+                size={15}
+                color="#e84118"
+                style={{ marginLeft: 10 }}
+              />
+            )}
+          </Text>
+          <Text style={styles.overText}>
+            Date de commercialisation :{" "}
+            {item.market_date ? "oui" : "Pas de préférence"}
+          </Text>
+          <Text style={styles.overText}>
+            Joignable par les pro :{" "}
+            {item.open_to_pro ? (
+              <Icon
+                name="check"
+                size={10}
+                color="#4cd137"
+                style={{ marginLeft: 10 }}
+              />
+            ) : (
+              <Icon
+                name="times"
+                size={15}
+                color="#e84118"
+                style={{ marginLeft: 10 }}
+              />
+            )}
+          </Text>
         </View>
       </Overlay>
     )
   }
-
 
   // Réutilisation de la fonction pour le refresh de la page.
   async function userData() {
@@ -217,7 +422,7 @@ function HomeScreen(props) {
       <SafeAreaView>
         {overlay}
         {exclusivity}
-        <ScrollView>
+        <ScrollView style={{ backgroundColor: "white" }}>
           <Header
             onRefresh={userData}
             title={data.firstName}
@@ -230,15 +435,11 @@ function HomeScreen(props) {
               marginVertical: 10,
               color: "#2C98DA",
               fontWeight: "bold",
-<<<<<<< HEAD
-            }}>
-            {quest === 1 ? "Votre quête" : `Vos ${quest} quêtes en cours`}
-=======
             }}
             onPress={() => viewexclusivity()}
           >
-            Vos {quest} quêtes en cours
->>>>>>> d45d611f268670c9543f3c09bf156057a6a30e32
+            {" "}
+            {quest === 1 ? "Votre quête" : `Vos ${quest} quêtes en cours`}
           </Text>
           <TouchableOpacity
             style={styles.Button}
@@ -305,22 +506,25 @@ function HomeScreen(props) {
                   style={{
                     flexDirection: "row",
                     justifyContent: "space-between",
-<<<<<<< HEAD
-                  }}>
-                  <CreatButton textStyle={{ fontWeight: "bold" }} onPress={() => toggleOverlay(item)}>Détails</CreatButton>
-=======
                   }}
                 >
-                  <CreatButton onPress={() => toggleOverlay(item)}>
+                  <CreatButton
+                    textStyle={{ fontWeight: "bold" }}
+                    onPress={() => toggleOverlay(item)}
+                  >
                     Détails
                   </CreatButton>
->>>>>>> d45d611f268670c9543f3c09bf156057a6a30e32
                   <CreatButton
                     result={results[i]}
                     onPress={() => {
                       handleResult(item._id)
                     }}
-                    buttonStyle={{ backgroundColor: "rgba(251, 197, 49, 1)" }}
+                    buttonStyle={{
+                      backgroundColor: "white",
+                      borderWidth: 2,
+                      borderColor: "rgba(251, 197, 49, 1)",
+                      padding: 0,
+                    }}
                   >
                     <Text style={[styles.textButton, styles[results[i]]]}>
                       {results[i]} {results[i] > 1 ? "RÉSULTATS" : "RÉSULTAT"}

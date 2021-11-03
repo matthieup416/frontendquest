@@ -74,9 +74,6 @@ function SignInScreen(props) {
           placeholder="Mon Email"
         />
         {tabErrorsSignIn}
-<<<<<<< HEAD
-        <TextInput selectionColor="white" style={styles.inputStyle} placeholderTextColor={"#fff"} secureTextEntry={true} onChangeText={(text) => setSignInPassword(text)} value={signInPassword} placeholder="Password" />
-=======
         <TextInput
           secureTextEntry={true}
           selectionColor="white"
@@ -86,7 +83,6 @@ function SignInScreen(props) {
           value={signInPassword}
           placeholder="Password"
         />
->>>>>>> d45d611f268670c9543f3c09bf156057a6a30e32
       </View>
       <TouchableOpacity
         style={styles.Button}
