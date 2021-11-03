@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   signup: {
     backgroundColor: "#2C8BC6",
     paddingHorizontal: 25,
-    paddingVertical: 17,
+    paddingVertical: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
