@@ -20,6 +20,7 @@ function HomeScreen(props) {
   const [quest, setQuest] = useState(0);
   const [offers, setOffers] = useState(0);
   const [results, setResults] = useState([]);
+  const [avatarImg, setAvatarImg] = useState(props.dataUser.avatar);
   const isFocused = useIsFocused();
 
   // Au chargement du composant, on obtient toutes les données de l'utilisateur.
@@ -41,6 +42,10 @@ function HomeScreen(props) {
     }
     userData();
   }, []);
+
+  useEffect(() => {
+    setAvatarImg(props.dataUser.avatar);
+  }, [props.dataUser.avatar]);
 
   //Relance la fonction useData à chaque fois que l'écran est focus
   useFocusEffect(
@@ -132,7 +137,7 @@ function HomeScreen(props) {
           <Text></Text>
         </AnimatedLoader>
         <ScrollView>
-          <Header onRefresh={userData} title={data.firstName} image={data.avatar} />
+          <Header onRefresh={userData} title={data.firstName} image={avatarImg} />
           <Text
             onPress={() => viewExclusivity()}
             style={{

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, StyleSheet, TouchableOpacity, Text, LogBox } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { connect } from "react-redux";
 import { FontAwesome } from "@expo/vector-icons";
 import { Camera } from "expo-camera";
@@ -59,14 +59,12 @@ function CameraScreen(props) {
               var response = await rawResponse.json();
               console.log("response", response);
               if (!response.error) {
-                props.navigation.navigate("Profil");
+                props.addUser({ avatar: response.url, firstName: props.dataUser.firstName, token: props.dataUser.token });
+                props.navigation.navigate("Profil", { upload: true });
               }
               setLoaderVisible(false);
             }
           }}>
-          {/* <Entypo name="controller-record" size={92} color="red" /> */}
-          {/* <FontAwesome5 name="record-vinyl" size={92} color="white" /> */}
-          {/* <MaterialCommunityIcons name="record-circle-outline" size={92} color="red" /> */}
           <FontAwesome name="camera" size={64} color="red" />
         </TouchableOpacity>
       </Camera>
@@ -93,4 +91,12 @@ function mapStateToProps(state) {
   return { dataUser: state.dataUser };
 }
 
-export default connect(mapStateToProps)(CameraScreen);
+function mapDispatchToProps(dispatch) {
+  return {
+    addUser: function (dataUser) {
+      dispatch({ type: "addUser", dataUser: dataUser });
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CameraScreen);

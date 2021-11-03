@@ -1,16 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Dimensions, TextInput, ScrollView } from "react-native";
-import { Avatar, Accessory, Button } from "react-native-elements";
+import { Avatar, Accessory } from "react-native-elements";
 import { connect } from "react-redux";
 import CreatButton from "../shared/CreatButton";
-import { showMessage, hideMessage } from "react-native-flash-message";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { FontAwesome } from "@expo/vector-icons";
+import { showMessage } from "react-native-flash-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Camera } from "expo-camera";
-import { useIsFocused } from "@react-navigation/native";
-
 import { MY_IP } from "@env"; /* Variable environnement */
+import { useIsFocused } from "@react-navigation/native";
 
 let screenWidth = Dimensions.get("window").width;
 
@@ -27,6 +23,7 @@ function ProfileScreen(props) {
   const [focusPhone, setFocusPhone] = useState(false);
   const [focusJob, setFocusJob] = useState(false);
   const [focusDescription, setFocusDescription] = useState(false);
+  const [avatarImg, setAvatarImg] = useState(props.dataUser.avatar);
 
   const isFocused = useIsFocused();
 
@@ -42,6 +39,10 @@ function ProfileScreen(props) {
     }
     userData();
   }, []);
+
+  useEffect(() => {
+    setAvatarImg(props.dataUser.avatar);
+  }, [props.dataUser.avatar]);
 
   const onChange = async () => {
     // setLoading(true)
@@ -61,101 +62,109 @@ function ProfileScreen(props) {
   if (!data) {
     return null;
   }
-  if (!data.avatar) {
+  if (!avatarImg) {
     var avatar = (
       <Avatar rounded icon={{ name: "user", type: "font-awesome" }} size={"xlarge"} onPress={() => props.navigation.navigate("Camera")} activeOpacity={0.7} containerStyle={{ margin: 20, backgroundColor: "#2C8BC6" }}>
         <Accessory style={{ width: 50, height: 50, borderRadius: 50 }} size="36" />
       </Avatar>
     );
   } else {
-    var avatar = <Avatar source={{ uri: data.avatar }} avatarStyle={{ borderRadius: 50, overflow: "hidden" }} size={"xlarge"} title={data.firstName[0]} />;
+    var avatar = (
+      <Avatar source={{ uri: avatarImg }} avatarStyle={{ borderRadius: 50, overflow: "hidden" }} onPress={() => props.navigation.navigate("Camera")} size={"xlarge"} title={data.firstName[0]}>
+        <Accessory style={{ width: 50, height: 50, borderRadius: 50 }} size="36" />
+      </Avatar>
+    );
   }
 
-  return (
-    <View style={{ flex: 1 }}>
-      <ScrollView>
-        <View style={styles.upperContainer}>
-          {avatar}
-          <Text style={styles.heading}>
-            {data.firstName} {data.lastName}
-          </Text>
-        </View>
-        <View
-          style={focusEmail ? styles.focusInput : styles.detailWrappper}
-          onFocus={() => {
-            setFocusEmail(true);
-          }}
-          onBlur={() => setFocusEmail(false)}>
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            value={data.email}
-            onChangeText={(value) => {
-              // setEdit(true);
-              setData({ ...data, email: value });
+  if (isFocused) {
+    return (
+      <View style={{ flex: 1 }}>
+        <ScrollView>
+          <View style={styles.upperContainer}>
+            {avatar}
+            <Text style={styles.heading}>
+              {data.firstName} {data.lastName}
+            </Text>
+          </View>
+          <View
+            style={focusEmail ? styles.focusInput : styles.detailWrappper}
+            onFocus={() => {
+              setFocusEmail(true);
             }}
-            style={styles.detail}
-          />
-        </View>
-        <View
-          style={focusPhone ? styles.focusInput : styles.detailWrappper}
-          onFocus={() => {
-            setFocusPhone(true);
-          }}
-          onBlur={() => setFocusPhone(false)}>
-          <Text style={styles.label}>Phone</Text>
-          <TextInput
-            value={data.phone}
-            onChangeText={(value) => {
-              // setEdit(true);
-              setData({ ...data, phone: value });
+            onBlur={() => setFocusEmail(false)}>
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              value={data.email}
+              onChangeText={(value) => {
+                // setEdit(true);
+                setData({ ...data, email: value });
+              }}
+              style={styles.detail}
+            />
+          </View>
+          <View
+            style={focusPhone ? styles.focusInput : styles.detailWrappper}
+            onFocus={() => {
+              setFocusPhone(true);
             }}
-            style={styles.detail}
-          />
-        </View>
-        <View
-          style={focusJob ? styles.focusInput : styles.detailWrappper}
-          onFocus={() => {
-            setFocusJob(true);
-          }}
-          onBlur={() => setFocusJob(false)}>
-          <Text style={styles.label}>Job</Text>
-          <TextInput
-            value={data.job}
-            onChangeText={(value) => {
-              // setEdit(true);
-              setData({ ...data, job: value });
+            onBlur={() => setFocusPhone(false)}>
+            <Text style={styles.label}>Phone</Text>
+            <TextInput
+              value={data.phone}
+              onChangeText={(value) => {
+                // setEdit(true);
+                setData({ ...data, phone: value });
+              }}
+              style={styles.detail}
+            />
+          </View>
+          <View
+            style={focusJob ? styles.focusInput : styles.detailWrappper}
+            onFocus={() => {
+              setFocusJob(true);
             }}
-            style={styles.detail}
-          />
-        </View>
-        <View
-          style={focusDescription ? styles.focusInput : styles.detailWrappper}
-          onFocus={() => {
-            setFocusDescription(true);
-          }}
-          onBlur={() => setFocusDescription(false)}>
-          <Text style={styles.label}>Description</Text>
-          <TextInput
-            value={data.description}
-            multiline={true}
-            numberOfLines={3}
-            onChangeText={(value) => {
-              // setEdit(true);
-              setData({ ...data, description: value });
+            onBlur={() => setFocusJob(false)}>
+            <Text style={styles.label}>Job</Text>
+            <TextInput
+              value={data.job}
+              onChangeText={(value) => {
+                // setEdit(true);
+                setData({ ...data, job: value });
+              }}
+              style={styles.detail}
+            />
+          </View>
+          <View
+            style={focusDescription ? styles.focusInput : styles.detailWrappper}
+            onFocus={() => {
+              setFocusDescription(true);
             }}
-            style={styles.detail}
-          />
-        </View>
-        <View style={{ marginVertical: 20, alignItems: "center" }}>
-          <CreatButton onPress={onChange}>Modifier</CreatButton>
-          <View style={{ margin: 5 }}></View>
-          <CreatButton buttonStyle={{ backgroundColor: "#eb4d4b" }} textStyle={{ fontWeight: "bold" }} onPress={() => handleSubmitRemove()}>
-            Déconnexion
-          </CreatButton>
-        </View>
-      </ScrollView>
-    </View>
-  );
+            onBlur={() => setFocusDescription(false)}>
+            <Text style={styles.label}>Description</Text>
+            <TextInput
+              value={data.description}
+              multiline={true}
+              numberOfLines={3}
+              onChangeText={(value) => {
+                // setEdit(true);
+                setData({ ...data, description: value });
+              }}
+              style={styles.detail}
+            />
+          </View>
+          <View style={{ marginVertical: 20, alignItems: "center" }}>
+            <CreatButton onPress={onChange}>Modifier</CreatButton>
+            <View style={{ margin: 5 }}></View>
+            <CreatButton buttonStyle={{ backgroundColor: "#eb4d4b" }} textStyle={{ fontWeight: "bold" }} onPress={() => handleSubmitRemove()}>
+              Déconnexion
+            </CreatButton>
+          </View>
+        </ScrollView>
+      </View>
+    );
+  } else {
+    return <View style={{ flex: 1 }}></View>;
+  }
 }
 
 // {edit && }
@@ -208,4 +217,12 @@ function mapStateToProps(state) {
   return { dataUser: state.dataUser };
 }
 
-export default connect(mapStateToProps)(ProfileScreen);
+function mapDispatchToProps(dispatch) {
+  return {
+    addUser: function (dataUser) {
+      dispatch({ type: "addUser", dataUser: dataUser });
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
