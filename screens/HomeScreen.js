@@ -37,9 +37,12 @@ function HomeScreen(props) {
   const [offers, setOffers] = useState(0)
   const [results, setResults] = useState([])
   const [loaderVisible, setLoaderVisible] = useState(true)
-  const isFocused = useIsFocused()
   let deviceHeight = Dimensions.get("window").height
   let deviceWidth = Dimensions.get("window").width
+
+  const [avatarImg, setAvatarImg] = useState(props.dataUser.avatar)
+  const isFocused = useIsFocused()
+
   // Au chargement du composant, on obtient toutes les données de l'utilisateur.
   useEffect(() => {
     async function userData() {
@@ -90,6 +93,10 @@ function HomeScreen(props) {
       console.log("erreur coté back!")
     }
   }
+
+  useEffect(() => {
+    setAvatarImg(props.dataUser.avatar)
+  }, [props.dataUser.avatar])
 
   //Relance la fonction useData à chaque fois que l'écran est focus
   useFocusEffect(
@@ -510,7 +517,7 @@ function HomeScreen(props) {
           <Header
             onRefresh={userData}
             title={data.firstName}
-            image={data.avatar}
+            image={avatarImg}
           />
           <Text
             onPress={() => viewExclusivity()}

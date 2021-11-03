@@ -22,6 +22,7 @@ import ListingScreen from "./screens/ListingScreen";
 import ResultsScreen from "./screens/ResultsScreen";
 import ImageScreen from "./screens/ImageScreen";
 import MapScreen from "./screens/MapScreen";
+import CameraScreen from "./screens/CameraScreen";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Provider } from "react-redux";
@@ -82,6 +83,7 @@ export default function App() {
           <Stack.Screen name="Results" component={ResultsScreen} />
           <Stack.Screen name="ImageScreen" component={ImageScreen} />
           <Stack.Screen name="MapScreen" component={MapScreen} />
+          <Stack.Screen name="Camera" component={CameraScreen} />
           <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
