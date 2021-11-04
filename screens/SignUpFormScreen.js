@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import { Text, View, StyleSheet, Dimensions, ImageBackground, TouchableOpacity, StatusBar } from "react-native"
+import React, { useState } from "react";
+import { Text, View, StyleSheet, Dimensions, ImageBackground, TouchableOpacity, StatusBar } from "react-native";
 
 import { connect } from "react-redux";
 
@@ -50,60 +50,39 @@ function SignUpFormScreen(props) {
         </View>
         <View style={styles.mainbox}>
           <View>
-            <Text style={styles.personalText}>
-              Information Personnelle
-            </Text>
+            <Text style={styles.personalText}>Information Personnelle</Text>
             <View style={styles.formContainer}>
-              <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: "row" }}>
                 <View style={[styles.inputWrapper, { flex: 1 }]}>
-                  <Text style={styles.text}>
-                    Prenom
-                  </Text>
-                  <TextInput style={styles.inputStyle} onChangeText={(text) => setFirstName(text)}
-                    value={firstName} />
+                  <Text style={styles.text}>Prenom</Text>
+                  <TextInput style={styles.inputStyle} onChangeText={(text) => setFirstName(text)} value={firstName} />
                 </View>
                 {tabErrorsSignUp}
                 <View style={[styles.inputWrapper, { flex: 1 }]}>
-                  <Text style={styles.text}>
-                    Nom
-                  </Text>
-                  <TextInput style={styles.inputStyle} onChangeText={(text) => setLastName(text)}
-                    value={lastName} />
+                  <Text style={styles.text}>Nom</Text>
+                  <TextInput style={styles.inputStyle} onChangeText={(text) => setLastName(text)} value={lastName} />
                 </View>
               </View>
               <View style={styles.inputWrapper}>
-                <Text style={styles.text}>
-                  Email
-                </Text>
-                <TextInput style={styles.inputStyle} onChangeText={(text) => setSignUpEmail(text)}
-                  value={signUpEmail} />
+                <Text style={styles.text}>Email</Text>
+                <TextInput style={styles.inputStyle} onChangeText={(text) => setSignUpEmail(text)} value={signUpEmail} />
               </View>
               <View style={styles.inputWrapper}>
-                <Text style={styles.text}>
-                  Password
-                </Text>
-                <TextInput style={styles.inputStyle} secureTextEntry={true} onChangeText={(number) => setSignUpPassword(number)}
-                  value={signUpPassword} />
+                <Text style={styles.text}>Password</Text>
+                <TextInput style={styles.inputStyle} secureTextEntry={true} onChangeText={(number) => setSignUpPassword(number)} value={signUpPassword} />
               </View>
               <View style={styles.inputWrapper}>
-                <Text style={styles.text}>
-                  Telephone
-                </Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={styles.text}>Telephone</Text>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
                   <Text style={styles.text}>+33</Text>
-                  <TextInput style={[styles.inputStyle, { flex: 0, minWidth: 150 }]} onChangeText={(number) => setPhoneNumber(number)}
-                    value={phoneNumber} />
+                  <TextInput style={[styles.inputStyle, { flex: 0, minWidth: 150 }]} onChangeText={(number) => setPhoneNumber(number)} value={phoneNumber} />
                 </View>
               </View>
             </View>
           </View>
           <View style={styles.buttonWrapper}>
-            <TouchableOpacity
-              onPress={() => handleSubmitSignup()}
-              style={styles.signup}>
-              <Text style={styles.signupText}>
-                VALIDER
-              </Text>
+            <TouchableOpacity onPress={() => handleSubmitSignup()} style={styles.signup}>
+              <Text style={styles.signupText}>VALIDER</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -127,7 +106,7 @@ const styles = StyleSheet.create({
   personalText: {
     fontSize: 18,
     margin: 10,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: "#585858",
   },
   text: {
@@ -146,9 +125,9 @@ const styles = StyleSheet.create({
   },
   headingText: {
     fontSize: 25,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#2C98DA',
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#2C98DA",
     marginVertical: 30,
     paddingTop: 100,
   },
@@ -161,7 +140,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#2C8BC6",
     paddingHorizontal: 50,
     paddingVertical: 17,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 2,
@@ -180,7 +159,7 @@ const styles = StyleSheet.create({
   formContainer: {
     backgroundColor: "#F8F7FF",
     paddingVertical: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 2,

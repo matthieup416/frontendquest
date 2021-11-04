@@ -263,6 +263,10 @@ function ListingScreen(props) {
     </View>
   );
 
+  var badgePro;
+  if (sellerData.is_pro) {
+    badgePro = <Badge value="PRO" badgeStyle={{ backgroundColor: "#2D98DA" }} />;
+  }
   let listingContent = (
     <View>
       <TouchableOpacity
@@ -362,7 +366,7 @@ function ListingScreen(props) {
                 marginRight: 5,
                 marginBottom: 10,
               }}>
-              <Badge value="PRO" badgeStyle={{ backgroundColor: "#2D98DA" }} />
+              {badgePro}
               <Text style={{ fontSize: 22, fontWeight: "bold", color: "#585858" }}>{sellerData.firstName}</Text>
             </View>
 

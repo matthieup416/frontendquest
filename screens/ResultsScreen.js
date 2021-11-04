@@ -38,11 +38,14 @@ function ResultsScreen(props) {
       <StatusBar backgroundColor={"#2D98DA"} style="light" />
       <ScrollView>
         {listOffer.map((offer, i) => {
+          console.log("is_pro", offer.is_pro);
+          var pro;
+          var meteor;
           if (offer.is_pro) {
-            var pro = <Badge status="primary" value="PRO" />;
+            pro = <Badge value="PRO" badgeStyle={{ backgroundColor: "#2D98DA" }} />;
           }
           if (new Date(offer.offers.created) > new Date(new Date().setDate(new Date().getDate() - 1))) {
-            var meteor = <Icon name="meteor" size={20} color="#FBC531" style={{ marginRight: 5, marginBottom: 5 }} />;
+            meteor = <Icon name="meteor" size={20} color="#FBC531" style={{ marginRight: 5, marginBottom: 5 }} />;
           }
           return (
             <TouchableOpacity key={i} onPress={() => props.navigation.navigate("Listing", { offerId: offer.offers._id, questId: quest._id })}>

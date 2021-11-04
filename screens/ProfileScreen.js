@@ -55,6 +55,7 @@ function ProfileScreen(props) {
         type: "success",
         animationDuration: 500,
         duration: 3000,
+        hideStatusBar: true,
       });
     } else {
       console.log("quelque chose a mal tourné !");

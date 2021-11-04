@@ -13,6 +13,7 @@ function SignInScreen(props) {
   const [listErrorsSignIn, setErrorsSignIn] = useState([]);
 
   useEffect(() => {
+    // AsyncStorage.removeItem("token");
     AsyncStorage.getItem("token", function (error, value) {
       if (value) {
         props.addUser({ token: value });

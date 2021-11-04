@@ -50,12 +50,14 @@ function HomeScreen(props) {
     console.log("home props.dataUser", props.dataUser.firstName);
   }, []);
 
-  //// Fonction pour creer une conversation suite à l'apparition du message EXCLUSIVE sur l'overlay
+  // Fonction pour creer une conversation suite à l'apparition du message EXCLUSIVE sur l'overlay
   var createConversation = async () => {
+    console.log("props.dataUser.quest", props.dataUser);
+
     const data = await fetch(`http://${MY_IP}:3000/inbox/addMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `sender_token=UdQxBmsipgFdvtQvrsqQTg_WopWmh9Jj&buyer_token=${props.dataUser.token}&seller_token=UdQxBmsipgFdvtQvrsqQTg_WopWmh9Jj&quest_id=${props.dataUser.quest[1]._id}&offer_id=617ef1724a67b6421214b74e&message=${newMessage}`,
+      body: `sender_token=UdQxBmsipgFdvtQvrsqQTg_WopWmh9Jj&buyer_token=${props.dataUser.token}&seller_token=UdQxBmsipgFdvtQvrsqQTg_WopWmh9Jj&quest_id=${props.dataUser.quest[0]._id}&offer_id=617ef1724a67b6421214b74e&message=${newMessage}`,
     });
 
     const body = await data.json();
@@ -224,7 +226,7 @@ function HomeScreen(props) {
           </Text>
           <Text style={styles.overText}>Surface extérieure : {item.outdoor_surface} ㎡</Text>
           <Text style={styles.overText}>
-            Nombre de pièces : {item.pieces_min} / {item.pieces_max}
+            Nombre de pièces : {item.pieces_min} / {item.pieces_max === 6 ? "6 et +" : item.pieces_max}
           </Text>
           <Text style={styles.overText}>Ascenseur : {item.elevator ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
           <Text style={styles.overText}>Parking : {item.parking ? <Icon name="check" size={10} color="#4cd137" style={{ marginLeft: 10 }} /> : <Icon name="times" size={15} color="#e84118" style={{ marginLeft: 10 }} />}</Text>
@@ -256,7 +258,12 @@ function HomeScreen(props) {
       setData(body.user);
       setQuest(body.user.quests.length);
       setOffers(body.user.offers.length);
-      props.addUser;
+      props.addUser({
+        token: body.user.token,
+        firstName: body.user.firstName,
+        avatar: body.user.avatar,
+        quest: body.user.quests,
+      });
       setLoaderVisible(false);
     } else {
       console.log("error");

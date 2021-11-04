@@ -178,6 +178,9 @@ function AddQuestScreen(props) {
       const body = await envoiBack.json();
       if (body.result == true) {
         console.log("tout est bon coté back la quest a été enregistree en BDD !");
+        console.log("body", body);
+        console.log("redux", props.dataUser);
+
         setFormProgress(formProgress + 1);
       } else {
         console.log("erreur coté back!");

@@ -34,7 +34,7 @@ function ExplorerScreen(props) {
 
   //Au chargement du composant, on cherche toutes les quêtes de l'utilisateur pour faire le menu select
   useEffect(() => {
-    console.log("maps props.dataUser", props.dataUser.firstName);
+    console.log("maps props.dataUser", props.dataUser.token);
     async function listQuest() {
       const data = await fetch(`http://${MY_IP}:3000/inbox/?token=${props.dataUser.token}`);
       const body = await data.json();
