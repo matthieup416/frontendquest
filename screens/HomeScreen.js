@@ -47,6 +47,7 @@ function HomeScreen(props) {
       }
     }
     userData();
+    console.log("home props.dataUser", props.dataUser.firstName);
   }, []);
 
   //// Fonction pour creer une conversation suite à l'apparition du message EXCLUSIVE sur l'overlay

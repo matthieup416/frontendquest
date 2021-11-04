@@ -28,6 +28,7 @@ function ProfileScreen(props) {
   const isFocused = useIsFocused();
 
   useEffect(() => {
+    console.log("profil props.dataUser", props.dataUser.firstName);
     async function userData() {
       const data = await fetch(`http://${MY_IP}:3000/home/userDetail?token=${props.dataUser.token}`);
       const body = await data.json();

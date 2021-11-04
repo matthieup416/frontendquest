@@ -21,6 +21,8 @@ function ConversationsScreen(props) {
 
   //Au chargement du composant, on cherche toutes les quêtes de l'utilisateur pour faire le menu select
   useEffect(() => {
+    console.log("conv props.dataUser", props.dataUser.firstName);
+
     async function loadListQuest() {
       const data = await fetch(`http://${MY_IP}:3000/inbox/?token=${props.dataUser.token}`);
       const body = await data.json();

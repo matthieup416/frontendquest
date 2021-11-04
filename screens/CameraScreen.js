@@ -59,7 +59,7 @@ function CameraScreen(props) {
               var response = await rawResponse.json();
               console.log("response", response);
               if (!response.error) {
-                props.addUser({ avatar: response.url, firstName: props.dataUser.firstName, token: props.dataUser.token });
+                props.addUser({ avatar: response.url, firstName: props.dataUser.firstName, token: props.dataUser.token, quest: props.dataUser.quest });
                 props.navigation.navigate("Profil", { upload: true });
               }
               setLoaderVisible(false);
