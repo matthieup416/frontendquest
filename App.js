@@ -23,6 +23,7 @@ import ResultsScreen from "./screens/ResultsScreen";
 import ImageScreen from "./screens/ImageScreen";
 import MapScreen from "./screens/MapScreen";
 import CameraScreen from "./screens/CameraScreen";
+import ConversationsScreen from "./screens/ConversationsScreen";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Provider } from "react-redux";
@@ -49,7 +50,7 @@ const BottomNavigator = () => {
             iconName = "home";
           } else if (route.name == "Explorer") {
             iconName = "search-location";
-          } else if (route.name == "Messages") {
+          } else if (route.name == "Conversations") {
             iconName = "comments";
           } else if (route.name == "Profil") {
             iconName = "user";
@@ -64,7 +65,7 @@ const BottomNavigator = () => {
       })}>
       <Tab.Screen name="Accueil" component={HomeScreen} />
       <Tab.Screen name="Explorer" component={ExplorerScreen} />
-      <Tab.Screen name="Messages" component={MessagesScreen} />
+      <Tab.Screen name="Conversations" component={ConversationsScreen} />
       <Tab.Screen name="Profil" component={ProfileScreen} />
     </Tab.Navigator>
   );
@@ -84,6 +85,7 @@ export default function App() {
           <Stack.Screen name="ImageScreen" component={ImageScreen} />
           <Stack.Screen name="MapScreen" component={MapScreen} />
           <Stack.Screen name="Camera" component={CameraScreen} />
+          <Stack.Screen name="Messages" component={MessagesScreen} />
           <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
