@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Avatar } from "react-native-elements";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-const Header = ({ title, image, onRefresh }) => {
+const Header = ({ title, image, onRefresh, iconColor }) => {
   if (!image) {
     var avatar = <Avatar rounded icon={{ name: "user", type: "font-awesome" }} size={64} activeOpacity={0.7} containerStyle={styles.avatar} />;
   } else {
@@ -24,7 +24,7 @@ const Header = ({ title, image, onRefresh }) => {
           onRefresh();
         }}
         style={{ alignSelf: "center" }}>
-        <FontAwesome5 name={"undo"} size={25} color={"rgba(251, 197, 49, 1)"} />
+        <FontAwesome5 name={"undo"} size={25} color={iconColor} />
       </TouchableOpacity>
     </View>
   );

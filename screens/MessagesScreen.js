@@ -94,7 +94,7 @@ function MessagesScreen(props) {
             <Text style={{ color: "#FFFFFF", fontWeight: "400", fontSize: 12 }}>{offerMessages[0].city}</Text>
           </View>
           <TouchableOpacity onPress={() => refresh(selectedConversation)} style={{ marginRight: 10, flex: 0, justifyContent: "center" }}>
-            <FontAwesome5 name={"undo"} size={25} color={"orange"} />
+            <FontAwesome5 name={"undo"} size={25} color="#2C98DA" />
           </TouchableOpacity>
         </View>
         <Button icon={<Icon name="arrow-left" size={15} color="white" style={{ marginRight: 8 }} />} title="Retour aux discussions" onPress={() => props.navigation.navigate("Conversations", { selectedQuestId: selectedQuest })} />

@@ -279,7 +279,7 @@ function HomeScreen(props) {
           <Text></Text>
         </AnimatedLoader>
         <StatusBar backgroundColor={"#2D98DA"} style="light" />
-        <Header onRefresh={userData} title={data.firstName} image={avatarImg} />
+        <Header onRefresh={userData} title={data.firstName} image={avatarImg} iconColor={"rgba(251, 197, 49, 1)"} />
         <ScrollView>
           <Text
             onPress={() => viewExclusivity()}

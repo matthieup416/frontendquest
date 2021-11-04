@@ -85,7 +85,7 @@ function ConversationsScreen(props) {
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor={"#2D98DA"} style="light" />
-        <Header onRefresh={loadListQuest} title={props.dataUser.firstName} image={props.dataUser.avatar} />
+        <Header onRefresh={loadListQuest} title={props.dataUser.firstName} image={props.dataUser.avatar} iconColor="#2C98DA" />
         {/* Menu select */}
         <RNPickerSelect onValueChange={(value) => setSelectedQuest(value)} items={listQuest} placeholder={{ label: "Choisir une quête", value: null }} value={selectedQuest} style={pickerSelectStyles} />
         {/* Résultat du choix du select */}
