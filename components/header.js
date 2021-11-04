@@ -15,7 +15,7 @@ const Header = ({ title, image, onRefresh }) => {
         {/* <Image source={{ uri: image }} style={styles.avatar} /> */}
         {avatar}
       </View>
-      <View style={{ flex: 1, paddingLeft: 30, alignSelf: "center" }}>
+      <View style={{ flex: 1, paddingLeft: 15, alignSelf: "center" }}>
         <Text style={{ color: "white", fontWeight: "bold", fontSize: 30 }}>{title}</Text>
       </View>
 
@@ -23,8 +23,8 @@ const Header = ({ title, image, onRefresh }) => {
         onPress={() => {
           onRefresh();
         }}
-        style={{ alignSelf: "flex-end", paddingBottom: 10 }}>
-        <FontAwesome5 name={"undo"} size={25} color={"orange"} />
+        style={{ alignSelf: "center" }}>
+        <FontAwesome5 name={"undo"} size={25} color={"rgba(251, 197, 49, 1)"} />
       </TouchableOpacity>
     </View>
   );
