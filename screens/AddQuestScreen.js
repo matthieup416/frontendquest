@@ -1,15 +1,31 @@
-import React, { useState } from "react";
-import { View, Text, ScrollView, Dimensions, TextInput, StyleSheet, SafeAreaView, KeyboardAvoidingView, Image } from "react-native";
+import React, { useState } from "react"
+import {
+  View,
+  Text,
+  ScrollView,
+  Dimensions,
+  TextInput,
+  StyleSheet,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Image,
+} from "react-native"
 
-import { MY_IP } from "@env"; /* Variable environnement */
+import { MY_IP } from "@env" /* Variable environnement */
 
-import Icon from "react-native-vector-icons/FontAwesome5";
-import { connect } from "react-redux";
-import StepIndicator from "react-native-step-indicator";
-import { Input, SearchBar, CheckBox, Button, Slider } from "react-native-elements";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import moment from "moment";
-import "moment/locale/fr";
+import Icon from "react-native-vector-icons/FontAwesome5"
+import { connect } from "react-redux"
+import StepIndicator from "react-native-step-indicator"
+import {
+  Input,
+  SearchBar,
+  CheckBox,
+  Button,
+  Slider,
+} from "react-native-elements"
+import DateTimePicker from "@react-native-community/datetimepicker"
+import moment from "moment"
+import "moment/locale/fr"
 
 const customStyles = {
   stepIndicatorSize: 20,
@@ -33,110 +49,110 @@ const customStyles = {
   labelColor: "#999999",
   labelSize: 12,
   currentStepLabelColor: "#fe7013",
-};
+}
 
-let deviceHeight = Dimensions.get("window").height;
-let deviceWidth = Dimensions.get("window").width;
+let deviceHeight = Dimensions.get("window").height
+let deviceWidth = Dimensions.get("window").width
 
 function AddQuestScreen(props) {
   if (!props.dataUser) {
-    props.navigation.navigate("SignIn", { screen: "SignInScreen" });
+    props.navigation.navigate("SignIn", { screen: "SignInScreen" })
   }
 
-  const [maisonChecked, setMaisonChecked] = useState(true);
-  const [appartementChecked, setAppartementChecked] = useState(false);
-  const [immeubleChecked, setImmeubleChecked] = useState(false);
-  const [businessChecked, setBusinessChecked] = useState(false);
-  const [autreChecked, setAutreChecked] = useState(false);
-  const [parkingChecked, setParkingChecked] = useState(false);
-  const [balconyChecked, setBalconyChecked] = useState(false);
-  const [oneRoomChecked, setOneRoomChecked] = useState(true);
-  const [twoRoomChecked, setTwoRoomChecked] = useState(false);
-  const [threeRoomChecked, setThreeRoomChecked] = useState(false);
-  const [fourRoomChecked, setFourRoomChecked] = useState(false);
-  const [fiveRoomChecked, setFiveRoomChecked] = useState(false);
-  const [moreRoomChecked, setMoreRoomChecked] = useState(false);
+  const [maisonChecked, setMaisonChecked] = useState(true)
+  const [appartementChecked, setAppartementChecked] = useState(false)
+  const [immeubleChecked, setImmeubleChecked] = useState(false)
+  const [businessChecked, setBusinessChecked] = useState(false)
+  const [autreChecked, setAutreChecked] = useState(false)
+  const [parkingChecked, setParkingChecked] = useState(false)
+  const [balconyChecked, setBalconyChecked] = useState(false)
+  const [oneRoomChecked, setOneRoomChecked] = useState(true)
+  const [twoRoomChecked, setTwoRoomChecked] = useState(false)
+  const [threeRoomChecked, setThreeRoomChecked] = useState(false)
+  const [fourRoomChecked, setFourRoomChecked] = useState(false)
+  const [fiveRoomChecked, setFiveRoomChecked] = useState(false)
+  const [moreRoomChecked, setMoreRoomChecked] = useState(false)
 
   //fonction pour supprimer un nombre de pièces dans piecesList quand on décoche une checkbox
   function handleRemoveRoom(number) {
-    const newList = piecesList.filter((item) => item !== number);
-    setPiecesList(newList);
+    const newList = piecesList.filter((item) => item !== number)
+    setPiecesList(newList)
     // puis on détermine le plus grand et le plus petit de la liste et on attribue ces valeurs à room_max et room_min
   }
   function findMinMax() {
-    const newList2 = piecesList;
+    const newList2 = piecesList
     if (newList2.length > 1) {
-      setPieces_Min(Math.min(...newList2));
-      setPieces_Max(Math.max(...newList2));
+      setPieces_Min(Math.min(...newList2))
+      setPieces_Max(Math.max(...newList2))
     }
     // si un seul nombre de pièces, on met pieces_Min et pieces_Max à la meme valeur unique
     else {
-      setPieces_Min(newList2[0]);
-      setPieces_Max(newList2[0]);
+      setPieces_Min(newList2[0])
+      setPieces_Max(newList2[0])
     }
   }
 
-  const [ancienChecked, setAncienChecked] = useState(true);
-  const [neufChecked, setNeufChecked] = useState(false);
-  const [nb_Pieces, setNb_Pieces] = useState(1);
-  const [min_Price, setMin_Price] = useState(0);
-  const [max_Price, setMax_Price] = useState(0);
-  const [min_Surface, setMin_Surface] = useState(0);
-  const [max_Surface, setMax_Surface] = useState(0);
-  const [outdoor_surface, setOutdoor_surface] = useState(0);
-  const [pieces_Min, setPieces_Min] = useState(1);
-  const [pieces_Max, setPieces_Max] = useState(1);
-  const [piecesList, setPiecesList] = useState([1]);
+  const [ancienChecked, setAncienChecked] = useState(true)
+  const [neufChecked, setNeufChecked] = useState(false)
+  const [nb_Pieces, setNb_Pieces] = useState(1)
+  const [min_Price, setMin_Price] = useState(0)
+  const [max_Price, setMax_Price] = useState(0)
+  const [min_Surface, setMin_Surface] = useState(0)
+  const [max_Surface, setMax_Surface] = useState(0)
+  const [outdoor_surface, setOutdoor_surface] = useState(0)
+  const [pieces_Min, setPieces_Min] = useState(1)
+  const [pieces_Max, setPieces_Max] = useState(1)
+  const [piecesList, setPiecesList] = useState([1])
 
-  const [fiber_opticsChecked, setFiber_opticsChecked] = useState(false);
-  const [poolChecked, setPoolChecked] = useState(false);
-  const [elevatorChecked, setElevatorChecked] = useState(false);
-  const [datePreferenceChecked, setDatePreferenceChecked] = useState(true);
-  const [marketDateFromFront, setMarketDateFromFront] = useState(null);
+  const [fiber_opticsChecked, setFiber_opticsChecked] = useState(false)
+  const [poolChecked, setPoolChecked] = useState(false)
+  const [elevatorChecked, setElevatorChecked] = useState(false)
+  const [datePreferenceChecked, setDatePreferenceChecked] = useState(true)
+  const [marketDateFromFront, setMarketDateFromFront] = useState(null)
 
-  const [social_text, setSocial_text] = useState("");
-  const [open_to_proChecked, setOpen_to_proChecked] = useState(true);
-  const [terraceChecked, setTerraceChecked] = useState(false);
+  const [social_text, setSocial_text] = useState("")
+  const [open_to_proChecked, setOpen_to_proChecked] = useState(true)
+  const [terraceChecked, setTerraceChecked] = useState(false)
 
-  const [type, setType] = useState("maison");
+  const [type, setType] = useState("maison")
 
-  const [formProgress, setFormProgress] = useState(0);
-  const [dateDisplayFr, setDateDisplayFr] = useState("");
-  const [sliderValue, setSliderValue] = useState(0);
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
-  const [show, setShow] = useState(false);
+  const [formProgress, setFormProgress] = useState(0)
+  const [dateDisplayFr, setDateDisplayFr] = useState("")
+  const [sliderValue, setSliderValue] = useState(0)
+  const [date, setDate] = useState(new Date())
+  const [mode, setMode] = useState("date")
+  const [show, setShow] = useState(false)
 
   const onChange = (event, selectedDate) => {
-    moment.locale("fr");
+    moment.locale("fr")
 
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setDate(currentDate);
-    setDatePreferenceChecked(false);
+    const currentDate = selectedDate || date
+    setShow(Platform.OS === "ios")
+    setDate(currentDate)
+    setDatePreferenceChecked(false)
 
-    setDateDisplayFr(moment(currentDate).format("LL"));
-  };
+    setDateDisplayFr(moment(currentDate).format("LL"))
+  }
 
   const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
+    setShow(true)
+    setMode(currentMode)
+  }
 
   const showDatepicker = () => {
-    showMode("date");
-  };
+    showMode("date")
+  }
 
-  const [searchValue, setSearchValue] = useState("");
-  const [goodType, setGoodType] = useState("maison");
-  let changeGoodType = (value) => setGoodType(value);
+  const [searchValue, setSearchValue] = useState("")
+  const [goodType, setGoodType] = useState("maison")
+  let changeGoodType = (value) => setGoodType(value)
 
   let nextStep = async () => {
     if (formProgress < 4) {
-      findMinMax();
+      findMinMax()
 
-      processData();
-      setFormProgress(formProgress + 1);
+      processData()
+      setFormProgress(formProgress + 1)
     } else if (formProgress == 4) {
       var data = {
         token: props.dataUser.token,
@@ -165,31 +181,33 @@ function AddQuestScreen(props) {
           is_new: neufChecked,
           social_text: social_text,
         },
-      };
+      }
 
-      let envoiBack = await fetch(`http://${MY_IP}:3000/addquest`, {
+      let envoiBack = await fetch(`https://${MY_IP}/addquest`, {
         method: "post",
 
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
         },
-      });
-      const body = await envoiBack.json();
+      })
+      const body = await envoiBack.json()
       if (body.result == true) {
-        console.log("tout est bon coté back la quest a été enregistree en BDD !");
-        console.log("body", body);
-        console.log("redux", props.dataUser);
+        console.log(
+          "tout est bon coté back la quest a été enregistree en BDD !"
+        )
+        console.log("body", body)
+        console.log("redux", props.dataUser)
 
-        setFormProgress(formProgress + 1);
+        setFormProgress(formProgress + 1)
       } else {
-        console.log("erreur coté back!");
+        console.log("erreur coté back!")
       }
     }
-  };
+  }
   let previousStep = () => {
-    setFormProgress(formProgress - 1);
-  };
+    setFormProgress(formProgress - 1)
+  }
   let dateDisplay = (
     <Text
       style={{
@@ -201,10 +219,11 @@ function AddQuestScreen(props) {
         marginLeft: 10,
         marginTop: 30,
         marginBottom: 10,
-      }}>
+      }}
+    >
       {date}
     </Text>
-  );
+  )
   let slider = (
     <Slider
       value={Math.round(sliderValue)}
@@ -216,15 +235,21 @@ function AddQuestScreen(props) {
       thumbTintColor="#2D98DA"
       minimumTrackTintColor="#585858"
     />
-  );
+  )
 
-  let sliderValueDisplay = <Text style={{ color: "#585858" }}>Rayon : {sliderValue} km</Text>;
+  let sliderValueDisplay = (
+    <Text style={{ color: "#585858" }}>Rayon : {sliderValue} km</Text>
+  )
 
   let outdoorSpace = (
     <View style={{ alignContent: "center" }}>
-      <Input placeholder="Min" inputContainerStyle={{ width: deviceWidth / 8 }} onChangeText={(value) => setOutdoor_surface(value)} />
+      <Input
+        placeholder="Min"
+        inputContainerStyle={{ width: deviceWidth / 8 }}
+        onChangeText={(value) => setOutdoor_surface(value)}
+      />
     </View>
-  );
+  )
   let fiber = (
     <View style={{ flexDirection: "row" }}>
       <CheckBox
@@ -238,10 +263,14 @@ function AddQuestScreen(props) {
         title="Fibre optique"
         checked={fiber_opticsChecked}
         checkedColor="#2D98DA"
-        onPress={fiber_opticsChecked ? () => setFiber_opticsChecked(false) : () => setFiber_opticsChecked(true)}
+        onPress={
+          fiber_opticsChecked
+            ? () => setFiber_opticsChecked(false)
+            : () => setFiber_opticsChecked(true)
+        }
       />
     </View>
-  );
+  )
 
   let pool = (
     <View style={{ flexDirection: "row" }}>
@@ -256,10 +285,12 @@ function AddQuestScreen(props) {
         title="Piscine"
         checked={poolChecked}
         checkedColor="#2D98DA"
-        onPress={poolChecked ? () => setPoolChecked(false) : () => setPoolChecked(true)}
+        onPress={
+          poolChecked ? () => setPoolChecked(false) : () => setPoolChecked(true)
+        }
       />
     </View>
-  );
+  )
 
   let elevator = (
     <View style={{ flexDirection: "row" }}>
@@ -274,10 +305,14 @@ function AddQuestScreen(props) {
         title="Ascenseur"
         checked={elevatorChecked}
         checkedColor="#2D98DA"
-        onPress={elevatorChecked ? () => setElevatorChecked(false) : () => setElevatorChecked(true)}
+        onPress={
+          elevatorChecked
+            ? () => setElevatorChecked(false)
+            : () => setElevatorChecked(true)
+        }
       />
     </View>
-  );
+  )
 
   let checkBoxes = (
     <View style={{ flexDirection: "row" }}>
@@ -296,12 +331,12 @@ function AddQuestScreen(props) {
           onPress={
             oneRoomChecked
               ? () => {
-                  setOneRoomChecked(false);
-                  handleRemoveRoom(1);
+                  setOneRoomChecked(false)
+                  handleRemoveRoom(1)
                 }
               : () => {
-                  setOneRoomChecked(true);
-                  setPiecesList([...piecesList, 1]);
+                  setOneRoomChecked(true)
+                  setPiecesList([...piecesList, 1])
                 }
           }
         />
@@ -319,12 +354,12 @@ function AddQuestScreen(props) {
           onPress={
             twoRoomChecked
               ? () => {
-                  setTwoRoomChecked(false);
-                  handleRemoveRoom(2);
+                  setTwoRoomChecked(false)
+                  handleRemoveRoom(2)
                 }
               : () => {
-                  setTwoRoomChecked(true);
-                  setPiecesList([...piecesList, 2]);
+                  setTwoRoomChecked(true)
+                  setPiecesList([...piecesList, 2])
                 }
           }
         />
@@ -344,12 +379,12 @@ function AddQuestScreen(props) {
           onPress={
             threeRoomChecked
               ? () => {
-                  setThreeRoomChecked(false);
-                  handleRemoveRoom(3);
+                  setThreeRoomChecked(false)
+                  handleRemoveRoom(3)
                 }
               : () => {
-                  setThreeRoomChecked(true);
-                  setPiecesList([...piecesList, 3]);
+                  setThreeRoomChecked(true)
+                  setPiecesList([...piecesList, 3])
                 }
           }
         />
@@ -367,13 +402,13 @@ function AddQuestScreen(props) {
           onPress={
             fourRoomChecked
               ? () => {
-                  setFourRoomChecked(false);
-                  handleRemoveRoom(4);
+                  setFourRoomChecked(false)
+                  handleRemoveRoom(4)
                 }
               : () => {
-                  setFourRoomChecked(true);
-                  setPiecesList([...piecesList, 4]);
-                  console.log(piecesList);
+                  setFourRoomChecked(true)
+                  setPiecesList([...piecesList, 4])
+                  console.log(piecesList)
                 }
           }
         />
@@ -393,12 +428,12 @@ function AddQuestScreen(props) {
           onPress={
             fiveRoomChecked
               ? () => {
-                  setFiveRoomChecked(false);
-                  handleRemoveRoom(5);
+                  setFiveRoomChecked(false)
+                  handleRemoveRoom(5)
                 }
               : () => {
-                  setFiveRoomChecked(true);
-                  setPiecesList([...piecesList, 5]);
+                  setFiveRoomChecked(true)
+                  setPiecesList([...piecesList, 5])
                 }
           }
         />
@@ -416,18 +451,18 @@ function AddQuestScreen(props) {
           onPress={
             moreRoomChecked
               ? () => {
-                  setMoreRoomChecked(false);
-                  handleRemoveRoom(6);
+                  setMoreRoomChecked(false)
+                  handleRemoveRoom(6)
                 }
               : () => {
-                  setMoreRoomChecked(true);
-                  setPiecesList([...piecesList, 6]);
+                  setMoreRoomChecked(true)
+                  setPiecesList([...piecesList, 6])
                 }
           }
         />
       </View>
     </View>
-  );
+  )
 
   let checkBoxesComplements = (
     <View style={{}}>
@@ -441,7 +476,11 @@ function AddQuestScreen(props) {
         title="Stationnement / Box / Garage"
         checked={parkingChecked}
         checkedColor="#2D98DA"
-        onPress={parkingChecked ? () => setParkingChecked(false) : () => setParkingChecked(true)}
+        onPress={
+          parkingChecked
+            ? () => setParkingChecked(false)
+            : () => setParkingChecked(true)
+        }
       />
       <CheckBox
         containerStyle={{
@@ -454,7 +493,11 @@ function AddQuestScreen(props) {
         title="Balcon"
         checked={balconyChecked}
         checkedColor="#2D98DA"
-        onPress={balconyChecked ? () => setBalconyChecked(false) : () => setBalconyChecked(true)}
+        onPress={
+          balconyChecked
+            ? () => setBalconyChecked(false)
+            : () => setBalconyChecked(true)
+        }
       />
       <CheckBox
         containerStyle={{
@@ -467,13 +510,17 @@ function AddQuestScreen(props) {
         title="Terrasse"
         checked={terraceChecked}
         checkedColor="#2D98DA"
-        onPress={terraceChecked ? () => setTerraceChecked(false) : () => setTerraceChecked(true)}
+        onPress={
+          terraceChecked
+            ? () => setTerraceChecked(false)
+            : () => setTerraceChecked(true)
+        }
       />
 
       {fiber}
       {elevator}
     </View>
-  );
+  )
 
   let checkBoxesDates = (
     <View style={{ flexDirection: "column" }}>
@@ -487,7 +534,14 @@ function AddQuestScreen(props) {
               backgroundColor: "#2D98DA",
               borderRadius: 20,
             }}
-            icon={<Icon name="calendar-alt" size={18} color="white" style={{ marginRight: 5, marginLeft: 4 }} />}
+            icon={
+              <Icon
+                name="calendar-alt"
+                size={18}
+                color="white"
+                style={{ marginRight: 5, marginLeft: 4 }}
+              />
+            }
             iconLeft
           />
           <Text
@@ -497,12 +551,22 @@ function AddQuestScreen(props) {
               color: "#585858",
               fontWeight: "bold",
               marginLeft: 10,
-            }}>
+            }}
+          >
             {dateDisplayFr}
           </Text>
         </View>
 
-        {show && <DateTimePicker testID="dateTimePicker" value={date} mode={mode} is24Hour={true} display="default" onChange={onChange} />}
+        {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode={mode}
+            is24Hour={true}
+            display="default"
+            onChange={onChange}
+          />
+        )}
       </View>
       <CheckBox
         containerStyle={{
@@ -515,10 +579,18 @@ function AddQuestScreen(props) {
         title="Pas de préférence"
         checked={datePreferenceChecked}
         checkedColor="#2D98DA"
-        onPress={datePreferenceChecked ? () => setDatePreferenceChecked(false) : () => [setDatePreferenceChecked(true), setDate(new Date()), setDateDisplayFr("")]}
+        onPress={
+          datePreferenceChecked
+            ? () => setDatePreferenceChecked(false)
+            : () => [
+                setDatePreferenceChecked(true),
+                setDate(new Date()),
+                setDateDisplayFr(""),
+              ]
+        }
       />
     </View>
-  );
+  )
 
   let checkBoxesTypes = (
     <View style={{ flexDirection: "row" }}>
@@ -533,7 +605,11 @@ function AddQuestScreen(props) {
         title="Ancien"
         checked={ancienChecked}
         checkedColor="#2D98DA"
-        onPress={ancienChecked ? () => setAncienChecked(false) : () => setAncienChecked(true)}
+        onPress={
+          ancienChecked
+            ? () => setAncienChecked(false)
+            : () => setAncienChecked(true)
+        }
       />
       <CheckBox
         containerStyle={{
@@ -546,10 +622,12 @@ function AddQuestScreen(props) {
         title="Neuf"
         checked={neufChecked}
         checkedColor="#2D98DA"
-        onPress={neufChecked ? () => setNeufChecked(false) : () => setNeufChecked(true)}
+        onPress={
+          neufChecked ? () => setNeufChecked(false) : () => setNeufChecked(true)
+        }
       />
     </View>
-  );
+  )
   let radioButtons = (
     <View
       style={{
@@ -557,7 +635,8 @@ function AddQuestScreen(props) {
         marginTop: 20,
         flexDirection: "column",
         alignItems: "center",
-      }}>
+      }}
+    >
       <Text
         style={{
           fontSize: 18,
@@ -566,7 +645,8 @@ function AddQuestScreen(props) {
           fontWeight: "bold",
           marginBottom: 5,
           marginLeft: 10,
-        }}>
+        }}
+      >
         Type de bien
       </Text>
       <CheckBox
@@ -583,7 +663,17 @@ function AddQuestScreen(props) {
         uncheckedIcon="circle-o"
         checked={maisonChecked}
         checkedColor="#2D98DA"
-        onPress={maisonChecked ? () => setMaisonChecked(false) : () => [setMaisonChecked(true), setAppartementChecked(false), setImmeubleChecked(false), setBusinessChecked(false), setAutreChecked(false)]}
+        onPress={
+          maisonChecked
+            ? () => setMaisonChecked(false)
+            : () => [
+                setMaisonChecked(true),
+                setAppartementChecked(false),
+                setImmeubleChecked(false),
+                setBusinessChecked(false),
+                setAutreChecked(false),
+              ]
+        }
       />
       <CheckBox
         containerStyle={{
@@ -599,7 +689,17 @@ function AddQuestScreen(props) {
         uncheckedIcon="circle-o"
         checked={appartementChecked}
         checkedColor="#2D98DA"
-        onPress={appartementChecked ? () => setAppartementChecked(false) : () => [setAppartementChecked(true), setMaisonChecked(false), setImmeubleChecked(false), setBusinessChecked(false), setAutreChecked(false)]}
+        onPress={
+          appartementChecked
+            ? () => setAppartementChecked(false)
+            : () => [
+                setAppartementChecked(true),
+                setMaisonChecked(false),
+                setImmeubleChecked(false),
+                setBusinessChecked(false),
+                setAutreChecked(false),
+              ]
+        }
       />
       <CheckBox
         containerStyle={{
@@ -615,7 +715,17 @@ function AddQuestScreen(props) {
         uncheckedIcon="circle-o"
         checked={immeubleChecked}
         checkedColor="#2D98DA"
-        onPress={immeubleChecked ? () => setImmeubleChecked(false) : () => [setImmeubleChecked(true), setAppartementChecked(false), setMaisonChecked(false), setBusinessChecked(false), setAutreChecked(false)]}
+        onPress={
+          immeubleChecked
+            ? () => setImmeubleChecked(false)
+            : () => [
+                setImmeubleChecked(true),
+                setAppartementChecked(false),
+                setMaisonChecked(false),
+                setBusinessChecked(false),
+                setAutreChecked(false),
+              ]
+        }
       />
       <CheckBox
         containerStyle={{
@@ -631,7 +741,17 @@ function AddQuestScreen(props) {
         uncheckedIcon="circle-o"
         checked={businessChecked}
         checkedColor="#2D98DA"
-        onPress={businessChecked ? () => setBusinessChecked(false) : () => [setBusinessChecked(true), setAppartementChecked(false), setMaisonChecked(false), setImmeubleChecked(false), setAutreChecked(false)]}
+        onPress={
+          businessChecked
+            ? () => setBusinessChecked(false)
+            : () => [
+                setBusinessChecked(true),
+                setAppartementChecked(false),
+                setMaisonChecked(false),
+                setImmeubleChecked(false),
+                setAutreChecked(false),
+              ]
+        }
       />
       <CheckBox
         containerStyle={{
@@ -647,10 +767,20 @@ function AddQuestScreen(props) {
         uncheckedIcon="circle-o"
         checked={autreChecked}
         checkedColor="#2D98DA"
-        onPress={autreChecked ? () => setAutreChecked(false) : () => [setAutreChecked(true), setAppartementChecked(false), setMaisonChecked(false), setImmeubleChecked(false), setBusinessChecked(false)]}
+        onPress={
+          autreChecked
+            ? () => setAutreChecked(false)
+            : () => [
+                setAutreChecked(true),
+                setAppartementChecked(false),
+                setMaisonChecked(false),
+                setImmeubleChecked(false),
+                setBusinessChecked(false),
+              ]
+        }
       />
     </View>
-  );
+  )
   const styles = StyleSheet.create({
     searchBox: {
       width: 340,
@@ -668,7 +798,7 @@ function AddQuestScreen(props) {
       backgroundColor: "lightblue",
       alignItems: "center",
     },
-  });
+  })
 
   let formContent = (
     <View style={{ flexDirection: "column", alignItems: "center" }}>
@@ -680,7 +810,8 @@ function AddQuestScreen(props) {
           fontWeight: "bold",
 
           marginTop: 30,
-        }}>
+        }}
+      >
         Localisation
       </Text>
 
@@ -693,7 +824,8 @@ function AddQuestScreen(props) {
           borderWidth: 0,
           borderRadius: 20,
           paddingRight: 10,
-        }}>
+        }}
+      >
         <SearchBar
           placeholder="Ville..."
           onChangeText={(searchValue) => setSearchValue(searchValue)}
@@ -716,15 +848,16 @@ function AddQuestScreen(props) {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-          }}>
+          }}
+        >
           {sliderValueDisplay}
           {slider}
         </View>
       </View>
       {radioButtons}
     </View>
-  );
-  let steps = <View></View>;
+  )
+  let steps = <View></View>
   let buttonBottom = (
     <View
       style={{
@@ -733,7 +866,8 @@ function AddQuestScreen(props) {
         alignItems: "center",
 
         height: deviceHeight / 8,
-      }}>
+      }}
+    >
       <Button
         icon={
           <Icon
@@ -758,7 +892,14 @@ function AddQuestScreen(props) {
       />
       <Button
         title="Continuer"
-        icon={<Icon name="arrow-right" size={15} color="white" style={{ marginLeft: 8 }} />}
+        icon={
+          <Icon
+            name="arrow-right"
+            size={15}
+            color="white"
+            style={{ marginLeft: 8 }}
+          />
+        }
         buttonStyle={{
           width: deviceWidth / 3,
           borderRadius: 50,
@@ -768,7 +909,7 @@ function AddQuestScreen(props) {
         onPress={nextStep}
       />
     </View>
-  );
+  )
   // header with stepIndicator 1-2-3
   if (formProgress == 0) {
     buttonBottom = (
@@ -779,7 +920,8 @@ function AddQuestScreen(props) {
           alignItems: "center",
 
           height: deviceHeight / 8,
-        }}>
+        }}
+      >
         <Button
           icon={
             <Icon
@@ -805,7 +947,14 @@ function AddQuestScreen(props) {
         />
         <Button
           title="Continuer"
-          icon={<Icon name="arrow-right" size={15} color="white" style={{ marginLeft: 8 }} />}
+          icon={
+            <Icon
+              name="arrow-right"
+              size={15}
+              color="white"
+              style={{ marginLeft: 8 }}
+            />
+          }
           buttonStyle={{
             width: deviceWidth / 3,
             borderRadius: 50,
@@ -815,7 +964,7 @@ function AddQuestScreen(props) {
           onPress={nextStep}
         />
       </View>
-    );
+    )
     steps = (
       <View style={{ height: deviceHeight / 5 }}>
         <Text
@@ -826,12 +975,17 @@ function AddQuestScreen(props) {
             fontWeight: "bold",
             marginBottom: 30,
             marginTop: 50,
-          }}>
+          }}
+        >
           Créer une quête
         </Text>
-        <StepIndicator customStyles={customStyles} currentPosition={0} stepCount={5} />
+        <StepIndicator
+          customStyles={customStyles}
+          currentPosition={0}
+          stepCount={5}
+        />
       </View>
-    );
+    )
   } else if (formProgress == 1) {
     formContent = (
       <KeyboardAvoidingView
@@ -844,8 +998,15 @@ function AddQuestScreen(props) {
           borderWidth: 0,
           borderRadius: 20,
           paddingRight: 10,
-        }}>
-        <View style={{ flexDirection: "column", alignItems: "center", marginBottom: 50 }}>
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "column",
+            alignItems: "center",
+            marginBottom: 50,
+          }}
+        >
           <Text
             style={{
               fontSize: 18,
@@ -854,15 +1015,26 @@ function AddQuestScreen(props) {
               fontWeight: "bold",
               marginLeft: 10,
               marginTop: 30,
-            }}>
+            }}
+          >
             Votre budget
           </Text>
           <View style={{ flexDirection: "row" }}>
             <View>
-              <Input placeholder="Minimum" inputContainerStyle={{ width: deviceWidth / 4 }} onChangeText={(value) => setMin_Price(value)} maxLength={7} />
+              <Input
+                placeholder="Minimum"
+                inputContainerStyle={{ width: deviceWidth / 4 }}
+                onChangeText={(value) => setMin_Price(value)}
+                maxLength={7}
+              />
             </View>
             <View>
-              <Input placeholder="Maximum" inputContainerStyle={{ width: deviceWidth / 4 }} onChangeText={(value) => setMax_Price(value)} maxLength={7} />
+              <Input
+                placeholder="Maximum"
+                inputContainerStyle={{ width: deviceWidth / 4 }}
+                onChangeText={(value) => setMax_Price(value)}
+                maxLength={7}
+              />
             </View>
           </View>
         </View>
@@ -875,21 +1047,32 @@ function AddQuestScreen(props) {
               fontWeight: "bold",
               marginBottom: 5,
               marginLeft: 10,
-            }}>
+            }}
+          >
             Surface habitable (m{"\u00b2"})
           </Text>
 
           <View style={{ flexDirection: "row", justifyContent: "center" }}>
             <View>
-              <Input placeholder="Min" inputContainerStyle={{ width: deviceWidth / 8 }} onChangeText={(value) => setMin_Surface(value)} maxLength={4} />
+              <Input
+                placeholder="Min"
+                inputContainerStyle={{ width: deviceWidth / 8 }}
+                onChangeText={(value) => setMin_Surface(value)}
+                maxLength={4}
+              />
             </View>
             <View>
-              <Input placeholder="Max" inputContainerStyle={{ width: deviceWidth / 8 }} onChangeText={(value) => setMax_Surface(value)} maxLength={4} />
+              <Input
+                placeholder="Max"
+                inputContainerStyle={{ width: deviceWidth / 8 }}
+                onChangeText={(value) => setMax_Surface(value)}
+                maxLength={4}
+              />
             </View>
           </View>
         </View>
       </KeyboardAvoidingView>
-    );
+    )
 
     steps = (
       <View style={{ height: deviceHeight / 5 }}>
@@ -901,12 +1084,17 @@ function AddQuestScreen(props) {
             fontWeight: "bold",
             marginBottom: 30,
             marginTop: 50,
-          }}>
+          }}
+        >
           Créer une quête
         </Text>
-        <StepIndicator customStyles={customStyles} currentPosition={1} stepCount={5} />
+        <StepIndicator
+          customStyles={customStyles}
+          currentPosition={1}
+          stepCount={5}
+        />
       </View>
-    );
+    )
   } else if (formProgress == 2 && appartementChecked == true) {
     formContent = (
       <ScrollView>
@@ -915,7 +1103,8 @@ function AddQuestScreen(props) {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-          }}>
+          }}
+        >
           <Text
             style={{
               fontSize: 18,
@@ -924,7 +1113,8 @@ function AddQuestScreen(props) {
               fontWeight: "bold",
               marginLeft: 10,
               marginTop: 30,
-            }}>
+            }}
+          >
             Nombre de pièces :
           </Text>
 
@@ -939,13 +1129,14 @@ function AddQuestScreen(props) {
               marginBottom: 5,
               marginLeft: 10,
               marginTop: 25,
-            }}>
+            }}
+          >
             Compléments :
           </Text>
           {checkBoxesComplements}
         </View>
       </ScrollView>
-    );
+    )
     buttonBottom = (
       <View
         style={{
@@ -954,7 +1145,8 @@ function AddQuestScreen(props) {
           alignItems: "center",
 
           height: deviceHeight / 8,
-        }}>
+        }}
+      >
         <Button
           icon={
             <Icon
@@ -979,7 +1171,14 @@ function AddQuestScreen(props) {
         />
         <Button
           title="Continuer"
-          icon={<Icon name="arrow-right" size={15} color="white" style={{ marginLeft: 8 }} />}
+          icon={
+            <Icon
+              name="arrow-right"
+              size={15}
+              color="white"
+              style={{ marginLeft: 8 }}
+            />
+          }
           buttonStyle={{
             width: deviceWidth / 3,
             borderRadius: 50,
@@ -989,7 +1188,7 @@ function AddQuestScreen(props) {
           onPress={nextStep}
         />
       </View>
-    );
+    )
     steps = (
       <View style={{ height: deviceHeight / 5 }}>
         <Text
@@ -1000,12 +1199,17 @@ function AddQuestScreen(props) {
             fontWeight: "bold",
             marginBottom: 30,
             marginTop: 50,
-          }}>
+          }}
+        >
           Créer une quête
         </Text>
-        <StepIndicator customStyles={customStyles} currentPosition={2} stepCount={5} />
+        <StepIndicator
+          customStyles={customStyles}
+          currentPosition={2}
+          stepCount={5}
+        />
       </View>
-    );
+    )
   } else if (formProgress == 2 && maisonChecked == true) {
     formContent = (
       <View
@@ -1013,7 +1217,8 @@ function AddQuestScreen(props) {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-        }}>
+        }}
+      >
         <Text
           style={{
             fontSize: 18,
@@ -1022,7 +1227,8 @@ function AddQuestScreen(props) {
             fontWeight: "bold",
             marginLeft: 10,
             marginTop: 30,
-          }}>
+          }}
+        >
           Nombre de pièces :
         </Text>
         {checkBoxes}
@@ -1034,7 +1240,8 @@ function AddQuestScreen(props) {
             fontWeight: "bold",
             marginBottom: 0,
             marginTop: 20,
-          }}>
+          }}
+        >
           Surface extérieure / terrain (m{"\u00b2"})
         </Text>
         {outdoorSpace}
@@ -1047,7 +1254,8 @@ function AddQuestScreen(props) {
             marginBottom: 5,
             marginLeft: 10,
             marginTop: 20,
-          }}>
+          }}
+        >
           Compléments :
         </Text>
         <CheckBox
@@ -1060,7 +1268,11 @@ function AddQuestScreen(props) {
           title="Stationnement / Box / Garage"
           checked={parkingChecked}
           checkedColor="#2D98DA"
-          onPress={parkingChecked ? () => setParkingChecked(false) : () => setParkingChecked(true)}
+          onPress={
+            parkingChecked
+              ? () => setParkingChecked(false)
+              : () => setParkingChecked(true)
+          }
         />
         <CheckBox
           containerStyle={{
@@ -1072,7 +1284,11 @@ function AddQuestScreen(props) {
           title="Balcon"
           checked={balconyChecked}
           checkedColor="#2D98DA"
-          onPress={balconyChecked ? () => setBalconyChecked(false) : () => setBalconyChecked(true)}
+          onPress={
+            balconyChecked
+              ? () => setBalconyChecked(false)
+              : () => setBalconyChecked(true)
+          }
         />
         <CheckBox
           containerStyle={{
@@ -1084,7 +1300,11 @@ function AddQuestScreen(props) {
           title="Terrasse"
           checked={terraceChecked}
           checkedColor="#2D98DA"
-          onPress={terraceChecked ? () => setTerraceChecked(false) : () => setTerraceChecked(true)}
+          onPress={
+            terraceChecked
+              ? () => setTerraceChecked(false)
+              : () => setTerraceChecked(true)
+          }
         />
         <Text
           style={{
@@ -1094,13 +1314,14 @@ function AddQuestScreen(props) {
             fontWeight: "bold",
             marginBottom: 5,
             marginTop: 20,
-          }}>
+          }}
+        >
           Équipements:
         </Text>
         {fiber}
         {pool}
       </View>
-    );
+    )
     buttonBottom = (
       <View
         style={{
@@ -1109,7 +1330,8 @@ function AddQuestScreen(props) {
           alignItems: "center",
 
           height: deviceHeight / 8,
-        }}>
+        }}
+      >
         <Button
           icon={
             <Icon
@@ -1134,7 +1356,14 @@ function AddQuestScreen(props) {
         />
         <Button
           title="Continuer"
-          icon={<Icon name="arrow-right" size={15} color="white" style={{ marginLeft: 8 }} />}
+          icon={
+            <Icon
+              name="arrow-right"
+              size={15}
+              color="white"
+              style={{ marginLeft: 8 }}
+            />
+          }
           buttonStyle={{
             width: deviceWidth / 3,
             borderRadius: 50,
@@ -1144,7 +1373,7 @@ function AddQuestScreen(props) {
           onPress={nextStep}
         />
       </View>
-    );
+    )
     steps = (
       <View style={{ height: deviceHeight / 5 }}>
         <Text
@@ -1155,13 +1384,22 @@ function AddQuestScreen(props) {
             fontWeight: "bold",
             marginBottom: 30,
             marginTop: 50,
-          }}>
+          }}
+        >
           Dîtes-en plus
         </Text>
-        <StepIndicator customStyles={customStyles} currentPosition={2} stepCount={5} />
+        <StepIndicator
+          customStyles={customStyles}
+          currentPosition={2}
+          stepCount={5}
+        />
       </View>
-    );
-  } else if (formProgress == 2 && maisonChecked != true && appartementChecked != true) {
+    )
+  } else if (
+    formProgress == 2 &&
+    maisonChecked != true &&
+    appartementChecked != true
+  ) {
     formContent = (
       <View>
         <Text
@@ -1172,13 +1410,14 @@ function AddQuestScreen(props) {
             fontWeight: "bold",
             marginLeft: 10,
             marginTop: 30,
-          }}>
+          }}
+        >
           Nombre de pièces :
         </Text>
 
         {checkBoxes}
       </View>
-    );
+    )
     buttonBottom = (
       <View
         style={{
@@ -1187,7 +1426,8 @@ function AddQuestScreen(props) {
           alignItems: "center",
 
           height: deviceHeight / 8,
-        }}>
+        }}
+      >
         <Button
           icon={
             <Icon
@@ -1212,7 +1452,14 @@ function AddQuestScreen(props) {
         />
         <Button
           title="Continuer"
-          icon={<Icon name="arrow-right" size={15} color="white" style={{ marginLeft: 8 }} />}
+          icon={
+            <Icon
+              name="arrow-right"
+              size={15}
+              color="white"
+              style={{ marginLeft: 8 }}
+            />
+          }
           buttonStyle={{
             width: deviceWidth / 3,
             borderRadius: 50,
@@ -1222,7 +1469,7 @@ function AddQuestScreen(props) {
           onPress={nextStep}
         />
       </View>
-    );
+    )
     steps = (
       <View style={{ height: deviceHeight / 5 }}>
         <Text
@@ -1233,12 +1480,17 @@ function AddQuestScreen(props) {
             fontWeight: "bold",
             marginBottom: 30,
             marginTop: 50,
-          }}>
+          }}
+        >
           Dîtes-en plus ...
         </Text>
-        <StepIndicator customStyles={customStyles} currentPosition={2} stepCount={5} />
+        <StepIndicator
+          customStyles={customStyles}
+          currentPosition={2}
+          stepCount={5}
+        />
       </View>
-    );
+    )
   } else if (formProgress == 3) {
     buttonBottom = (
       <View
@@ -1248,7 +1500,8 @@ function AddQuestScreen(props) {
           alignItems: "center",
 
           height: deviceHeight / 8,
-        }}>
+        }}
+      >
         <Button
           icon={
             <Icon
@@ -1273,7 +1526,14 @@ function AddQuestScreen(props) {
         />
         <Button
           title="Continuer"
-          icon={<Icon name="arrow-right" size={15} color="white" style={{ marginLeft: 8 }} />}
+          icon={
+            <Icon
+              name="arrow-right"
+              size={15}
+              color="white"
+              style={{ marginLeft: 8 }}
+            />
+          }
           buttonStyle={{
             width: deviceWidth / 3,
             borderRadius: 50,
@@ -1283,7 +1543,7 @@ function AddQuestScreen(props) {
           onPress={nextStep}
         />
       </View>
-    );
+    )
 
     formContent = (
       <View
@@ -1298,7 +1558,8 @@ function AddQuestScreen(props) {
           borderColor: "#98989E",
           borderRadius: 20,
           paddingRight: 10,
-        }}>
+        }}
+      >
         <View>
           <Text
             style={{
@@ -1308,7 +1569,8 @@ function AddQuestScreen(props) {
               fontWeight: "bold",
               marginLeft: 10,
               marginTop: 30,
-            }}>
+            }}
+          >
             Vous souhaitez acheter un bien
           </Text>
 
@@ -1325,13 +1587,14 @@ function AddQuestScreen(props) {
               marginLeft: 10,
               marginTop: 30,
               marginBottom: 10,
-            }}>
+            }}
+          >
             Commercialisé depuis le :
           </Text>
           {checkBoxesDates}
         </View>
       </View>
-    );
+    )
 
     steps = (
       <View style={{ height: deviceHeight / 5 }}>
@@ -1343,12 +1606,17 @@ function AddQuestScreen(props) {
             fontWeight: "bold",
             marginBottom: 30,
             marginTop: 50,
-          }}>
+          }}
+        >
           Encore quelques infos
         </Text>
-        <StepIndicator customStyles={customStyles} currentPosition={3} stepCount={5} />
+        <StepIndicator
+          customStyles={customStyles}
+          currentPosition={3}
+          stepCount={5}
+        />
       </View>
-    );
+    )
   } else if (formProgress == 4) {
     buttonBottom = (
       <View
@@ -1358,7 +1626,8 @@ function AddQuestScreen(props) {
           alignItems: "center",
 
           height: deviceHeight / 8,
-        }}>
+        }}
+      >
         <Button
           icon={
             <Icon
@@ -1383,7 +1652,14 @@ function AddQuestScreen(props) {
         />
         <Button
           title="Publier ma quête !"
-          icon={<Icon name="paper-plane" size={15} color="white" style={{ marginLeft: 8 }} />}
+          icon={
+            <Icon
+              name="paper-plane"
+              size={15}
+              color="white"
+              style={{ marginLeft: 8 }}
+            />
+          }
           buttonStyle={{
             borderRadius: 50,
             backgroundColor: "#2D98DA",
@@ -1392,7 +1668,7 @@ function AddQuestScreen(props) {
           onPress={nextStep}
         />
       </View>
-    );
+    )
 
     formContent = (
       <View
@@ -1400,7 +1676,8 @@ function AddQuestScreen(props) {
           height: deviceHeight * 0.7,
 
           justifyContent: "center",
-        }}>
+        }}
+      >
         <Text
           style={{
             fontSize: 18,
@@ -1409,8 +1686,10 @@ function AddQuestScreen(props) {
             fontWeight: "bold",
             marginLeft: 10,
             marginTop: 30,
-          }}>
-          Maximisez vos chances auprès des Vendeurs en écrivant quelques mots sur votre recherche :
+          }}
+        >
+          Maximisez vos chances auprès des Vendeurs en écrivant quelques mots
+          sur votre recherche :
         </Text>
         <TextInput
           placeholder=" ☺️ Parlez de votre recherche ..."
@@ -1443,10 +1722,14 @@ function AddQuestScreen(props) {
           title="Je souhaite être contacté par les professionnels de l'immobilier et accéder à leurs offres en avant-première."
           checked={open_to_proChecked}
           checkedColor="#2D98DA"
-          onPress={open_to_proChecked ? () => setOpen_to_proChecked(false) : () => setOpen_to_proChecked(true)}
+          onPress={
+            open_to_proChecked
+              ? () => setOpen_to_proChecked(false)
+              : () => setOpen_to_proChecked(true)
+          }
         />
       </View>
-    );
+    )
     steps = (
       <View style={{ height: deviceHeight / 5 }}>
         <Text
@@ -1457,12 +1740,17 @@ function AddQuestScreen(props) {
             fontWeight: "bold",
             marginBottom: 30,
             marginTop: 50,
-          }}>
+          }}
+        >
           Dernière étape !{" "}
         </Text>
-        <StepIndicator customStyles={customStyles} currentPosition={4} stepCount={5} />
+        <StepIndicator
+          customStyles={customStyles}
+          currentPosition={4}
+          stepCount={5}
+        />
       </View>
-    );
+    )
 
     //// Ecran de validation de la quête et bouton retour HOME
   } else if (formProgress == 5) {
@@ -1474,7 +1762,8 @@ function AddQuestScreen(props) {
           alignItems: "center",
 
           height: deviceHeight / 8,
-        }}>
+        }}
+      >
         <Button
           icon={
             <Icon
@@ -1498,7 +1787,14 @@ function AddQuestScreen(props) {
         />
         <Button
           title="Home"
-          icon={<Icon name="home" size={15} color="white" style={{ marginLeft: 8 }} />}
+          icon={
+            <Icon
+              name="home"
+              size={15}
+              color="white"
+              style={{ marginLeft: 8 }}
+            />
+          }
           buttonStyle={{
             width: deviceWidth / 3,
             borderRadius: 50,
@@ -1508,11 +1804,11 @@ function AddQuestScreen(props) {
           onPress={() => {
             props.navigation.navigate("BottomNavigator", {
               screen: "HomeScreen",
-            });
+            })
           }}
         />
       </View>
-    );
+    )
 
     formContent = (
       <View
@@ -1527,7 +1823,8 @@ function AddQuestScreen(props) {
           borderColor: "#98989E",
           borderRadius: 20,
           paddingRight: 10,
-        }}>
+        }}
+      >
         <View>
           <Text
             style={{
@@ -1537,7 +1834,8 @@ function AddQuestScreen(props) {
               fontWeight: "bold",
               marginBottom: 15,
               marginTop: 50,
-            }}>
+            }}
+          >
             Félicitations 🎉
           </Text>
           <Text
@@ -1548,12 +1846,14 @@ function AddQuestScreen(props) {
               fontWeight: "bold",
               marginLeft: 10,
               marginTop: 30,
-            }}>
-            Votre quête a bien été publiée ! Rendez-vous sur l'espace Home pour accéder aux premières offres qui correspondent à vos critères.
+            }}
+          >
+            Votre quête a bien été publiée ! Rendez-vous sur l'espace Home pour
+            accéder aux premières offres qui correspondent à vos critères.
           </Text>
         </View>
       </View>
-    );
+    )
 
     steps = (
       <View style={{ height: deviceHeight / 5 }}>
@@ -1568,46 +1868,53 @@ function AddQuestScreen(props) {
             justifyContent: "center",
             alignItems: "center",
             marginTop: 50,
-          }}>
-          <Image source={require("../assets/logo.png")} resizeMode="contain" style={{ width: 100, height: 55 }}></Image>
+          }}
+        >
+          <Image
+            source={require("../assets/logo.png")}
+            resizeMode="contain"
+            style={{ width: 100, height: 55 }}
+          ></Image>
         </View>
       </View>
-    );
+    )
   }
 
   let processData = () => {
     // type de logement
-    setType("Maison");
+    setType("Maison")
     if (appartementChecked == true) {
-      setType("Appartement");
+      setType("Appartement")
     } else if (immeubleChecked == true) {
-      setType("Immeuble");
+      setType("Immeuble")
     } else if (businessChecked == true) {
-      setType("Local commercial");
+      setType("Local commercial")
     } else if (autreChecked == true) {
-      setType("Autre");
+      setType("Autre")
     }
 
     // Date de commercialisation
     if (datePreferenceChecked == true) {
-      setMarketDateFromFront(null);
+      setMarketDateFromFront(null)
     }
     if (datePreferenceChecked == false) {
-      setMarketDateFromFront(date);
+      setMarketDateFromFront(date)
     }
-  };
+  }
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", backgroundColor: "#FFFFFF" }}>
+    <View
+      style={{ flex: 1, justifyContent: "center", backgroundColor: "#FFFFFF" }}
+    >
       <View>{steps}</View>
       <ScrollView>{formContent}</ScrollView>
       {buttonBottom}
     </View>
-  );
+  )
 }
 
 function mapStateToProps(state) {
-  return { dataUser: state.dataUser };
+  return { dataUser: state.dataUser }
 }
 
-export default connect(mapStateToProps)(AddQuestScreen);
+export default connect(mapStateToProps)(AddQuestScreen)

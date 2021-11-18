@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react"
-import { View, Dimensions, StyleSheet, Image } from "react-native"
-import Icon from "react-native-vector-icons/FontAwesome5"
+import { View, Dimensions, Image } from "react-native"
 import { connect } from "react-redux"
 import MapView, { Marker, Callout } from "react-native-maps"
-import { Card, Text, Button, ListItem, Avatar } from "react-native-elements"
-import { MY_IP } from "@env" /* Variable environnement */
+import { Text } from "react-native-elements"
 import { WebView } from "react-native-webview"
 
 let deviceHeight = Dimensions.get("window").height
