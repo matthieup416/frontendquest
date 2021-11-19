@@ -14,6 +14,7 @@ import { showMessage } from "react-native-flash-message"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { MY_IP } from "@env" /* Variable environnement */
 import { useIsFocused } from "@react-navigation/native"
+import { StatusBar } from "expo-status-bar"
 
 let screenWidth = Dimensions.get("window").width
 
@@ -113,6 +114,7 @@ function ProfileScreen(props) {
   if (isFocused) {
     return (
       <View style={{ flex: 1 }}>
+        <StatusBar backgroundColor={"#2D98DA"} style="light" />
         <ScrollView>
           <View style={styles.upperContainer}>
             {avatar}

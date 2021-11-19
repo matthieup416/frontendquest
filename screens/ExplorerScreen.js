@@ -67,7 +67,7 @@ function ExplorerScreen(props) {
   useEffect(() => {
     async function results() {
       const data = await fetch(
-        `https://${MY_IP}:3000/resultsmap/?quest_id=${selectedQuest}&token=${props.dataUser.token}`
+        `https://${MY_IP}/results/?quest_id=${selectedQuest}&token=${props.dataUser.token}`
       )
       const body = await data.json()
 

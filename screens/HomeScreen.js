@@ -17,7 +17,6 @@ import { StatusBar } from "expo-status-bar"
 import { connect } from "react-redux"
 
 import { Overlay, Badge } from "react-native-elements"
-import AnimatedLoader from "react-native-animated-loader"
 import Header from "../components/header"
 import CreatButton from "../shared/CreatButton"
 
@@ -461,17 +460,17 @@ function HomeScreen(props) {
   // Réutilisation de la fonction pour le refresh de la page.
   async function userData() {
     const data = await fetch(
-      `https://${MY_IP}:3000/home/userDetail?token=${props.dataUser.token}`
+      `https://${MY_IP}/home/userDetail?token=${props.dataUser.token}`
     )
     const body = await data.json()
     if (body.result) {
       var countresult = []
       for (let i = 0; i < body.user.quests.length; i++) {
         const res = await fetch(
-          `https://${MY_IP}:3000/countresults?token=${props.dataUser.token}&quest_id=${body.user.quests[i]._id}`
+          `https://${MY_IP}/countresults?token=${props.dataUser.token}&quest_id=${body.user.quests[i]._id}`
         )
         const count = await res.json()
-        countresult.push(count.listOffers)
+        countresult.push(count.offersCount)
       }
       setResults(countresult)
       setData(body.user)
@@ -502,15 +501,7 @@ function HomeScreen(props) {
       <SafeAreaView>
         {overlay}
         {exclusivity}
-        {/* <AnimatedLoader
-          visible={loaderVisible}
-          overlayColor="rgba(255,255,255,0.75)"
-          animationStyle={styles.lottie}
-          speed={1}
-          source={require("../assets/loader.json")}
-        >
-          <Text></Text>
-        </AnimatedLoader> */}
+
         <StatusBar backgroundColor={"#2D98DA"} style="light" />
         <Header
           onRefresh={userData}
